@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from './model/product.model';
+import { Product } from './product.model';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 const RETAIL_PRODUCTS = [

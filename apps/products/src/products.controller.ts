@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ProductService } from './products.service';
-import { Product } from './model/product.model';
+import { Product } from './product.model';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 @Controller('products')
