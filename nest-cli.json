@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/microservices-architecture-nestjs/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/microservices-architecture-nestjs/tsconfig.app.json"
+  },
+  "projects": {
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    },
+    "microservices-architecture-nestjs": {
+      "type": "application",
+      "root": "apps/microservices-architecture-nestjs",
+      "entryFile": "main",
+      "sourceRoot": "apps/microservices-architecture-nestjs/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/microservices-architecture-nestjs/tsconfig.app.json"
+      }
+    },
+    "products": {
+      "type": "application",
+      "root": "apps/products",
+      "entryFile": "main",
+      "sourceRoot": "apps/products/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/products/tsconfig.app.json"
+      }
+    },
+    "shared/logger": {
+      "type": "library",
+      "root": "libs/shared/logger",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/logger/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/logger/tsconfig.lib.json"
+      }
+    }
+  },
+  "monorepo": true,
+  "root": "apps/microservices-architecture-nestjs"
+}
