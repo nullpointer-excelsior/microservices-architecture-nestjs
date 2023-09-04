@@ -1,16 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { ProductsModule } from './products.module';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { sdk } from './tracing';
 
 const APP_PORT = 3000;
 
 async function bootstrap() {
+  
+  sdk.start()
+  
   const app = await NestFactory.create(ProductsModule, {
     bufferLogs: true,
   });
   const logger = app.get(Logger);
   app.useLogger(logger);
-  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  app.useGlobalInterceptors(new LoggerErrorInterceptor())
 
   app.enableShutdownHooks();
   const server = await app.listen(APP_PORT);
@@ -28,7 +33,7 @@ async function bootstrap() {
       }
 
       logger.log('Safe Closing server');
-      process.exit();
+      process.exit(0);
     });
   };
 

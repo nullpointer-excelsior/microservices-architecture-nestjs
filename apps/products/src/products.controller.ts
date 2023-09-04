@@ -14,8 +14,7 @@ import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 @Controller('products')
 export class ProductController {
   constructor(
-    @InjectPinoLogger(ProductController.name)
-    private readonly logger: PinoLogger,
+    @InjectPinoLogger(ProductController.name) private readonly logger: PinoLogger,
     private readonly productService: ProductService,
   ) {}
 
