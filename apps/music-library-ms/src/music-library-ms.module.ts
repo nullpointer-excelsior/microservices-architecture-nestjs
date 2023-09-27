@@ -16,6 +16,7 @@ import { SongRepository } from './infrastructure/persistence/song.repository';
       database: 'music-library',
       entities: [SongEntity],
       synchronize: true,
+      logging: ['query']
     }),
     TypeOrmModule.forFeature([SongEntity])
   ],

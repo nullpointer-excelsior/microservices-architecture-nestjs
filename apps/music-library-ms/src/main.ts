@@ -7,8 +7,8 @@ async function bootstrap() {
   const app = await NestFactory.create(MusicLibraryMsModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Spotify clone library')
-    .setDescription('The Spotify clone library API description')
+    .setTitle('Music library microservice')
+    .setDescription('The Music library API description')
     .setVersion('1.0')
     .addTag('Player-library')
     .build();

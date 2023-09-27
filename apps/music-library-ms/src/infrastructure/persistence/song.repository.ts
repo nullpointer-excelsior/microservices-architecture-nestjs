@@ -11,6 +11,8 @@ export class SongRepository {
     findByContainsName(name: string) {
         return this.repository.createQueryBuilder('song')
             .andWhere('song.name LIKE :name', { name: `%${name}%` })
+            .orWhere('song.artist LIKE :name', { name: `%${name}%` })
+            .orWhere('song.album LIKE :name', { name: `%${name}%` })
             .getMany()
     }
 
