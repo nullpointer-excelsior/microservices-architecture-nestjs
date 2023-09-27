@@ -17,22 +17,13 @@
         "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     },
-    "microservices-architecture-nestjs": {
+    "products-ms": {
       "type": "application",
-      "root": "apps/microservices-architecture-nestjs",
+      "root": "apps/products-ms",
       "entryFile": "main",
-      "sourceRoot": "apps/microservices-architecture-nestjs/src",
+      "sourceRoot": "apps/products-ms/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/microservices-architecture-nestjs/tsconfig.app.json"
-      }
-    },
-    "products": {
-      "type": "application",
-      "root": "apps/products",
-      "entryFile": "main",
-      "sourceRoot": "apps/products/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/products/tsconfig.app.json"
+        "tsConfigPath": "apps/products-ms/tsconfig.app.json"
       }
     },
     "shared/logger": {
@@ -42,6 +33,33 @@
       "sourceRoot": "libs/shared/logger/src",
       "compilerOptions": {
         "tsConfigPath": "libs/shared/logger/tsconfig.lib.json"
+      }
+    },
+    "stock-ms": {
+      "type": "application",
+      "root": "apps/stock-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/stock-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/stock-ms/tsconfig.app.json"
+      }
+    },
+    "store-ms": {
+      "type": "application",
+      "root": "apps/store-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/store-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/store-ms/tsconfig.app.json"
+      }
+    },
+    "song-library-ms": {
+      "type": "application",
+      "root": "apps/song-library-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/song-library-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/song-library-ms/tsconfig.app.json"
       }
     }
   },

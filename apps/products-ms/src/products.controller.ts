@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   Post,
-  Put,
 } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { Product } from './product.model';
@@ -24,19 +23,9 @@ export class ProductController {
   }
 
   @Get()
-  findAll(): Product[] {
+  findAll() {
     this.logger.info('get-all-products');
     return this.productService.findAll();
-  }
-
-  @Get(':id')
-  findById(@Param('id') id: number): Product {
-    return this.productService.findById(id);
-  }
-
-  @Put(':id')
-  update(@Param('id') id: number, @Body() updatedProduct: Product): Product {
-    return this.productService.update(id, updatedProduct);
   }
 
   @Delete(':id')

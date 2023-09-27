@@ -12,4 +12,8 @@ export class Product {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  stock: number
 }

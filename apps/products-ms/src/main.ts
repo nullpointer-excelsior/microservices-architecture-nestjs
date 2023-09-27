@@ -1,14 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { ProductsModule } from './products.module';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { sdk } from './tracing';
+import { InstrumentationModule } from '../../../libs/shared/src/instrumentation/instrumentation.module';
 
 const APP_PORT = 3000;
 
 async function bootstrap() {
   
-  sdk.start()
+  const sdk = InstrumentationModule.createSdk({
+    serviceName:"products-ms",
+    serviceVersion: "1.0",
+    traceExporterOptions: {
+      url: "https://otlp.nr-data.net:4318/v1/traces",
+      headers: {
+        ['api-key']: "549373a546da446c372324876de7d0e625d7NRAL"
+      }
+    },
+    metricExporterOptions: {
+      url: "https://otlp.nr-data.net:4318/v1/metrics",
+      headers: {
+        ['api-key']: "549373a546da446c372324876de7d0e625d7NRAL"
+      }
+    }
+  })
+  sdk.start() 
   
   const app = await NestFactory.create(ProductsModule, {
     bufferLogs: true,

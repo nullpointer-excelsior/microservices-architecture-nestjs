@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Product } from './product.model';
 import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
-import { tracer } from './tracing';
+import { getTracer } from './instrumentation';
+
+export class Product {
+	name: string;
+	price: number;
+	description: string;
+  }
 
 const RETAIL_PRODUCTS = [
 	{
@@ -71,7 +76,7 @@ export class ProductRepository {
 	}
 
 	findAll(): Product[] {
-		return tracer.startActiveSpan('products-repository.findAll()', (span) => {
+		return getTracer().startActiveSpan('products-repository.findAll()', (span) => {
 			span.setAttributes({
 				'component-service': 'ProductRepository',
 				'method': 'findAll',
