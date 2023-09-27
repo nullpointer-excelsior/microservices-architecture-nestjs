@@ -1,0 +1,22 @@
+import { NestFactory } from '@nestjs/core';
+import { MusicLibraryMsModule } from './music-library-ms.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+async function bootstrap() {
+  
+  const app = await NestFactory.create(MusicLibraryMsModule);
+
+  const config = new DocumentBuilder()
+    .setTitle('Spotify clone library')
+    .setDescription('The Spotify clone library API description')
+    .setVersion('1.0')
+    .addTag('Player-library')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(3000);
+  
+}
+bootstrap();

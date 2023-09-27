@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  song-library-db:
-    container_name: song-library-db
+  music-library-db:
+    container_name: music-library-db
     image: postgres:13
     environment:
-      POSTGRES_DB: song-library
-      POSTGRES_USER: song-library
-      POSTGRES_PASSWORD: song-library
+      POSTGRES_DB: music-library
+      POSTGRES_USER: music-library
+      POSTGRES_PASSWORD: music-library
     volumes:
       - postgresql_bin:/usr/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data

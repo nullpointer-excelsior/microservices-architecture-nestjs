@@ -53,13 +53,13 @@
         "tsConfigPath": "apps/store-ms/tsconfig.app.json"
       }
     },
-    "song-library-ms": {
+    "music-library-ms": {
       "type": "application",
-      "root": "apps/song-library-ms",
+      "root": "apps/music-library-ms",
       "entryFile": "main",
-      "sourceRoot": "apps/song-library-ms/src",
+      "sourceRoot": "apps/music-library-ms/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/song-library-ms/tsconfig.app.json"
+        "tsConfigPath": "apps/music-library-ms/tsconfig.app.json"
       }
     }
   },
