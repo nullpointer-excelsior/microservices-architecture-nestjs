@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  song-library-db:
+    container_name: song-library-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: song-library
+      POSTGRES_USER: song-library
+      POSTGRES_PASSWORD: song-library
+    volumes:
+      - postgresql_bin:/usr/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - microservices-architecture
+
+networks:
+  microservices-architecture:
+    driver: bridge
+
+volumes:
+  pgadmin_root_prefs:
+    driver: local
+  postgresql_data:
+    driver: local
+  postgresql_bin:
+    driver: local
