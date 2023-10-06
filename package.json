@@ -11,8 +11,9 @@
     "start": "nest start",
     "start:infra": "cd infrastructure && docker-compose up -d",
     "stop:infra": "cd infrastructure && docker-compose down",
-    "bash:postgres": "docker exec -it music-library-db psql -U music-library",
+    "container:postgres": "docker exec -it music-library-db psql -U music-library",
     "start:products": "cross-env NODE_ENV=development npx nest start -w products-ms",
+    "start:music-library": "npx nest start -w music-library-ms",
     "start:prod:products": "cross-env NODE_ENV=production npx nest start -w products-ms",
     "start:stock": "cross-env NODE_ENV=development npx nest start -w stock-ms",
     "start:store": "cross-env NODE_ENV=development npx nest start -w store-ms",
@@ -23,11 +24,12 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/microservices-architecture-nestjs/test/jest-e2e.json"
+    "test:e2e:music-library": "jest --config ./apps/music-library-ms/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.1.12",
