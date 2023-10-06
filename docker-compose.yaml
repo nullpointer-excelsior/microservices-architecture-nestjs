@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  music-library-db:
+    container_name: music-library-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${MUSIC_LIBRARY_MS_DATABASE_NAME}
+      POSTGRES_USER: ${MUSIC_LIBRARY_MS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${MUSIC_LIBRARY_MS_DATABASE_PASS}
+    ports:
+      - 5432:5432
+    networks:
+      - microservices-architecture
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+
+    networks:
+      - microservices-architecture
+
+networks:
+  microservices-architecture:
+    driver: bridge
+
+volumes:
+  pgadmin_root_prefs:
+    driver: local
+  postgresql_data:
+    driver: local
+  postgresql_bin:
+    driver: local
