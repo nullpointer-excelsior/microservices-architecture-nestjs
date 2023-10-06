@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Param, Query } from "@nestjs/common";
 import { SongUseCases } from "../../application/song.use-cases";
 import { ApiInternalServerErrorResponse, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { SongModel } from "../../domain/model/song.model";
@@ -20,10 +20,23 @@ export class SongController {
     })
     @ApiQuery({ 
         name: 'q', 
-        description: 'Key words for a song search'
+        description: 'Keywords for a song search'
     })
     searchByContainsName(@Query('q') name: string): Promise<SongModel[]> {
         return this.songs.searchByContainsName(name)
+    }
+
+    @Get(':artist')
+    @ApiInternalServerErrorResponse({ 
+        description: 'An error has been ocurred'
+    })
+    @ApiResponse({ 
+        status: 200,
+        description: 'The records has been successfully retrieved.',
+        type: SongModel,
+    })
+    getByArtistName(@Param('artist') artist: string): Promise<SongModel[]> {
+        return this.songs.findByArtist(artist)
     }
 
 }

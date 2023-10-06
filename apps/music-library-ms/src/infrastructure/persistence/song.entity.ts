@@ -12,6 +12,6 @@ export class SongEntity {
     album: string;
     @Column()
     artist: string;
-    @Column({ unique: true })
+    @Column({ unique: false })
     trackUrl: string;
 }

@@ -1,7 +1,17 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
+
+type SongProperties = {
+    id: string
+    name: string
+    genre: string
+    album: string
+    artist: string
+    trackUrl: string;
+}
 export class SongModel {
+    
     @ApiProperty({ description: 'Id song'})
     @IsNotEmpty()
     @IsString()
@@ -27,4 +37,15 @@ export class SongModel {
     @IsString()
     trackUrl: string;
     
+    static create(props: SongProperties) {
+        const model = new SongModel()
+        model.album = props.album
+        model.artist = props.artist
+        model.genre = props.genre
+        model.id = props.id
+        model.name = props.name
+        model.trackUrl = props.trackUrl
+        return model
+    }
+
 }

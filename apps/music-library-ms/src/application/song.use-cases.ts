@@ -10,5 +10,9 @@ export class SongUseCases {
     searchByContainsName(name: string): Promise<SongModel[]> {
         return this.repository.findByContainsName(name)
     }
-    
+
+    findByArtist(artist: string): Promise<SongModel[]> {
+        return this.repository.findByArtist(artist)
+    }
+
 }

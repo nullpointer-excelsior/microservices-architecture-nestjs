@@ -1,30 +1,30 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SongEntity } from './infrastructure/persistence/song.entity';
-import { SongController } from './infrastructure/api/song.controller';
+import { ConfigModule } from '@nestjs/config';
 import { SongUseCases } from './application/song.use-cases';
+import { SongController } from './infrastructure/api/song.controller';
+import { PersistenceModule } from './infrastructure/persistence/persistence.module';
 import { SongRepository } from './infrastructure/persistence/song.repository';
+import { ArtistController } from './infrastructure/api/artist.controller';
+import { ArtistUseCases } from './application/artist.use-cases';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
+    ConfigModule.forRoot(),
+    PersistenceModule.register({
+      host: process.env.MUSIC_LIBRARY_MS_DATABASE_HOST,
       port: 5432,
-      username: 'music-library',
-      password: 'music-library',
-      database: 'music-library',
-      entities: [SongEntity],
-      synchronize: true,
-      logging: ['query']
-    }),
-    TypeOrmModule.forFeature([SongEntity])
+      username: process.env.MUSIC_LIBRARY_MS_DATABASE_USER,
+      password: process.env.MUSIC_LIBRARY_MS_DATABASE_PASS,
+      database: process.env.MUSIC_LIBRARY_MS_DATABASE_NAME,
+    })
   ],
   controllers: [
-    SongController
+    SongController,
+    ArtistController
   ],
   providers: [
     SongUseCases,
+    ArtistUseCases,
     SongRepository
   ]
 })
