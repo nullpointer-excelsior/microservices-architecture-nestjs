@@ -24,11 +24,11 @@
       "@app/shared/*": [
         "libs/shared/src/*"
       ],
-      "@app/shared/logger": [
-        "libs/shared/logger/src"
+      "@app/rabbitmq-queue": [
+        "libs/rabbitmq-queue/src"
       ],
-      "@app/shared/logger/*": [
-        "libs/shared/logger/src/*"
+      "@app/rabbitmq-queue/*": [
+        "libs/rabbitmq-queue/src/*"
       ]
     }
   }

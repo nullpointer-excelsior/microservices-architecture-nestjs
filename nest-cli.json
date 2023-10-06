@@ -17,15 +17,6 @@
         "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     },
-    "products-ms": {
-      "type": "application",
-      "root": "apps/products-ms",
-      "entryFile": "main",
-      "sourceRoot": "apps/products-ms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/products-ms/tsconfig.app.json"
-      }
-    },
     "shared/logger": {
       "type": "library",
       "root": "libs/shared/logger",
@@ -35,24 +26,6 @@
         "tsConfigPath": "libs/shared/logger/tsconfig.lib.json"
       }
     },
-    "stock-ms": {
-      "type": "application",
-      "root": "apps/stock-ms",
-      "entryFile": "main",
-      "sourceRoot": "apps/stock-ms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/stock-ms/tsconfig.app.json"
-      }
-    },
-    "store-ms": {
-      "type": "application",
-      "root": "apps/store-ms",
-      "entryFile": "main",
-      "sourceRoot": "apps/store-ms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/store-ms/tsconfig.app.json"
-      }
-    },
     "music-library-ms": {
       "type": "application",
       "root": "apps/music-library-ms",
@@ -60,6 +33,24 @@
       "sourceRoot": "apps/music-library-ms/src",
       "compilerOptions": {
         "tsConfigPath": "apps/music-library-ms/tsconfig.app.json"
+      }
+    },
+    "ai-recommender-ms": {
+      "type": "application",
+      "root": "apps/ai-recommender-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/ai-recommender-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ai-recommender-ms/tsconfig.app.json"
+      }
+    },
+    "rabbitmq-queue": {
+      "type": "library",
+      "root": "libs/rabbitmq-queue",
+      "entryFile": "index",
+      "sourceRoot": "libs/rabbitmq-queue/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/rabbitmq-queue/tsconfig.lib.json"
       }
     }
   },
