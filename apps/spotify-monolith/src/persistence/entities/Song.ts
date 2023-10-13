@@ -28,7 +28,4 @@ export class Song {
   @ManyToOne(() => Genre, genre => genre.songs)
   genre: Genre
 
-  // @ManyToMany(() => Song, song => song.playlists)
-  // playlists: Playlist[]
-
 }

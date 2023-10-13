@@ -1,12 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Song } from "./Song";
 import { User } from "./User";
 
 
 @Entity()
 export class Playlist {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;
@@ -14,8 +15,9 @@ export class Playlist {
   @Column()
   duration: number;
 
-  // @OneToMany(() => Song, song => song.playlists)
-  // songs: Song[];
+  @ManyToMany(() => Song)
+  @JoinTable()
+  songs: Song[];
 
   @ManyToOne(() => Playlist, playlist => playlist.user)
   user: User;

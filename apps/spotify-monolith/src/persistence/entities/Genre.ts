@@ -4,8 +4,8 @@ import { Song } from "./Song";
 @Entity()
 export class Genre {
 
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column()
   name: string;

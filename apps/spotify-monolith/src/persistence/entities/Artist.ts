@@ -1,5 +1,4 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-// import { Genre } from "./Genre";
 import { Album } from "./Album";
 import { Song } from "./Song";
 
@@ -18,9 +17,6 @@ export class Artist {
 
   @Column()
   biography: string;
-
-  // @ManyToMany(() => Genre, genre => genre.artists)
-  // genres: Genre[];
 
   @OneToMany(() => Song, song => song.artist)
   songs: Song[]

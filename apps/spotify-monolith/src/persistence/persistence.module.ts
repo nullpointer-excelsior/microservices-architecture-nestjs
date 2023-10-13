@@ -4,6 +4,9 @@ import { Album } from './entities/Album';
 import { Artist } from './entities/Artist';
 import { Genre } from './entities/Genre';
 import { Song } from './entities/Song';
+import { Playlist } from './entities/Playlist';
+import { Radio } from './entities/Radio';
+import { User } from './entities/User';
 
 type Options = {
   host: string
@@ -33,9 +36,9 @@ export class PersistenceModule {
             Album,
             Artist,
             Genre,
-            // Playlist,
-            // Queue,
-            // User
+            Playlist,
+            Radio,
+            User
           ],
           synchronize: true,
           logging: ['query']

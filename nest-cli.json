@@ -52,6 +52,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/rabbitmq-queue/tsconfig.lib.json"
       }
+    },
+    "spotify-monolith": {
+      "type": "application",
+      "root": "apps/spotify-monolith",
+      "entryFile": "main",
+      "sourceRoot": "apps/spotify-monolith/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/spotify-monolith/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
