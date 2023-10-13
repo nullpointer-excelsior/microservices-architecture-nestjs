@@ -10,7 +10,19 @@ services:
       POSTGRES_USER: ${MUSIC_LIBRARY_MS_DATABASE_USER}
       POSTGRES_PASSWORD: ${MUSIC_LIBRARY_MS_DATABASE_PASS}
     ports:
-      - 5432:5432
+      - ${MUSIC_LIBRARY_MS_DATABASE_PORT}:5432
+    networks:
+      - microservices-architecture
+
+  spotify-monolith-db:
+    container_name: spotify-monolith-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${SPOTIFY_MONOLITH_DATABASE_NAME}
+      POSTGRES_USER: ${SPOTIFY_MONOLITH_DATABASE_USER}
+      POSTGRES_PASSWORD: ${SPOTIFY_MONOLITH_DATABASE_PASS}
+    ports:
+      - ${SPOTIFY_MONOLITH_DATABASE_PORT}:5432
     networks:
       - microservices-architecture
 
