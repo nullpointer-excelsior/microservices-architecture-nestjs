@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Song } from "./Song";
-import { Genre } from "./Genre";
+import { Song } from "./song.entity";
+import { Genre } from "./genre.entity";
 
 @Entity()
 export class Radio {

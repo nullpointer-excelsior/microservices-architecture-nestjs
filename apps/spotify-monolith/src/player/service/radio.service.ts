@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Radio } from '../entities/Radio';
+import { Radio } from '../../shared/database/entities/radio.entity';
 
 @Injectable()
-export class RadioRepository {
+export class RadioService {
   constructor(
     @InjectRepository(Radio)
     private radioRepository: Repository<Radio>,

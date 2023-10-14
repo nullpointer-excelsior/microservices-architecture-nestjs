@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Song } from "./Song";
+import { Song } from "./song.entity";
 
 @Entity()
 export class Genre {

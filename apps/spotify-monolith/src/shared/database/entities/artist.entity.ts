@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Album } from "./Album";
-import { Song } from "./Song";
+import { Album } from "./album.entity";
+import { Song } from "./song.entity";
 
 
 @Entity()

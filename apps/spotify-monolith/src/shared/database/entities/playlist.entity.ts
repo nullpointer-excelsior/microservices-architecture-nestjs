@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Song } from "./Song";
-import { User } from "./User";
+import { Song } from "./song.entity";
+import { User } from "./user.entity";
 
 
 @Entity()
