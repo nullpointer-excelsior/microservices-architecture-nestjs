@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Radio } from '../../shared/database/entities/radio.entity';
+import { Radio } from '../../../shared/database/entities/radio.entity';
 
 @Injectable()
 export class RadioService {
