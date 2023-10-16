@@ -1,10 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { SongRepository } from "../domain/repository/song.repository";
-import { Playlist } from "../../shared/database/entities/playlist.entity";
-import { UserRepository } from "../domain/repository/user.repository";
-import { PlaylistRepository } from "../domain/repository/playlist.repository";
+import { Inject, Injectable } from "@nestjs/common";
+import { PlaylistEntity } from "../domain/entity/playlist";
+import { PlaylistRepository } from "../domain/repository/PlaylistRepository";
+import { UserRepository } from "../domain/repository/UserRepository";
+import { SongRepository } from "../domain/repository/SongRepository";
+import { SONG_REPOSITORY, PLAYLIST_REPOSITORY, USER_REPOSITORY } from "../providers.token";
 
-export type CreatePlayList = {
+export type CreatePlayListDTO = {
     userId: string
     name: string;
     songIds: string[] 
@@ -14,26 +15,24 @@ export type CreatePlayList = {
 export class PlayListUseCases {
 
     constructor(
-        private songRepository: SongRepository, 
-        private userRepository: UserRepository,
-        private playListRepository: PlaylistRepository
+        @Inject(SONG_REPOSITORY) private songRepository: SongRepository, 
+        @Inject(PLAYLIST_REPOSITORY) private playListRepository: PlaylistRepository,
+        @Inject(USER_REPOSITORY) private userRepository: UserRepository
     ) {}
 
-    async create(createPlayList: CreatePlayList) {
-        const songs = await this.songRepository.findByIds(createPlayList.songIds)
-        const playlist = new Playlist()
-        playlist.name = createPlayList.name
-        playlist.songs = songs
-        playlist.user = await this.userRepository.findById(createPlayList.userId)
-        playlist.duration = songs.map(song => song.duration).reduce((prev, curr) => prev + curr, 0)
-        return await this.playListRepository.create(playlist)
+    async create(dto: CreatePlayListDTO) {
+        const songs = await this.songRepository.findByIds(dto.songIds)
+        const user = await this.userRepository.findById(dto.userId)
+        const playlist = PlaylistEntity.create({ 
+            name: dto.name,
+            songs: songs,
+            user: user
+        })
+        return await this.playListRepository.save(playlist)
     }
 
-    update() {}
+    findByUserId(id: string): Promise<PlaylistEntity[]> {
+        return this.playListRepository.findByUserId(id)
+    }
 
-    findByUserId(id: string) {}
-
-    findAll() {}
-
-    delete(id: string) {}
 }
