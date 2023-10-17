@@ -19,7 +19,7 @@ export class Playlist {
   @JoinTable()
   songs: Song[];
 
-  @ManyToOne(() => Playlist, playlist => playlist.user)
+  @ManyToOne(() => User, user => user.playlists)
   user: User;
 
 }
