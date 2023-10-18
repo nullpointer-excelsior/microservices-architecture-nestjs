@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
-import { Song } from "../../../../shared/database/entities/song.entity";
-import { SongRepository } from "../../../domain/repository/SongRepository";
+import { Song } from "../../../shared/database/entities/song.entity";
 
 @Injectable()
-export class SongPostgresRepository implements SongRepository {
+export class SongRepository {
     
     constructor(@InjectRepository(Song) private songRepository: Repository<Song>) { }
 

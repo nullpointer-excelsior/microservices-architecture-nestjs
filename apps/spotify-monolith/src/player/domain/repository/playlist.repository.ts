@@ -1,16 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Playlist } from "../../../../shared/database/entities/playlist.entity";
-import { PlaylistEntity } from "../../../domain/entity/playlist";
+import { Playlist } from "../../../shared/database/entities/playlist.entity";
+
 
 @Injectable()
-export class PlaylistPostgresRepository {
+export class PlaylistRepository {
 
   constructor(@InjectRepository(Playlist) private playlistRepository: Repository<Playlist>) { }
 
-  async findByUserId(id: string): Promise<PlaylistEntity[]> {
+  async findByUserId(id: string): Promise<Playlist[]> {
     return await this.playlistRepository.find({
+      relations: {
+        songs: true
+      },
       where: {
         user: {
           id: id,
@@ -19,7 +22,7 @@ export class PlaylistPostgresRepository {
     });
   }
 
-  async save(playlist: Playlist): Promise<PlaylistEntity> {
+  async save(playlist: Playlist): Promise<Playlist> {
     return await this.playlistRepository.save(playlist);
   }
 

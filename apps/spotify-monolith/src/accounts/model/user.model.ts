@@ -5,7 +5,7 @@ export class UserModel {
 
   @IsNotEmpty()
   @IsOptional()
-  @ApiProperty({ description: 'The ID of the user', nullable: true })
+  @ApiProperty({ description: 'The ID of the user', required: false })
   id?: string;
 
   @IsNotEmpty()
