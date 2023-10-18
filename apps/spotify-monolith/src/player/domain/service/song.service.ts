@@ -4,15 +4,16 @@ import { In, Repository } from "typeorm";
 import { Song } from "../../../shared/database/entities/song.entity";
 
 @Injectable()
-export class SongRepository {
+export class SongService {
     
-    constructor(@InjectRepository(Song) private songRepository: Repository<Song>) { }
+    constructor(@InjectRepository(Song) private repository: Repository<Song>) { }
 
     findByIds(ids: string[]): Promise<Song[]> {
-        return this.songRepository.find({ 
+        return this.repository.find({ 
             where: { 
                 id: In(ids)
             } 
         })
     }
+
 }

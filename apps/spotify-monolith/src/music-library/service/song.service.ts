@@ -3,38 +3,40 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Song } from '../../shared/database/entities/song.entity';
 import { SongModel } from '../model/song.model';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
 
 @Injectable()
 export class SongService {
     
-    constructor(@InjectRepository(Song) private songRepository: Repository<Song>) { }
+    constructor(@InjectRepository(Song) private repository: Repository<Song>) { }
 
-    async findAll(): Promise<SongModel[]> {
-        return await this.songRepository.find();
+    findAll(): Promise<SongModel[]> {
+        return this.repository.find();
     }
 
-    async findById(id: string): Promise<SongModel | undefined> {
-        return await this.songRepository.findOneBy({ id });
+    @NotFoundExceptionIfUndefined
+    findById(id: string): Promise<SongModel> {
+        return this.repository.findOneBy({ id });
     }
 
-    async update(song: Song): Promise<SongModel> {
-        return await this.songRepository.save(song);
+    update(song: Song): Promise<SongModel> {
+        return this.repository.save(song);
     }
 
-    async findByArtistId(artistId: string): Promise<SongModel[]> {
-        return await this.songRepository.find({
+    findByArtistId(artistId: string): Promise<SongModel[]> {
+        return this.repository.find({
             where: { artist: { id: artistId } },
         });
     }
 
-    async findByAlbumId(albumId: string): Promise<SongModel[]> {
-        return await this.songRepository.find({
+    findByAlbumId(albumId: string): Promise<SongModel[]> {
+        return this.repository.find({
             where: { album: { id: albumId } },
         });
     }
 
-    async findByGenre(genreId: string): Promise<SongModel[]> {
-        return await this.songRepository.find({
+    findByGenre(genreId: string): Promise<SongModel[]> {
+        return this.repository.find({
             where: { genre: { id: genreId } },
         });
     }

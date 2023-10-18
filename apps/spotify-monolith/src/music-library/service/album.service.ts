@@ -2,24 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Album } from '../../shared/database/entities/album.entity';
-import { NotFoundExceptionIfUndefined } from '../decorator/not-found-exception-if-indefined';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
 
 @Injectable()
 export class AlbumService {
-  
-  constructor(@InjectRepository(Album) private albumRepository: Repository<Album>) { }
 
-  async findAll(): Promise<Album[]> {
-    return await this.albumRepository.find();
+  constructor(@InjectRepository(Album) private repository: Repository<Album>) { }
+
+  findAll(): Promise<Album[]> {
+    return this.repository.find();
   }
 
   @NotFoundExceptionIfUndefined
-  async findById(id: string): Promise<Album> {
-    return await this.albumRepository.findOneBy({ id });
+  findById(id: string): Promise<Album> {
+    return this.repository.findOneBy({ id });
   }
 
-  async findByArtistId(artistId: string): Promise<Album[]> {
-    return await this.albumRepository.find({
+  @NotFoundExceptionIfUndefined
+  findByArtistId(artistId: string): Promise<Album[]> {
+    return this.repository.find({
       where: { artist: { id: artistId } },
     });
   }

@@ -5,7 +5,7 @@ export function NotFoundExceptionIfUndefined(target: any, propertyKey: string | 
   
     descriptor.value = async function(...args: any[]) {
       const result = await originalMethod.apply(this, args);
-      if (result === undefined) {
+      if (!result) {
         throw new NotFoundException();
       }
       return result;

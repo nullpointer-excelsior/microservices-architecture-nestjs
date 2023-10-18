@@ -3,18 +3,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artist } from '../../shared/database/entities/artist.entity';
 import { ArtistModel } from '../model/artist.model';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
 
 @Injectable()
 export class ArtistService {
 
     constructor(@InjectRepository(Artist) private repository: Repository<Artist>) { }
 
-    async findAll(): Promise<ArtistModel[]> {
-        return await this.repository.find();
+    findAll(): Promise<ArtistModel[]> {
+        return this.repository.find();
     }
 
-    async findById(id: string): Promise<ArtistModel | undefined> {
-        return await this.repository.findOneBy({ id });
+    @NotFoundExceptionIfUndefined
+    findById(id: string): Promise<ArtistModel> {
+        return this.repository.findOneBy({ id });
     }
 
 }

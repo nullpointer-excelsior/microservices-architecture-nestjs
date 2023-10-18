@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Song } from "./song.entity";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Genre } from "./genre.entity";
+import { Song } from "./song.entity";
 
 @Entity()
 export class Radio {
@@ -11,11 +11,10 @@ export class Radio {
   @Column()
   name: string;
 
-  @OneToMany(() => Song, song => song.genre)
+  @ManyToMany(() => Song, (song) => song.radios)
   songs: Song[];
 
-  @OneToOne(() => Genre)
-  @JoinColumn()
+  @ManyToOne(() => Genre, genre => genre.songs)
   genre: Genre
 
 }

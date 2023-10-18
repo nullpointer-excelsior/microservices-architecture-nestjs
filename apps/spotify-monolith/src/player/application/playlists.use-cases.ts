@@ -1,27 +1,28 @@
 import { Injectable } from "@nestjs/common";
-import { createPlaylistEntity } from "../domain/factory/create-playlist-entity";
-import { PlaylistModel } from "../domain/model/playlist.model";
-import { PlaylistRepository } from "../domain/repository/playlist.repository";
-import { SongRepository } from "../domain/repository/song.repository";
-import { UserRepository } from "../domain/repository/user.repository";
-import { CreatePlayListRequest } from "../infrastructure/restful-api/model/create-playlist.request";
-import { createPLaylistModel } from "../domain/factory/create-playlist-model";
 import { Playlist } from "../../shared/database/entities/playlist.entity";
+import { createPlaylistEntity } from "../domain/factory/create-playlist-entity";
+import { createPLaylistModel } from "../domain/factory/create-playlist-model";
+import { PlaylistModel } from "../domain/model/playlist.model";
+import { PlaylistService } from "../domain/service/playlist.service";
+import { SongService } from "../domain/service/song.service";
+import { UserService } from "../domain/service/user.service";
+import { CreatePlayListRequest } from "../infrastructure/restful-api/dto/create-playlist.request";
+import { EntityCreatedResponse as CreatedEntityResponse } from "../infrastructure/restful-api/dto/entity-created.response";
 
 
 @Injectable()
 export class PlayListUseCases {
 
     constructor(
-        private userRepository: UserRepository,
-        private songRepository: SongRepository,
-        private playlistRepository: PlaylistRepository
+        private user: UserService,
+        private song: SongService,
+        private playlist: PlaylistService
     ) { }
 
-    async create(request: CreatePlayListRequest): Promise<PlaylistModel> {
+    async create(request: CreatePlayListRequest): Promise<CreatedEntityResponse> {
 
-        const songs = await this.songRepository.findByIds(request.songIds)
-        const user = await this.userRepository.findById(request.userId)
+        const songs = await this.song.findByIds(request.songIds)
+        const user = await this.user.findById(request.userId)
 
         const playlist = createPlaylistEntity({
             name: request.name,
@@ -29,9 +30,9 @@ export class PlayListUseCases {
             songs: songs
         })
 
-        return this.playlistRepository
+        return this.playlist
             .save(playlist)
-            .then(saved => createPLaylistModel(saved))
+            .then(entity => new CreatedEntityResponse(entity.id))
 
     }
 
@@ -39,7 +40,7 @@ export class PlayListUseCases {
         
         const mapEntities = (playlists: Playlist[]) => playlists.map(playlist => createPLaylistModel(playlist))
 
-        return this.playlistRepository
+        return this.playlist
             .findByUserId(id)
             .then(playlists => mapEntities(playlists))
             
