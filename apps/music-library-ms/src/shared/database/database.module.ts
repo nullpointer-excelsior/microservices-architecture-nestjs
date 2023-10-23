@@ -3,10 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Album } from './entities/album.entity';
 import { Artist } from './entities/artist.entity';
 import { Genre } from './entities/genre.entity';
-import { Playlist } from './entities/playlist.entity';
 import { Radio } from './entities/radio.entity';
 import { Song } from './entities/song.entity';
-import { User } from './entities/user.entity';
 
 type Options = {
   host: string
@@ -25,9 +23,7 @@ export class DatabaseModule {
       Album,
       Artist,
       Genre,
-      Playlist,
       Radio,
-      User
     ]
 
     const repositoriesModule = TypeOrmModule.forFeature(entities)
