@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PlayerMsModule } from './player-ms.module';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(PlayerMsModule);
@@ -14,6 +15,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  const port = process.env.PLAYER_MS_APP_PORT
+  await app.listen(port, () => {
+    Logger.log(`Player microservice listen on port: ${port}`, "Main")
+  });
+
 }
 bootstrap();

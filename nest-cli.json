@@ -61,6 +61,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/spotify-monolith/tsconfig.app.json"
       }
+    },
+    "player-ms": {
+      "type": "application",
+      "root": "apps/player-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/player-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/player-ms/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

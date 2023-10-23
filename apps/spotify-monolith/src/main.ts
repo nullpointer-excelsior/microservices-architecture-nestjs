@@ -1,9 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { SpotifyMonolithModule } from './spotify-monolith.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-// import { PlayListUseCases } from './player/application/playlists.use-cases';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
+  
   const app = await NestFactory.create(SpotifyMonolithModule);
 
   const config = new DocumentBuilder()
@@ -15,10 +16,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  // const s = app.get(PlayListUseCases)
-  // const x = s.findByUserId("jdkdjk")
-  // console.log("value", x)
-  
-  await app.listen(3000);
+  const port = process.env.SPOTIFY_MONOLITH_APP_PORT
+  await app.listen(port, () => {
+    Logger.log(`Spotify monolith listen on port: ${port}`, "Main")
+  });
+
 }
 bootstrap();
