@@ -20,7 +20,6 @@ type Options = {
 export class DatabaseModule {
 
   static register(options: Options): DynamicModule {
-
     const entities = [
       Song,
       Album,

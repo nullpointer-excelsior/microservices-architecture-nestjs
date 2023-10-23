@@ -22,5 +22,5 @@ export class SongModel {
   @IsNumber()
   @ApiProperty({ description: 'The duration of the song in seconds' })
   duration: number;
-
+  
 }

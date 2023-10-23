@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SongModel } from '../model/song.model';
 import { SongService } from '../service/song.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { CreateSongRequest } from '../dto/create-song.request';
 
 
 @Controller('songs')
@@ -52,4 +53,13 @@ export class SongController {
   async findByGenre(genreId: string): Promise<SongModel[]> {
     return await this.songService.findByGenre(genreId)
   }
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new song' })
+  @ApiBody({ type: CreateSongRequest })
+  @ApiResponse({ status: 201, description: 'The newly created song', type: CreateSongRequest })
+  async create(@Body() request: CreateSongRequest): Promise<SongModel> {
+    return await this.songService.create(request);
+  }
+  
 }
