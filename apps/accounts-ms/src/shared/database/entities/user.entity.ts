@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Playlist } from "./playlist.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -19,7 +18,5 @@ export class User {
   @Column()
   premium: boolean;
 
-  @OneToMany(() => Playlist, playlist => playlist.user)
-  playlists: Playlist[];
 
 }

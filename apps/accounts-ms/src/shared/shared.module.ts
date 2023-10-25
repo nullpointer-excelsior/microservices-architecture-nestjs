@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
     imports:[
         ConfigModule.forRoot(),
-        EventEmitterModule.forRoot(),
         DatabaseModule.register({
             host: process.env.ACCOUNTS_MS_DATABASE_HOST,
             port: +process.env.ACCOUNTS_MS_DATABASE_PORT,
