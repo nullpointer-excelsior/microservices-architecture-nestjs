@@ -26,6 +26,18 @@ services:
     networks:
       - microservices-architecture
 
+  accounts-db:
+    container_name: accounts-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${ACCOUNTS_MS_DATABASE_NAME}
+      POSTGRES_USER: ${ACCOUNTS_MS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${ACCOUNTS_MS_DATABASE_PASS}
+    ports:
+      - ${ACCOUNTS_MS_DATABASE_PORT}:5432
+    networks:
+      - microservices-architecture
+
   spotify-monolith-db:
     container_name: spotify-monolith-db
     image: postgres:13

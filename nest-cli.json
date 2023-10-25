@@ -70,6 +70,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/player-ms/tsconfig.app.json"
       }
+    },
+    "accounts-ms": {
+      "type": "application",
+      "root": "apps/accounts-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/accounts-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/accounts-ms/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
