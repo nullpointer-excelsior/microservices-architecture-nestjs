@@ -79,6 +79,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/accounts-ms/tsconfig.app.json"
       }
+    },
+    "mobile-bff": {
+      "type": "application",
+      "root": "apps/mobile-bff",
+      "entryFile": "main",
+      "sourceRoot": "apps/mobile-bff/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mobile-bff/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
