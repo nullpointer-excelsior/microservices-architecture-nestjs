@@ -14,9 +14,6 @@ export class RadioService {
 
     findByGenreId(id: string) {
         return this.repository.find({
-            relations: {
-                songs: true
-            },
             where: {
                 genre: {
                     id
@@ -26,6 +23,6 @@ export class RadioService {
     }
 
     findAll() {
-        return this.repository.find({ relations: { songs: true }})
+        return this.repository.find()
     }
 }
