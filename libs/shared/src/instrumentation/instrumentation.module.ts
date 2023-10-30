@@ -4,8 +4,8 @@ import { OpenTelemetryModule } from 'nestjs-otel';
 import { instrumentationConfigRepository } from './opentelemetry/instrumentation-config.repository';
 import { getTracer } from './opentelemetry/get-tracer';
 import { InternalAxiosRequestConfigWithSpan, injectFromResponse, setPropagation } from './axios/http.interceptors';
-import { createSdk } from './opentelemetry/create-sdk';
 import { CustomMetricsService } from './services/custom-metrics.service';
+import { createSdk } from './opentelemetry/start-opentelemetry';
 
 interface InstrumentationOptions {
     serviceName: string
