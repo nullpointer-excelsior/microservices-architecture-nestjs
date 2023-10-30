@@ -8,6 +8,7 @@ import { Resource } from '@opentelemetry/resources';
 import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+// import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-node"
 
 interface CreateSdkOptions {
     serviceName: string
@@ -17,6 +18,7 @@ interface CreateSdkOptions {
 }
 
 export function createSdk(options: CreateSdkOptions){
+    
     const resource = new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]: options.serviceName,
         [SemanticResourceAttributes.SERVICE_VERSION]: options.serviceVersion,

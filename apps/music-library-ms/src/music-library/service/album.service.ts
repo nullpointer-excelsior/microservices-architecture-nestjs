@@ -7,6 +7,7 @@ import { Artist } from '../../shared/database/entities/artist.entity';
 import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
 import { AlbumCreatedEvent } from '../../shared/events/album-created.event';
 import { CreateAlbumRequest } from '../dto/create-album.request';
+import { Span } from 'nestjs-otel';
 
 @Injectable()
 export class AlbumService {
@@ -17,15 +18,18 @@ export class AlbumService {
     private events: EventEmitter2
   ) { }
 
+  @Span("AlbumService/findAll")
   findAll(): Promise<Album[]> {
     return this.albumRepository.find();
   }
 
+  @Span("AlbumService/findById")
   @NotFoundExceptionIfUndefined
   findById(id: string): Promise<Album> {
     return this.albumRepository.findOneBy({ id });
   }
 
+  @Span("AlbumService/findByArtistId")
   @NotFoundExceptionIfUndefined
   findByArtistId(artistId: string): Promise<Album[]> {
     return this.albumRepository.find({
@@ -33,7 +37,8 @@ export class AlbumService {
     });
   }
 
-  async create(album: CreateAlbumRequest) {
+  @Span("AlbumService/save")
+  async save(album: CreateAlbumRequest) {
 
     const artist = await this.artistRepository.findOneBy({ id: album.artistId })
 

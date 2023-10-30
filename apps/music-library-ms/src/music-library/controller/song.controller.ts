@@ -59,7 +59,7 @@ export class SongController {
   @ApiBody({ type: CreateSongRequest })
   @ApiResponse({ status: 201, description: 'The newly created song', type: CreateSongRequest })
   async create(@Body() request: CreateSongRequest): Promise<SongModel> {
-    return await this.songService.create(request);
+    return await this.songService.save(request);
   }
   
 }

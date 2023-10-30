@@ -40,7 +40,7 @@ export class AlbumController {
   @ApiBody({ type: AlbumModel })
   @ApiResponse({ status: 201, description: 'The newly created album', type: CreateAlbumRequest })
   async create(@Body() album: CreateAlbumRequest): Promise<AlbumModel> {
-    return await this.albumService.create(album);
+    return await this.albumService.save(album);
   }
 
 }

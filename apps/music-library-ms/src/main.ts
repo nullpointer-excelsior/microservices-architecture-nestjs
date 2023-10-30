@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MusicLibraryMsModule } from './music-library-ms.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
+import { startOpenTelemetry } from '../../../libs/shared/src/instrumentation/opentelemetry/start-opentelemetry';
 
 async function bootstrap() {
 
@@ -22,4 +23,13 @@ async function bootstrap() {
   });
 
 }
+
+startOpenTelemetry({
+  serviceName: "music-library-ms",
+  serviceVersion: "1.0",
+  metricExporterOptions: {
+    url: "http://localhost::4318",
+  }
+})
+
 bootstrap();
