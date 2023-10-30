@@ -2,6 +2,7 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AxiosRequestConfig } from "axios";
+import { Span } from "nestjs-otel";
 import { Observable, map } from "rxjs";
 
 @Injectable()
@@ -16,6 +17,7 @@ export class MusicLibraryCLient {
         this.musiclibraryUrl = this.config.get("MOBILE_BFF_MUSIC_LIBRARY_API")
     }
 
+    @Span("MusicLibraryHttpClient/GET")
     get<T = any>(endopoint: string, config?: AxiosRequestConfig): Observable<T> {
         const url = `${this.musiclibraryUrl}/${endopoint}`
         return this.http.get(url, config).pipe(

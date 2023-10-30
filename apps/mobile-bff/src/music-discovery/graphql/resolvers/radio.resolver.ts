@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Args, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { Radio } from "../models/radio.model";
 import { RadioService } from "../../music-library-api/services/radio.service";
 import { Genre } from "../models/genre.model";
 import { SongService } from "../../music-library-api/services/song.service";
+import { Span } from "nestjs-otel";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 @Resolver(of => Radio)
 export class RadioResolver {
 
@@ -13,18 +14,19 @@ export class RadioResolver {
         private songService: SongService
     ) {}
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Span("RadioResolver/query/radios")
     @Query(returns => [Radio])
     radios() {
         return this.radioService.findAll()
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Span("RadioResolver/query/radioById")
     @Query(returns => Radio)
     radioById(@Args('id') id: string) {
         return this.radioService.findById(id)
     }
 
+    @Span("RadioResolver/field/songs")
     @ResolveField()
     songs(@Parent() genre: Genre) {
         return this.songService.findByGenreId(genre.id)

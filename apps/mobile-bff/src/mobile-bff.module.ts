@@ -15,6 +15,7 @@ import { SongService } from './music-discovery/music-library-api/services/song.s
 import { RadioResolver } from './music-discovery/graphql/resolvers/radio.resolver';
 import { RadioService } from './music-discovery/music-library-api/services/radio.service';
 import { PlayerCLient } from './music-discovery/shared/client/player.client';
+import { OpenTelemetryModule } from 'nestjs-otel';
 
 @Module({
   imports: [
@@ -23,7 +24,21 @@ import { PlayerCLient } from './music-discovery/shared/client/player.client';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'apps/mobile-bff/schema.gql'),
     }),
-    HttpModule
+    HttpModule,
+    OpenTelemetryModule.forRoot({
+      metrics: {
+        hostMetrics: true, // Includes Host Metrics
+        apiMetrics: {
+          enable: true, // Includes api metrics
+          defaultAttributes: {
+            // You can set default labels for api metrics
+            custom: 'label',
+          },
+          ignoreRoutes: ['/favicon.ico'], // You can ignore specific routes (See https://docs.nestjs.com/middleware#excluding-routes for options)
+          ignoreUndefinedRoutes: false, //Records metrics for all URLs, even undefined ones
+        },
+      },
+    })
   ],
   providers: [
       ArtistResolver,
