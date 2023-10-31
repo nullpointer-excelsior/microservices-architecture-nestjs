@@ -3,6 +3,9 @@ import { MusicLibraryMsModule } from './music-library-ms.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
 import { startOpenTelemetry } from '../../../libs/shared/src/instrumentation/opentelemetry/start-opentelemetry';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
+import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
 
 async function bootstrap() {
 
@@ -28,8 +31,15 @@ startOpenTelemetry({
   serviceName: "music-library-ms",
   serviceVersion: "1.0",
   metricExporterOptions: {
-    url: "http://localhost::4318",
-  }
+    url: process.env.OTLP_TRACE_EXPORTER_URL,
+  },
+  instrumentations: [
+    new HttpInstrumentation(),
+    new PgInstrumentation(),
+    new ExpressInstrumentation({
+      ignoreLayersType: [ExpressLayerType.REQUEST_HANDLER, ExpressLayerType.MIDDLEWARE]
+    }),
+  ],
 })
 
 bootstrap();
