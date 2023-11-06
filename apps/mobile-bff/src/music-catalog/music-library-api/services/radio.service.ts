@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { PlayerCLient } from "../../shared/client/player.client";
 import { Span } from "nestjs-otel";
+import { MusicLibraryCLient } from "../../shared/client/music-library.client";
 
 @Injectable()
 export class RadioService {
 
-    constructor(private client: PlayerCLient) { }
+    constructor(private client: MusicLibraryCLient) { }
 
     @Span("RadioService/findAll")
     findAll() {
