@@ -15,7 +15,6 @@
     "start:music-library": "npx nest start -w music-library-ms",
     "start:player": "npx nest start -w player-ms",
     "start:accounts": "npx nest start -w accounts-ms",
-    "start:ai-recommender": "npx nest start -w ai-recommender-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

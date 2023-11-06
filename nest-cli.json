@@ -35,15 +35,6 @@
         "tsConfigPath": "apps/music-library-ms/tsconfig.app.json"
       }
     },
-    "ai-recommender-ms": {
-      "type": "application",
-      "root": "apps/ai-recommender-ms",
-      "entryFile": "main",
-      "sourceRoot": "apps/ai-recommender-ms/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/ai-recommender-ms/tsconfig.app.json"
-      }
-    },
     "rabbitmq-queue": {
       "type": "library",
       "root": "libs/rabbitmq-queue",
