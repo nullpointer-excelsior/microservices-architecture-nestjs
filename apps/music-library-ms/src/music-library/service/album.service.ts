@@ -1,21 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Span } from 'nestjs-otel';
 import { Repository } from 'typeorm';
 import { Album } from '../../shared/database/entities/album.entity';
 import { Artist } from '../../shared/database/entities/artist.entity';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
-import { AlbumCreatedEvent } from '../../shared/events/album-created.event';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
 import { CreateAlbumRequest } from '../dto/create-album.request';
-import { Span } from 'nestjs-otel';
 
 @Injectable()
 export class AlbumService {
 
   constructor(
     @InjectRepository(Album) private albumRepository: Repository<Album>,
-    @InjectRepository(Artist) private artistRepository: Repository<Artist>,
-    private events: EventEmitter2
+    @InjectRepository(Artist) private artistRepository: Repository<Artist>
   ) { }
 
   @Span("AlbumService/findAll")
@@ -52,10 +49,6 @@ export class AlbumService {
       artist: artist,
       year: album.year,
     })
-
-    this.events.emit('library.album.created', new AlbumCreatedEvent(
-      albumCreated
-    ))
 
     return albumCreated
 

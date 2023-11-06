@@ -30,9 +30,6 @@ async function bootstrap() {
 startOpenTelemetry({
   serviceName: "music-library-ms",
   serviceVersion: "1.0",
-  metricExporterOptions: {
-    url: process.env.OTLP_TRACE_EXPORTER_URL,
-  },
   instrumentations: [
     new HttpInstrumentation(),
     new PgInstrumentation(),

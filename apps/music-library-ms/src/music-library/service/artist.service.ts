@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Artist } from '../../shared/database/entities/artist.entity';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
 import { CreateArtistRequest } from '../dto/create-artist.request';
 import { ArtistModel } from '../model/artist.model';
 import { Span } from 'nestjs-otel';

@@ -1,14 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Song } from '../../shared/database/entities/song.entity';
-import { SongModel } from '../model/song.model';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorator/not-found-exception-if-undefined';
-import { CreateSongRequest } from '../dto/create-song.request';
-import { Album } from '../../shared/database/entities/album.entity';
-import { Genre } from '../../shared/database/entities/genre.entity';
-import { Artist } from '../../shared/database/entities/artist.entity';
 import { Span } from 'nestjs-otel';
+import { Repository } from 'typeorm';
+import { NewSongDataMessage } from '../../../../../libs/rabbitmq-queue/src/rabbitmq-queue/model/messages/new-song.message';
+import { RabbitmqClient } from '../../../../../libs/rabbitmq-queue/src/rabbitmq-queue/services/rabbitmq-client.service';
+import { Album } from '../../shared/database/entities/album.entity';
+import { Artist } from '../../shared/database/entities/artist.entity';
+import { Genre } from '../../shared/database/entities/genre.entity';
+import { Song } from '../../shared/database/entities/song.entity';
+import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
+import { CreateSongRequest } from '../dto/create-song.request';
+import { SongModel } from '../model/song.model';
 
 @Injectable()
 export class SongService {
@@ -18,6 +20,7 @@ export class SongService {
         @InjectRepository(Album) private albumRepository: Repository<Album>,
         @InjectRepository(Artist) private artistRepository: Repository<Artist>,
         @InjectRepository(Genre) private genreRepository: Repository<Genre>,
+        private rabbitmqClient: RabbitmqClient,
     ) { }
 
     @Span("SongService/findAll")
@@ -33,10 +36,14 @@ export class SongService {
 
     @Span("SongService/save")
     async save(song: CreateSongRequest) {
+        Logger.log("request", song.albumId)
         const album = await this.albumRepository.findOneBy({ id: song.albumId })
+        Logger.log("album", album)
         const genre = await this.genreRepository.findOneBy({ id: song.genreId })
+        Logger.log("genre",genre)
         const artist = await this.artistRepository.findOneBy({ id: song.artistId })
-        return this.repository.save({
+        Logger.log("artist", artist)
+        const songSaved = await this.repository.save({
             album,
             genre,
             artist,
@@ -45,6 +52,13 @@ export class SongService {
             title: song.title,
             video: song.video
         })
+        const message: NewSongDataMessage = {
+            albumId: song.albumId,
+            genreId: song.genreId,
+            ...songSaved
+        } 
+        this.rabbitmqClient.emitTo('new-song', message)
+        return songSaved
     }
 
     @Span("SongService/update")

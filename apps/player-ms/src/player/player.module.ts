@@ -7,6 +7,7 @@ import { PlaylistController } from './infrastructure/restful-api/controller/play
 import { RadioController } from './infrastructure/restful-api/controller/radio.controller';
 import { RadioUseCases } from './application/radio.use-cases';
 import { RadioService } from './domain/service/radio.service';
+import { NewSongController } from './infrastructure/rabbitmq/new-song.consumer';
 
 @Module({
     providers:[
@@ -19,7 +20,8 @@ import { RadioService } from './domain/service/radio.service';
     ],
     controllers: [
         PlaylistController,
-        RadioController
-    ]
+        RadioController,
+        NewSongController
+    ],
 })
 export class PlayerModule {}

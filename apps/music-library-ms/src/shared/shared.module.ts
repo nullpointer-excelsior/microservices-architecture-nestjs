@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
     imports:[
         ConfigModule.forRoot(),
-        EventEmitterModule.forRoot(),
         DatabaseModule.register({
             host: process.env.MUSIC_LIBRARY_MS_DATABASE_HOST,
             port: +process.env.MUSIC_LIBRARY_MS_DATABASE_PORT,
