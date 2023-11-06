@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateAlbumRequest } from '../dto/create-album.request';
 import { AlbumModel } from '../model/album.model';
@@ -41,6 +41,14 @@ export class AlbumController {
   @ApiResponse({ status: 201, description: 'The newly created album', type: CreateAlbumRequest })
   async create(@Body() album: CreateAlbumRequest): Promise<AlbumModel> {
     return await this.albumService.save(album);
+  }
+
+  @Put()
+  @ApiOperation({ summary: 'Update a album' })
+  @ApiBody({ description: 'The album to update', type: AlbumModel})
+  @ApiResponse({ status: 201, description: 'The album updated', type: AlbumModel})
+  update(@Body() album: AlbumModel) {
+    return this.albumService.update(album)
   }
 
 }

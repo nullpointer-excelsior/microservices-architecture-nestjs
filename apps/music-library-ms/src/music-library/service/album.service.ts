@@ -6,6 +6,7 @@ import { Album } from '../../shared/database/entities/album.entity';
 import { Artist } from '../../shared/database/entities/artist.entity';
 import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
 import { CreateAlbumRequest } from '../dto/create-album.request';
+import { AlbumModel } from '../model/album.model';
 
 @Injectable()
 export class AlbumService {
@@ -52,6 +53,11 @@ export class AlbumService {
 
     return albumCreated
 
+  }
+
+  @Span("AlbumService/update")
+  update(album: AlbumModel) {
+    return this.albumRepository.save(album)
   }
 
 }

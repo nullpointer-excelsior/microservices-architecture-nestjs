@@ -8,19 +8,23 @@ import { ArtistService } from './service/artist.service';
 import { GenreService } from './service/genre.service';
 import { SongService } from './service/song.service';
 import { RabbitmqQueueModule } from '../../../../libs/rabbitmq-queue/rabbitmq-queue.module';
+import { RadioController } from './controller/radio.controller';
+import { RadioService } from './service/radio.service';
 
 @Module({
     controllers: [
         ArtistController,
         AlbumController,
         GenreController,
-        SongController
+        SongController,
+        RadioController
     ],
     providers: [
         AlbumService,
         ArtistService,
         GenreService,
-        SongService
+        SongService,
+        RadioService
     ],
     imports: [
         RabbitmqQueueModule,
