@@ -11,7 +11,7 @@ async function bootstrap() {
   const port = +process.env.MOBILE_BFF_APP_PORT
 
   await app.listen(port, () => {
-    Logger.log(`Mobile BFF listen on port: ${port}`, "Main")
+    Logger.log(`Mobile BFF ready on http://localhost:${port}/graphql`, "Main")
   });
   
 }
@@ -19,9 +19,6 @@ async function bootstrap() {
 startOpenTelemetry({
   serviceName: "mobile-bff",
   serviceVersion: "1.0",
-  metricExporterOptions: {
-    url: process.env.OTLP_TRACE_EXPORTER_URL,
-  },
   instrumentations: [
     new HttpInstrumentation(),
     new ExpressInstrumentation({
