@@ -6,16 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable()
-export class RabbitmqProducerClient {
+export class RabbitmqClient {
 
     constructor(@Inject(RABBITMQ_PRODUCER_CLIENT) private client: ClientProxy) { }
 
-    emitTo<T>(pattern: string, payload: T): RabbitmqMessage<T> {
+    emitTo<T>(pattern: string, data: T): RabbitmqMessage<T> {
         const message: RabbitmqMessage<T> = {
             id: uuidv4(),
             pattern: pattern,
             timestamp: new Date(),
-            data: payload
+            data: data
         }
         this.client.emit(pattern, message)
         return message

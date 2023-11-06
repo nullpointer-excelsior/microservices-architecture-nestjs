@@ -1,114 +1,72 @@
-import { DynamicModule, Logger } from '@nestjs/common';
-import { ClientProviderOptions, ClientsModule, Transport } from '@nestjs/microservices';
-import { RabbitmqProducerClient } from './src/rabbitmq-queue/services/rabbitmq-producer-client.service';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RABBITMQ_PRODUCER_CLIENT } from './src/rabbitmq-queue/config/providers.tokens';
-import { createDeadLetter } from './src/rabbitmq-queue/services/create-dead-letter';
-import { RabbitmqQueueConfigFactory } from './src/rabbitmq-queue/config/rabbitmq-queue.config';
+import { RabbitmqClient } from './src/rabbitmq-queue/services/rabbitmq-client.service';
 
+const QUEUE_NAME = 'spotify_clone_queue'
 
-export interface RabbitmqQueueModuleOptions {
-    credentials: {
-        host: string;
-        port: number;
-        vhost: string;
-        user: string;
-        password: string;
-    }
-    queue: {
-        name: string;
-        deadLetter: {
-            exchange: string;
-            patterns: string[];
-        }
-    }
-}
-
-export class RabbitmqQueueModule {
-
-    static async createWorkerMicroserviceOptions(options: RabbitmqQueueModuleOptions): Promise<ClientProviderOptions> {
-
-        const config = RabbitmqQueueConfigFactory(options)
-        const { deadLetter } = config
-
-        const deadLetterOptions = {
-            amqpurl: config.amqpurl,
-            deadLetterQueue: deadLetter.queue,
-            exchange: deadLetter.exchange,
-            patterns: deadLetter.patterns
-        }
-        const deadLetterResult = await createDeadLetter(deadLetterOptions)
-        Logger.log(deadLetterResult)
-
-        const provider: ClientProviderOptions = {
-            transport: Transport.RMQ,
-            name: 'worker-queue',
-            options: {
-                urls: [config.amqpurl],
-                queue: config.queue,
-                noAck: false,
-                queueOptions: {
-                    durable: true,
-                    deadLetterExchange: deadLetter.exchange,
-                    requeue: false,
-                },
-            },
-        }
-
-        return Promise.resolve(provider)
-
-    }
-
-    static async createRecoveryMicroserviceOptions(options: RabbitmqQueueModuleOptions): Promise<ClientProviderOptions> {
-
-        const config = RabbitmqQueueConfigFactory(options)
-        const { deadLetter } = config
-
-        const provider: ClientProviderOptions = {
-            transport: Transport.RMQ,
-            name: 'recovery-queue',
-            options: {
-                urls: [config.amqpurl],
-                queue: `${deadLetter.queue}`,
-                queueOptions: {
-                    durable: true
-                },
-            },
-        }
-
-        return Promise.resolve(provider)
-
-    }
-
-    static register(options: RabbitmqQueueModuleOptions): DynamicModule {
-        const config = RabbitmqQueueConfigFactory(options)
-        const { deadLetter } = config
-        return {
-            module: RabbitmqQueueModule,
-            imports: [
-                ClientsModule.register([
-                    {
-                        name: RABBITMQ_PRODUCER_CLIENT,
+@Module({
+    imports: [
+        ClientsModule.registerAsync([
+            {
+                name: RABBITMQ_PRODUCER_CLIENT,
+                imports: [
+                    ConfigModule.forRoot()
+                ],
+                useFactory: (config: ConfigService) => {
+                    const user = config.get('RABBITMQ_USER')
+                    const password = config.get('RABBITMQ_PASS')
+                    const host = config.get('RABBITMQ_HOST')
+                    const amqp = `amqp://${user}:${password}@${host}:5672`
+                    return {
                         transport: Transport.RMQ,
                         options: {
                             urls: [
-                                config.amqpurl
+                                amqp
                             ],
-                            queue: config.queue,
+                            queue: QUEUE_NAME,
                             queueOptions: {
-                                durable: true,
-                                deadLetterExchange: deadLetter.exchange
+                                durable: false,
                             },
                         },
                     }
-                ]),
-            ],
-            exports: [
-                RabbitmqProducerClient,
-            ],
-            providers: [
-                RabbitmqProducerClient
-            ]
+                },
+                inject: [
+                    ConfigService
+                ]
+            }
+        ]),
+    ],
+    exports: [
+        RabbitmqClient,
+    ],
+    providers: [
+        RabbitmqClient
+    ]
+})
+export class RabbitmqQueueModule {
+
+    static getMicroserviceOptions(): any {
+
+        const user = process.env.RABBITMQ_USER
+        const password = process.env.RABBITMQ_PASS
+        const host = process.env.RABBITMQ_HOST
+        const amqpurl = `amqp://${user}:${password}@${host}:5672`
+    
+        return {
+            transport: Transport.RMQ,
+            options: {
+                urls: [
+                    amqpurl
+                ],
+                queue: QUEUE_NAME,
+                queueOptions: {
+                    durable: false
+                },
+            }
         }
+
     }
 
 }
