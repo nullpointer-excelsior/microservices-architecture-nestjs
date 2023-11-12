@@ -26,6 +26,13 @@ export class RadioController {
     return this.radio.update(radio)
   }
 
+  @Put(':radioId/:songId')
+  @ApiOperation({ summary: 'Add song to radio' })
+  @ApiResponse({ status: 201, description: 'The radio updated' })
+  async addSong(@Param('radioId') radioId: string, @Param('songId') songId: string) {
+    await this.radio.addSong(radioId, songId)
+  }
+
   @Get('genre/:id')
   @ApiOperation({ summary: 'Get radios by genre ID' })
   @ApiParam({ name: 'id', description: 'The ID of the genre' })

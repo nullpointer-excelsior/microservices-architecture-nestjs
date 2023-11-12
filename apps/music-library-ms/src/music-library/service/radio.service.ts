@@ -21,6 +21,19 @@ export class RadioService {
         return this.repository.save(genre)
     }
 
+    @Span("RadioService/addSong")
+    async addSong(radioId: string, songId: string) {
+        await this.repository
+            .createQueryBuilder()
+            .insert()
+            .into('song_radios_radio')
+            .values({
+                songId,
+                radioId
+            })
+            .execute()
+    }
+
     @Span("RadioService/findByGenreId")
     findByGenreId(id: string) {
         return this.repository.find({
