@@ -1,7 +1,7 @@
 import { RabbitmqMessage } from "../RabbitmqMessage";
 
 export interface NewSongDataMessage {
-    id:string;
+    id: string;
     albumId: string;
     genreId: string;
     title: string;
