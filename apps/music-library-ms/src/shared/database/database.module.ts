@@ -14,10 +14,16 @@ type Options = {
   password: string
 }
 
+type AsyncOptions = {
+  useFactory(...args: any[]): Options
+  inject: any[],
+  imports: any[]
+}
+
 @Module({})
 export class DatabaseModule {
 
-  static register(options: Options): DynamicModule {
+  static forRoot(options: Options): DynamicModule {
     const entities = [
       Song,
       Album,
@@ -25,11 +31,10 @@ export class DatabaseModule {
       Genre,
       Radio,
     ]
-
+    
     const repositoriesModule = TypeOrmModule.forFeature(entities)
   
     return {
-      global: true,
       module: DatabaseModule,
       imports: [
         TypeOrmModule.forRoot({
@@ -47,6 +52,48 @@ export class DatabaseModule {
       ],
       exports: [
         DatabaseModule,
+        repositoriesModule
+      ],
+    }
+  }
+
+  static forRootAsync(options: AsyncOptions): DynamicModule {
+    
+    const entities = [
+      Song,
+      Album,
+      Artist,
+      Genre,
+      Radio,
+    ]
+
+    const repositoriesModule = TypeOrmModule.forFeature(entities)
+  
+    return {
+      module: DatabaseModule,
+      imports: [
+        TypeOrmModule.forRootAsync({
+          useFactory: (...args: any[]) => {
+            const config = options.useFactory(...args)
+            return {
+              type: 'postgres',
+              host: config.host,
+              port: config.port,
+              username: config.username,
+              password: config.password,
+              database: config.database,
+              entities: entities,
+              synchronize: true,
+              logging: ['query']
+            }
+          },
+          inject: options.inject || [],
+          imports: options.imports || []
+        }),
+        repositoriesModule    
+      ],
+      exports: [
+        // DatabaseModule,
         repositoriesModule
       ],
     }

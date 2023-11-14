@@ -14,6 +14,7 @@
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
     "start:music-library": "npx nest start -w music-library-ms",
     "start:player": "npx nest start -w player-ms",
+    "start:discovery": "npx nest start -w music-discovery-ms",
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -21,7 +22,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "e2e:monolith": "jest --config ./apps/spotify-monolith/test/jest-e2e.json"
+    "e2e:monolith": "jest --config ./apps/spotify-monolith/test/jest-e2e.json",
+    "database:music-library-test": "docker-compose --file apps/music-library-ms/test/docker-compose.yaml --env-file apps/music-library-ms/test/test.env up -d ",
+    "e2e:music-library-ms": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --detectOpenHandles --config ./apps/music-library-ms/test/jest-e2e.json"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
@@ -39,6 +42,7 @@
     "@opentelemetry/context-async-hooks": "^1.15.2",
     "@opentelemetry/exporter-metrics-otlp-proto": "^0.41.2",
     "@opentelemetry/exporter-trace-otlp-http": "^0.41.2",
+    "@opentelemetry/instrumentation-amqplib": "^0.33.2",
     "@opentelemetry/instrumentation-express": "^0.33.1",
     "@opentelemetry/instrumentation-http": "^0.43.0",
     "@opentelemetry/instrumentation-pg": "^0.36.2",
@@ -110,7 +114,8 @@
     ],
     "moduleNameMapper": {
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
-      "^@app/rabbitmq-queue(|/.*)$": "<rootDir>/libs/rabbitmq-queue/src/$1"
+      "^@app/rabbitmq-queue(|/.*)$": "<rootDir>/libs/rabbitmq-queue/src/$1",
+      "^@app/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1"
     }
   }
 }

@@ -10,6 +10,8 @@ import { SongService } from './service/song.service';
 import { RabbitmqQueueModule } from '../../../../libs/rabbitmq-queue/rabbitmq-queue.module';
 import { RadioController } from './controller/radio.controller';
 import { RadioService } from './service/radio.service';
+import { DatabaseModule } from '../shared/database/database.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     controllers: [
@@ -28,6 +30,23 @@ import { RadioService } from './service/radio.service';
     ],
     imports: [
         RabbitmqQueueModule,
+        DatabaseModule.forRootAsync({
+            useFactory(config: ConfigService) {
+                return {
+                    host: config.get('MUSIC_LIBRARY_MS_DATABASE_HOST'),
+                    port: +config.get('MUSIC_LIBRARY_MS_DATABASE_PORT'),
+                    username: config.get('MUSIC_LIBRARY_MS_DATABASE_USER'),
+                    password: config.get('MUSIC_LIBRARY_MS_DATABASE_PASS'),
+                    database: config.get('MUSIC_LIBRARY_MS_DATABASE_NAME'),
+                }
+            },
+            inject: [
+                ConfigService
+            ],
+            imports: [
+                ConfigModule
+            ]
+        })
     ]
 })
 export class MusicLibraryModule {}

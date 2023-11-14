@@ -34,8 +34,8 @@ export class ArtistService {
     }
 
     @Span("ArtistService/delete")
-    delete(id: string) {
-        return this.repository.delete(id)
+    async delete(id: string) {
+        await this.repository.delete(id)
     }
 
 }

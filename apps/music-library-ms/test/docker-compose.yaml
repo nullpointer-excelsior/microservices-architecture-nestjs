@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  music-library-test-db:
+    container_name: music-library-test-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${MUSIC_LIBRARY_MS_DATABASE_NAME}
+      POSTGRES_USER: ${MUSIC_LIBRARY_MS_DATABASE_USER}
+      POSTGRES_PASSWORD: ${MUSIC_LIBRARY_MS_DATABASE_PASS}
+    ports:
+      - ${MUSIC_LIBRARY_MS_DATABASE_PORT}:5432
+

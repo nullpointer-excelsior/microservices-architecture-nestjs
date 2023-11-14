@@ -46,7 +46,7 @@ export class ArtistController {
   @ApiOperation({ summary: 'Delete an artist' })
   @ApiResponse({ status: 200, description: 'The artist deleted' })
   delete(@Param('id') id: string) {
-    return this.artistService.delete(id)
+    this.artistService.delete(id)
   }
 
 }
