@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MusicLibraryMsModule } from './music-library-ms.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { startOpenTelemetry } from '../../../libs/shared/src/instrumentation/opentelemetry/start-opentelemetry';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
@@ -10,6 +10,7 @@ import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrum
 async function bootstrap() {
 
   const app = await NestFactory.create(MusicLibraryMsModule);
+  app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('Music library microservice')
