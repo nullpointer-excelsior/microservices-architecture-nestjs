@@ -54,7 +54,12 @@ export function createSdk(options: CreateSdkOptions) {
 
 export function startOpenTelemetry(options: CreateSdkOptions) {
 
-  const sdk = createSdk(options)
+  const sdk = createSdk({
+    ...options,
+    metricExporterOptions: {
+      url: process.env.OTLP_TRACE_EXPORTER_URL,
+    },
+  })
 
   const shutdownOtelSdk = () => {
     sdk
@@ -64,7 +69,7 @@ export function startOpenTelemetry(options: CreateSdkOptions) {
         process.exit(0)
       })
       .catch(() => {
-        Logger.log("OTEL SDK shut down successfully", "OpenTelemetrySdk")
+        Logger.log("OTEL SDK failed shut down", "OpenTelemetrySdk")
         process.exit(1)
       })
   }
