@@ -1,17 +1,15 @@
 import { HttpStatus, INestApplication } from "@nestjs/common";
-import { DataSource } from "typeorm";
-import { cleanDatabase, createGenreEntity, getDatasource } from "./utils";
-import { TestingModule, Test } from "@nestjs/testing";
-import { MusicLibraryModule } from "../src/music-library/music-library.module";
+import { Test, TestingModule } from "@nestjs/testing";
 import * as request from 'supertest';
 import { CreateGenreRequest } from "../src/music-library/dto/create-genre.request";
+import { MusicLibraryModule } from "../src/music-library/music-library.module";
+import { cleanDatabase, createGenreEntity } from "./utils";
 
 
 
 describe('Genre (e2e)', () => {
 
     let app: INestApplication;
-    let datasource: DataSource;
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -22,12 +20,11 @@ describe('Genre (e2e)', () => {
             .compile();
 
         app = moduleFixture.createNestApplication();
-        datasource = await getDatasource(app)
         await app.init();
     })
 
-    beforeEach(() => {
-        cleanDatabase(datasource).then()
+    beforeEach(async () => {
+        cleanDatabase(app)
     })
 
     afterAll(async () => {

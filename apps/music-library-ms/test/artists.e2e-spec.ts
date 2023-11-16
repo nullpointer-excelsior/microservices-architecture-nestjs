@@ -1,17 +1,15 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { DataSource } from 'typeorm';
 import { RabbitmqClient } from '../../../libs/rabbitmq-queue/src/rabbitmq-queue/services/rabbitmq-client.service';
 import { CreateArtistRequest } from '../src/music-library/dto/create-artist.request';
 import { MusicLibraryModule } from '../src/music-library/music-library.module';
-import { cleanDatabase, createArtistEntity, getDatasource } from './utils';
+import { cleanDatabase, createArtistEntity } from './utils';
 
 
 describe('Artist (e2e)', () => {
 
   let app: INestApplication;
-  let datasource: DataSource;
   const rabbitMqEmitToMock = jest.fn()
 
   beforeAll(async () => {
@@ -26,14 +24,13 @@ describe('Artist (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    datasource = await getDatasource(app)
 
     await app.init();
 
   });
 
-  beforeEach(() => {
-    cleanDatabase(datasource).then()
+  beforeEach(async () => {
+    cleanDatabase(app)
   })
 
   afterAll(async () => {

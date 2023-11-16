@@ -1,15 +1,13 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { DataSource } from 'typeorm';
 import { MusicLibraryModule } from '../src/music-library/music-library.module';
-import { cleanDatabase, createAlbumEntity, createArtistEntity, getDatasource } from './utils';
+import { cleanDatabase, createAlbumEntity, createArtistEntity } from './utils';
 
 
 describe('Album (e2e)', () => {
 
   let app: INestApplication;
-  let datasource: DataSource;
 
   beforeAll(async () => {
 
@@ -21,14 +19,13 @@ describe('Album (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-    datasource = await getDatasource(app)
 
     await app.init();
 
   });
 
   beforeEach(async () => {
-    await cleanDatabase(datasource)
+    await cleanDatabase(app)
   })
 
   afterAll(async () => {
