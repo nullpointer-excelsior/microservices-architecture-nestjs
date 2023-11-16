@@ -23,8 +23,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "e2e:monolith": "jest --config ./apps/spotify-monolith/test/jest-e2e.json",
-    "database:music-library-test": "docker-compose --file apps/music-library-ms/test/docker-compose.yaml --env-file apps/music-library-ms/test/test.env up -d ",
-    "e2e:music-library-ms": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --detectOpenHandles --config ./apps/music-library-ms/test/jest-e2e.json"
+    "database:music-library-test": "docker-compose --file apps/music-library-ms/test/infrastructure/docker-compose.yaml --env-file apps/music-library-ms/test/infrastructure/test.env up -d && docker ps",
+    "e2e:music-library-ms": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
