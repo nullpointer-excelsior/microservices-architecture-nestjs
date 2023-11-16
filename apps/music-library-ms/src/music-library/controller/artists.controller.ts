@@ -45,8 +45,8 @@ export class ArtistController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an artist' })
   @ApiResponse({ status: 200, description: 'The artist deleted' })
-  delete(@Param('id') id: string) {
-    this.artistService.delete(id)
+  async delete(@Param('id') id: string) {
+    await this.artistService.delete(id)
   }
 
 }

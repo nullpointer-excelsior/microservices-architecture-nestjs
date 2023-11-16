@@ -27,12 +27,12 @@ export class SongController {
     return await this.songService.findById(id);
   }
 
-  @Get('artists/:id')
+  @Get('artist/:id')
   @ApiOperation({ summary: 'Get all songs by artist ID' })
   @ApiParam({ name: 'id', description: 'The ID of the artist' })
   @ApiResponse({ status: 200, description: 'All songs by artist', type: [SongModel] })
   @ApiResponse({ status: 404, description: 'Artist not found' })
-  async findByArtistId(artistId: string): Promise<SongModel[]> {
+  async findByArtistId(@Param('id') artistId: string): Promise<SongModel[]> {
     return await this.songService.findByArtistId(artistId)
   }
 
@@ -41,7 +41,7 @@ export class SongController {
   @ApiParam({ name: 'id', description: 'The ID of the album' })
   @ApiResponse({ status: 200, description: 'All songs by album', type: [SongModel] })
   @ApiResponse({ status: 404, description: 'Album not found' })
-  async findByAlbumId(albumId: string): Promise<SongModel[]> {
+  async findByAlbumId(@Param('id') albumId: string): Promise<SongModel[]> {
     return await this.songService.findByAlbumId(albumId)
   }
 
@@ -50,7 +50,7 @@ export class SongController {
   @ApiParam({ name: 'id', description: 'The ID of the genre' })
   @ApiResponse({ status: 200, description: 'All songs by genre', type: [SongModel] })
   @ApiResponse({ status: 404, description: 'Genre not found' })
-  async findByGenre(genreId: string): Promise<SongModel[]> {
+  async findByGenre(@Param('id') genreId: string): Promise<SongModel[]> {
     return await this.songService.findByGenre(genreId)
   }
 

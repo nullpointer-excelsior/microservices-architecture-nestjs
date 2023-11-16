@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Span } from 'nestjs-otel';
 import { Repository } from 'typeorm';
@@ -36,29 +36,39 @@ export class SongService {
 
     @Span("SongService/save")
     async save(song: CreateSongRequest) {
-        Logger.log("request", song.albumId)
-        const album = await this.albumRepository.findOneBy({ id: song.albumId })
-        Logger.log("album", album)
-        const genre = await this.genreRepository.findOneBy({ id: song.genreId })
-        Logger.log("genre",genre)
-        const artist = await this.artistRepository.findOneBy({ id: song.artistId })
-        Logger.log("artist", artist)
+        
+        const album = await this.findEntityOrInvalidRequest('Invalid AlbumId', () => this.albumRepository.findOneBy({ id: song.albumId }))
+        const genre = await this.findEntityOrInvalidRequest('Invalid GenreId', () => this.genreRepository.findOneBy({ id: song.genreId }))
+        const artist = await this.findEntityOrInvalidRequest('Invalid ArtistId', () => this.artistRepository.findOneBy({ id: song.artistId }))
+
         const songSaved = await this.repository.save({
             album,
             genre,
             artist,
             duration: song.duration,
-            plays: 0,
+            plays: song.plays,
             title: song.title,
             video: song.video
         })
+
         const message: NewSongDataMessage = {
             albumId: song.albumId,
             genreId: song.genreId,
             ...songSaved
         } 
         this.rabbitmqClient.emitTo('new-song', message)
+
         return songSaved
+        
+    }
+
+    private async findEntityOrInvalidRequest<T>(message: string, callback: () => Promise<T>) {
+        return callback().then(entity => {
+            if (!entity) {
+                throw new BadRequestException(message);
+            }
+            return entity;
+        });
     }
 
     @Span("SongService/update")
@@ -68,6 +78,7 @@ export class SongService {
 
     @Span("SongService/findByArtistId")
     findByArtistId(artistId: string): Promise<SongModel[]> {
+        console.log('ARTIST-ID', artistId)
         return this.repository.find({
             where: { artist: { id: artistId } },
         });

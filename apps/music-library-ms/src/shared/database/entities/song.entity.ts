@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Album } from "./album.entity";
 import { Artist } from "./artist.entity";
 import { Genre } from "./genre.entity";
@@ -23,13 +23,13 @@ export class Song {
   @Column()
   duration: number;
 
-  @ManyToOne(() => Album, album => album.songs)
+  @ManyToOne(() => Album, album => album.songs, { nullable: false })
   album: Album;
 
-  @ManyToOne(() => Artist, artist => artist.songs)
+  @ManyToOne(() => Artist, artist => artist.songs, { nullable: false })
   artist: Artist;
 
-  @ManyToOne(() => Genre, genre => genre.songs)
+  @ManyToOne(() => Genre, genre => genre.songs, { nullable: false })
   genre: Genre
 
   @ManyToMany(() => Radio, (radio) => radio.songs)

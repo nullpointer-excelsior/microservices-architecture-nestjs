@@ -93,7 +93,6 @@ export class DatabaseModule {
         repositoriesModule    
       ],
       exports: [
-        // DatabaseModule,
         repositoriesModule
       ],
     }

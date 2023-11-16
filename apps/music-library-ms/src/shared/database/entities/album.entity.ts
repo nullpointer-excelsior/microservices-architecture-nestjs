@@ -20,7 +20,7 @@ export class Album {
   @OneToMany(() => Song, song => song.album)
   songs: Song[];
 
-  @ManyToOne(() => Artist, artist => artist.albums)
+  @ManyToOne(() => Artist, artist => artist.albums, { nullable: false })
   artist: Artist
 
 }
