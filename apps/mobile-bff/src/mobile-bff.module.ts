@@ -1,12 +1,11 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
 import { AlbumResolver } from './music-catalog/graphql/resolvers/album.resolver';
 import { ArtistResolver } from './music-catalog/graphql/resolvers/artist.resolver';
 import { GenreResolver } from './music-catalog/graphql/resolvers/genre.resolver';
-import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver';
 import { MusicLibraryApiModule } from '../../../libs/music-library-api/src';
 
 @Module({
@@ -16,13 +15,20 @@ import { MusicLibraryApiModule } from '../../../libs/music-library-api/src';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'apps/mobile-bff/schema.gql'),
     }),
-    MusicLibraryApiModule.forRoot('http://localhost:3011')
+    MusicLibraryApiModule.forAsyncRoot({
+      useFactory(config: ConfigService) {
+        return {
+          url: config.get('MOBILE_BFF_MUSIC_LIBRARY_API')
+        }
+      },
+      imports: [ ConfigModule],
+      inject:[ ConfigService ]
+    })
   ],
   providers: [
       ArtistResolver,
       AlbumResolver,
       GenreResolver,
-      RadioResolver
   ]
 })
 export class MobileBffModule {}

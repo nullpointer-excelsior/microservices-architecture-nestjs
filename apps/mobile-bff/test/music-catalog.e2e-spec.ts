@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AlbumAPI, ArtistAPI, GenreAPI, SongAPI } from '../../../libs/music-library-api/src';
-import { ArtistModel } from '../../../libs/music-library-api/src/model/artist.model';
+import { Artist } from '../../../libs/music-library-api/src/model/artist.model';
 import { MobileBffModule } from '../src/mobile-bff.module';
 import { graphqlRequest } from './utils';
 
@@ -14,7 +14,7 @@ describe('MobileBff (e2e)', () => {
     })
       .overrideProvider(ArtistAPI)
       .useValue({
-        findAll: (): ArtistModel[] => [
+        findAll: (): Artist[] => [
           {
             id: "42456925-999C-4DC1-9DF6-ECD441060891",
             name: "journey",
