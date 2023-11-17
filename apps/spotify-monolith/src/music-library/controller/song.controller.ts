@@ -41,7 +41,7 @@ export class SongController {
   @ApiParam({ name: 'id', description: 'The ID of the album' })
   @ApiResponse({ status: 200, description: 'All songs by album', type: [SongModel] })
   @ApiResponse({ status: 404, description: 'Album not found' })
-  async findByAlbumId(albumId: string): Promise<SongModel[]> {
+  async findByAlbumId(@Param('id') albumId: string): Promise<SongModel[]> {
     return await this.songService.findByAlbumId(albumId)
   }
 
@@ -50,7 +50,7 @@ export class SongController {
   @ApiParam({ name: 'id', description: 'The ID of the genre' })
   @ApiResponse({ status: 200, description: 'All songs by genre', type: [SongModel] })
   @ApiResponse({ status: 404, description: 'Genre not found' })
-  async findByGenre(genreId: string): Promise<SongModel[]> {
+  async findByGenre(@Param('id') genreId: string): Promise<SongModel[]> {
     return await this.songService.findByGenre(genreId)
   }
 
