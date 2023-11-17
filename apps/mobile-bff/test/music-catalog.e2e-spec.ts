@@ -68,7 +68,14 @@ describe('MobileBff (e2e)', () => {
             title: "chain reaction",
             video: "video.avi"
           }
-        ]
+        ],
+        findById: () => ({
+          id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
+          title: "separate ways",
+          video: "video.avi",
+          plays: 1000,
+          duration: 300
+        })
       })
       .overrideProvider(GenreAPI)
       .useValue({
@@ -220,6 +227,27 @@ describe('MobileBff (e2e)', () => {
         expect(data.genreById).toBeDefined()
         expect(data.genreById.name).toBe('rock')
   
+      });
+    })
+
+    describe('Song', () => {
+      
+      it('query: songById', async () => {
+        const query = graphqlRequest(app)
+        const res = await query(`{ 
+        songById(id: "42456925-999C-4DC1-9DF6-ECD441060891") {
+          title
+          video
+          plays
+          duration
+        }
+      }
+      `)
+        const data = res.body.data
+        expect(data.songById).toBeDefined()
+        console.log(data.songById)
+        expect(data.songById.title).toBe('separate ways')
+        expect(data.songById.plays).toBe(1000)
       });
     })
 

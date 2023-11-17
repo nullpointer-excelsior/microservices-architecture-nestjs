@@ -8,6 +8,11 @@ export class SongAPI {
 
     constructor(private client: MusicLibraryCLient) { }
 
+    @Span("SongAPI/findById")
+    findById(id: string) {
+        return this.client.get<Song>(`songs/${id}`)
+    }
+
     @Span("SongAPI/findByAlbumId")
     findByAlbumId(id: string) {
         return this.client.get<Song[]>(`songs/album/${id}`)
