@@ -8,8 +8,6 @@ import { ArtistService } from './service/artist.service';
 import { GenreService } from './service/genre.service';
 import { SongService } from './service/song.service';
 import { RabbitmqQueueModule } from '../../../../libs/rabbitmq-queue/rabbitmq-queue.module';
-import { RadioController } from './controller/radio.controller';
-import { RadioService } from './service/radio.service';
 import { DatabaseModule } from '../shared/database/database.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -19,14 +17,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         AlbumController,
         GenreController,
         SongController,
-        RadioController
     ],
     providers: [
         AlbumService,
         ArtistService,
         GenreService,
         SongService,
-        RadioService
     ],
     imports: [
         RabbitmqQueueModule,

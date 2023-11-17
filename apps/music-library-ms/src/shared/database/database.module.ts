@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Album } from './entities/album.entity';
 import { Artist } from './entities/artist.entity';
 import { Genre } from './entities/genre.entity';
-import { Radio } from './entities/radio.entity';
 import { Song } from './entities/song.entity';
 
 type Options = {
@@ -29,7 +28,6 @@ export class DatabaseModule {
       Album,
       Artist,
       Genre,
-      Radio,
     ]
     
     const repositoriesModule = TypeOrmModule.forFeature(entities)
@@ -64,7 +62,6 @@ export class DatabaseModule {
       Album,
       Artist,
       Genre,
-      Radio,
     ]
 
     const repositoriesModule = TypeOrmModule.forFeature(entities)

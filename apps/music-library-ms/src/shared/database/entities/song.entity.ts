@@ -1,8 +1,7 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Album } from "./album.entity";
 import { Artist } from "./artist.entity";
 import { Genre } from "./genre.entity";
-import { Radio } from "./radio.entity";
 
 
 @Entity()
@@ -32,8 +31,5 @@ export class Song {
   @ManyToOne(() => Genre, genre => genre.songs, { nullable: false })
   genre: Genre
 
-  @ManyToMany(() => Radio, (radio) => radio.songs)
-  @JoinTable()
-  radios: Radio[]
 
 }
