@@ -1,25 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { SongService } from "../../music-library-api/services/song.service";
+import { Args, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { Genre } from "../models/genre.model";
-import { GenreService } from "../../music-library-api/services/genre.service";
 import { Span } from "nestjs-otel";
+import { GenreAPI, SongAPI } from "../../../../../../libs/music-library-api/src";
 
 @Resolver(of => Genre)
 export class GenreResolver {
     
-    constructor(private songService: SongService, private genreService: GenreService) {}
+    constructor(
+        private songAPI: SongAPI, 
+        private genreAPI: GenreAPI
+    ) {}
 
     @Span("GenreResolver/query/genres")
     @Query(returns => [Genre])
     genres() {
-        return this.genreService.findAll()
+        return this.genreAPI.findAll()
+    }
+
+    @Span("GenreResolver/query/genreById")
+    @Query(returns => Genre)
+    async genreById(@Args('id') id: string) {
+        return this.genreAPI.findbyId(id)
     }
 
     @Span("GenreResolver/field/songs")
     @ResolveField()
     songs(@Parent() genre: Genre) {
-        return this.songService.findByGenreId(genre.id)
+        return this.songAPI.findByGenreId(genre.id)
     }
 
 }
