@@ -29,6 +29,18 @@
       ],
       "@app/rabbitmq-queue/*": [
         "libs/rabbitmq-queue/src/*"
+      ],
+      "@lib/music-library-api": [
+        "libs/music-library-api/src"
+      ],
+      "@lib/music-library-api/*": [
+        "libs/music-library-api/src/*"
+      ],
+      "@lib/utils": [
+        "libs/utils/src"
+      ],
+      "@lib/utils/*": [
+        "libs/utils/src/*"
       ]
     }
   }

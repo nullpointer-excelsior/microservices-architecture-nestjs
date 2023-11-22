@@ -26,7 +26,12 @@
     "start:infra:music-library-test": "cd apps/music-library-ms/test/infrastructure && docker-compose up -d && docker ps",
     "stop:infra:music-library-test": "cd apps/music-library-ms/test/infrastructure && docker-compose down && docker ps",
     "e2e:music-library-ms:dev": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1",
-    "e2e:music-library-ms": "npm run start:infra:music-library-test && env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1 && npm run stop:infra:music-library-test"
+    "e2e:music-library-ms": "npm run start:infra:music-library-test && env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1 && npm run stop:infra:music-library-test",
+    "e2e:mobile-bff": "env jest --config ./apps/mobile-bff/test/jest-e2e.json --maxWorkers 1",
+    "e2e:music-discovery": "env MUSIC_DISCOVERY_MS_DATABASE_HOST=localhost MUSIC_DISCOVERY_MS_DATABASE_NAME=test MUSIC_DISCOVERY_MS_DATABASE_PORT=27020 MUSIC_DISCOVERY_MS_DATABASE_USER=test MUSIC_DISCOVERY_MS_DATABASE_PASS=test jest --detectOpenHandles --config ./apps/music-discovery-ms/test/jest-e2e.json --maxWorkers 1 ",
+    "start:e2e-infra": "cd infrastructure/test && docker-compose up -d && docker ps",
+    "stop:e2e-infra": "cd infrastructure/test && docker-compose down && docker ps"
+
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
@@ -38,6 +43,7 @@
     "@nestjs/event-emitter": "^2.0.2",
     "@nestjs/graphql": "^12.0.9",
     "@nestjs/microservices": "^10.2.7",
+    "@nestjs/mongoose": "^10.0.2",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/swagger": "^7.1.12",
     "@nestjs/typeorm": "^10.0.0",
@@ -60,6 +66,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "graphql": "^16.8.1",
+    "mongoose": "^8.0.1",
     "nest-winston": "^1.9.4",
     "nestjs-otel": "^5.1.5",
     "nestjs-pino": "^3.4.0",
@@ -117,7 +124,8 @@
     "moduleNameMapper": {
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
       "^@app/rabbitmq-queue(|/.*)$": "<rootDir>/libs/rabbitmq-queue/src/$1",
-      "^@app/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1"
+      "^@lib/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1",
+      "^@lib/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"
     }
   }
 }

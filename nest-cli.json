@@ -79,6 +79,33 @@
       "compilerOptions": {
         "tsConfigPath": "apps/mobile-bff/tsconfig.app.json"
       }
+    },
+    "music-discovery-ms": {
+      "type": "application",
+      "root": "apps/music-discovery-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/music-discovery-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/music-discovery-ms/tsconfig.app.json"
+      }
+    },
+    "music-library-api": {
+      "type": "library",
+      "root": "libs/music-library-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/music-library-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/music-library-api/tsconfig.lib.json"
+      }
+    },
+    "utils": {
+      "type": "library",
+      "root": "libs/utils",
+      "entryFile": "index",
+      "sourceRoot": "libs/utils/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/utils/tsconfig.lib.json"
+      }
     }
   },
   "monorepo": true,
