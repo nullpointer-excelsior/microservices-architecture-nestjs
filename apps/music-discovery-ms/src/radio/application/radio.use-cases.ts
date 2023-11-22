@@ -15,6 +15,10 @@ export class RadioUseCases {
         return this.repository.save(dto)
     }
 
+    findById(id: string) {
+        return this.repository.findById(id)
+    }
+
     async updateSongs(dto: { radioId: string } & UpdateSongsDTO) {
         return this.findRadioById(dto.radioId)
             .then(radio => Radio.updateSongs(radio, dto.songs))

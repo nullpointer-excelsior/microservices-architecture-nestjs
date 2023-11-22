@@ -160,5 +160,60 @@ describe('MusicDiscoveryMs (e2e)', () => {
 
   });
 
+  it('/radio (GET): get a radio by id', async () => {
+
+    const radioId = "1B28A807-2314-4980-8D74-2F92F6C48869"
+    const radioToFind: CreateRadioDTO = {
+      id: radioId,
+      name: "rock radio",
+      songs: [
+        {
+          id: "A48BCD55-B248-4377-8BCD-E9687768BA07",
+          title: "runaway",
+          album: "bonjovi",
+          artist: "bonjovi",
+          genre: "rock"
+        },
+        {
+          id: "A48BCD55-B248-4377-8BCD-E9687768BA08",
+          title: "separate ways",
+          album: "journey",
+          artist: "journey",
+          genre: "rock"
+        }
+      ]
+    }
+    await request(app.getHttpServer())
+      .post('/radios')
+      .send({
+        id: "A48BCD55-B248-4377-8BCD-E9687768BA07",
+        name: "rock radio",
+        songs: [
+          {
+            id: "A48BCD55-B248-4377-8BCD-E9687768BA08",
+            title: "separate ways",
+            album: "journey",
+            artist: "journey",
+            genre: "rock"
+          }
+        ]
+      })
+      .expect(HttpStatus.CREATED)
+
+    await request(app.getHttpServer())
+      .post('/radios')
+      .send(radioToFind)
+      .expect(HttpStatus.CREATED)
+
+    const res = await request(app.getHttpServer())
+      .get(`/radios/${radioId}`)
+
+    expect(res.body).toBeDefined()
+    expect(res.body.name).toBe('rock radio')
+    expect(res.body.songs).toHaveLength(2)
+    const song = res.body.songs[0]
+    expect(song.title).toBe('runaway')
+  });
+
 
 });

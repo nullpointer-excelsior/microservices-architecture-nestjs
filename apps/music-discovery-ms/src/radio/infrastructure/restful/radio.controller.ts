@@ -25,6 +25,13 @@ export class RadioController {
         this.radio.updateSongs({ radioId: id, ...updateSongs })
     }
 
+    @Get(':id')
+    @ApiOperation({ summary: 'Get by ID' })
+    @ApiResponse({ status: 200, description: 'Get a Radio by id', type: Radio })
+    async findById(@Param('id') id: string): Promise<Radio> {
+        return await this.radio.findById(id)
+    }
+
     @Get()
     @ApiOperation({ summary: 'Get all radios' })
     @ApiResponse({ status: 200, description: 'All radios', type: [Radio] })
