@@ -50,6 +50,20 @@ services:
     networks:
       - microservices-architecture
 
+  music-discovery-mongodb:
+    container_name: music-discovery-mongodb
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: ${MUSIC_DISCOVERY_MS_DATABASE_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${MUSIC_DISCOVERY_MS_DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MUSIC_DISCOVERY_MS_DATABASE_PASS}
+    # volumes:
+    #   - mongo_volume:/data/db
+    ports:
+      - ${MUSIC_DISCOVERY_MS_DATABASE_PORT}:27017
+    networks:
+      - microservices-architecture
+
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management-alpine

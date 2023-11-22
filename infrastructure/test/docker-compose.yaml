@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  test-postgres-db:
+    container_name: test-postgres-db
+    image: postgres:13
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - 5555:5432
+    networks:
+      - microservices-architecture-test
+
+  mongo-test-db:
+    container_name: mongo-test-db
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: test
+      MONGO_INITDB_ROOT_USERNAME: test
+      MONGO_INITDB_ROOT_PASSWORD: test
+    ports:
+      - 27020:27017
+    networks:
+      - microservices-architecture-test
+
+
+networks:
+  microservices-architecture-test:
+    driver: bridge
+
