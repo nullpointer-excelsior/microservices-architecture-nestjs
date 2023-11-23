@@ -1,10 +1,11 @@
 import { Body, Controller, Param, ParseUUIDPipe, Post, Put, Get } from '@nestjs/common';
 import { CreateRadioDTO } from '../../application/dto/create-radio.dto';
-import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Radio } from '../../domain/model/radio.model';
 import { RadioUseCases } from '../../application/radio.use-cases';
 import { UpdateSongsDTO } from '../../application/dto/update-songs.dto';
 
+@ApiTags('Radios')
 @Controller('radios')
 export class RadioController {
 
