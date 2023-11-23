@@ -14,11 +14,9 @@ import { Song } from '../src/shared/database/entities/song.entity';
 export async function cleanDatabase(app: INestApplication) {
   const ds = app.get<DataSource>(DataSource)
   const query = `
-      delete from public.song_radios_radio;
       delete from public.song;
       delete from public.album;
       delete from public.artist;
-      delete from public.radio;
       delete from public.genre;
   `
   await ds.manager.query(query)
