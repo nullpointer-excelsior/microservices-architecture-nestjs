@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Span } from 'nestjs-otel';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { NewSongDataMessage } from '../../../../../libs/rabbitmq-queue/src/rabbitmq-queue/model/messages/new-song.message';
 import { RabbitmqClient } from '../../../../../libs/rabbitmq-queue/src/rabbitmq-queue/services/rabbitmq-client.service';
 import { Album } from '../../shared/database/entities/album.entity';
@@ -32,6 +32,16 @@ export class SongService {
     @NotFoundExceptionIfUndefined
     findById(id: string): Promise<SongModel> {
         return this.repository.findOneBy({ id });
+    }
+
+    @Span("SongService/findByIdIn")
+    @NotFoundExceptionIfUndefined
+    findByIdIn(ids: string[]): Promise<SongModel[]> {
+        return this.repository.find({ 
+            where: {
+                id: In(ids) 
+            }
+        });
     }
 
     @Span("SongService/save")

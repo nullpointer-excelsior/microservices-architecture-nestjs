@@ -214,4 +214,31 @@ describe('Songs (e2e)', () => {
     expect(rabbitMqEmitToMock).toBeCalledWith('new-song', expect.any(Object))
   })
 
+
+  it('/songs?id=${IDS} (GET): get song by id In', async () => {
+
+    const createArtist = createArtistEntity(app)
+    const createAlbum = createAlbumEntity(app)
+    const createSong = createSongEntity(app)
+    const createGenre = createGenreEntity(app)
+    const genre = await createGenre({ name: "rock" })
+    const jouney = await createArtist({ name: "journey" })
+    const frontiers = await createAlbum({ title: "fronties", artistId: jouney.id })
+    await createSong({ title: "song1", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+    const songtoFind1 = await createSong({ title: "song2", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+    await createSong({ title: "song3", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+    await createSong({ title: "song4", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+    const songtoFind2 = await createSong({ title: "song5", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+    await createSong({ title: "song3", albumId: frontiers.id, artistId: jouney.id, genreId: genre.id })
+
+    const idsToFind = [ songtoFind1.id, songtoFind2.id]
+    const res = await request(app.getHttpServer())
+      .get(`/songs/search`)
+      .query({ ids: idsToFind })
+      .expect(HttpStatus.OK)
+
+    expect(res.body).toHaveLength(2)
+
+  })
+
 });

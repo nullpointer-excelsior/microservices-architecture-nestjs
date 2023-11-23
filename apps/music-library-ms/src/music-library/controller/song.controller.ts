@@ -1,9 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { SongModel } from '../model/song.model';
 import { SongService } from '../service/song.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { CreateSongRequest } from '../dto/create-song.request';
-
 
 @Controller('songs')
 @ApiTags('Songs')
@@ -16,6 +15,14 @@ export class SongController {
   @ApiResponse({ status: 200, description: 'All songs', type: [SongModel] })
   async findAll(): Promise<SongModel[]> {
     return await this.songService.findAll();
+  }
+
+  @Get('search')
+  @ApiQuery({ name: 'ids', description: 'Array of song IDs', type: [String], required: true, explode: true })
+  @ApiResponse({ status: 200, description: 'Found songs by IDs', type: [SongModel], isArray: true })
+  async findByIdIn(@Query('ids') ids: string[]): Promise<SongModel[]> {
+    console.log('findByIdIn', ids)
+    return this.songService.findByIdIn(ids);
   }
 
   @Get(':id')
@@ -61,5 +68,5 @@ export class SongController {
   async create(@Body() request: CreateSongRequest): Promise<SongModel> {
     return await this.songService.save(request);
   }
-  
+
 }
