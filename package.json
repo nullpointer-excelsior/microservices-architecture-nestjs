@@ -13,7 +13,6 @@
     "container:postgres:monolith": "docker exec -it spotify-monolith-db psql -U spotify-monolith",
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
     "start:music-library": "npx nest start -w music-library-ms",
-    "start:player": "npx nest start -w player-ms",
     "start:discovery": "npx nest start -w music-discovery-ms",
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
