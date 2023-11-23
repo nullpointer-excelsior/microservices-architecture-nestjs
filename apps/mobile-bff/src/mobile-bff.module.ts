@@ -6,7 +6,7 @@ import { join } from 'path';
 import { AlbumResolver } from './music-catalog/graphql/resolvers/album.resolver';
 import { ArtistResolver } from './music-catalog/graphql/resolvers/artist.resolver';
 import { GenreResolver } from './music-catalog/graphql/resolvers/genre.resolver';
-import { MusicLibraryApiModule } from '../../../libs/music-library-api/src';
+import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
 
 @Module({

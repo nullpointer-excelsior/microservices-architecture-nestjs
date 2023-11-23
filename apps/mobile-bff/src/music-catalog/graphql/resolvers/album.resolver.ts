@@ -2,7 +2,7 @@
 import { Parent, ResolveField, Resolver } from "@nestjs/graphql";
 import { Span } from "nestjs-otel";
 import { Album } from "../models/album.model";
-import { SongAPI } from "../../../../../../libs/music-library-api/src";
+import { SongAPI } from "@lib/music-library-api";
 
 @Resolver(of => Album)
 export class AlbumResolver {

@@ -2,7 +2,7 @@
 import { Args, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { Genre } from "../models/genre.model";
 import { Span } from "nestjs-otel";
-import { GenreAPI, SongAPI } from "../../../../../../libs/music-library-api/src";
+import { GenreAPI, SongAPI } from "@lib/music-library-api";
 
 @Resolver(of => Genre)
 export class GenreResolver {

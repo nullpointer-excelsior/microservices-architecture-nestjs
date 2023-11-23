@@ -5,5 +5,10 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@lib/utils(|/.*)$": "<rootDir>/../../../libs/utils/src/$1",
+    "@lib/shared(|/.*)$": "<rootDir>/../../../libs/shared/src/$1",
+    "@lib/music-library-api(|/.*)$": "<rootDir>/../../../libs/music-library-api/src/$1"
   }
 }

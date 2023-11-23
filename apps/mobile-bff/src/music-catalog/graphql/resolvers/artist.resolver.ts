@@ -2,8 +2,8 @@
 import { Args, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
 import { Artist } from "../models/artist.model";
 import { Span } from "nestjs-otel";
-import { ArtistAPI } from "../../../../../../libs/music-library-api/src/api/artist.api";
-import { AlbumAPI } from "../../../../../../libs/music-library-api/src/api/album.api";
+import { ArtistAPI } from "@lib/music-library-api";
+import { AlbumAPI } from "@lib/music-library-api";
 
 @Resolver(of => Artist)
 export class ArtistResolver {

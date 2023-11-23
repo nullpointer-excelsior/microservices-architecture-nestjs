@@ -122,7 +122,7 @@
       "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
-      "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
+      "^@lib/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
       "^@app/rabbitmq-queue(|/.*)$": "<rootDir>/libs/rabbitmq-queue/src/$1",
       "^@lib/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1",
       "^@lib/utils(|/.*)$": "<rootDir>/libs/utils/src/$1"

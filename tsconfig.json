@@ -18,10 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/shared": [
+      "@lib/shared": [
         "libs/shared/src"
       ],
-      "@app/shared/*": [
+      "@lib/shared/*": [
         "libs/shared/src/*"
       ],
       "@app/rabbitmq-queue": [
