@@ -13,6 +13,15 @@ export class SongAPI {
         return this.client.get<Song>(`songs/${id}`)
     }
 
+    @Span("SongAPI/findByIdIn")
+    findByIdIn(ids: string[]) {
+        return this.client.get<Song>('songs/search', { 
+            params: {
+                ids
+            }
+        })
+    }
+
     @Span("SongAPI/findByAlbumId")
     findByAlbumId(id: string) {
         return this.client.get<Song[]>(`songs/album/${id}`)

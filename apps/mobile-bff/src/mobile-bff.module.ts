@@ -6,8 +6,10 @@ import { join } from 'path';
 import { AlbumResolver } from './music-catalog/graphql/resolvers/album.resolver';
 import { ArtistResolver } from './music-catalog/graphql/resolvers/artist.resolver';
 import { GenreResolver } from './music-catalog/graphql/resolvers/genre.resolver';
-import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
+import { MusicLibraryApiModule } from '@lib/music-library-api';
+import { MusicDiscoveryApiModule } from '@lib/music-discovery-api';
+import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver';
 
 @Module({
   imports: [
@@ -22,15 +24,25 @@ import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
           url: config.get('MOBILE_BFF_MUSIC_LIBRARY_API')
         }
       },
-      imports: [ ConfigModule],
-      inject:[ ConfigService ]
+      imports: [ConfigModule],
+      inject: [ConfigService]
+    }),
+    MusicDiscoveryApiModule.forAsyncRoot({
+      useFactory(config: ConfigService) {
+        return {
+          url: config.get('MOBILE_BFF_MUSIC_DISCOVERY_API')
+        }
+      },
+      imports: [ConfigModule],
+      inject: [ConfigService]
     })
   ],
   providers: [
-      ArtistResolver,
-      AlbumResolver,
-      GenreResolver,
-      SongResolver
+    ArtistResolver,
+    AlbumResolver,
+    GenreResolver,
+    SongResolver,
+    RadioResolver
   ]
 })
-export class MobileBffModule {}
+export class MobileBffModule { }

@@ -1,9 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AlbumAPI, ArtistAPI, GenreAPI, SongAPI } from '../../../libs/music-library-api/src';
-import { Artist } from '../../../libs/music-library-api/src/model/artist.model';
+import { AlbumAPI, ArtistAPI, GenreAPI, SongAPI } from '@lib/music-library-api';
+import { Artist } from '@lib/music-library-api/model/artist.model';
 import { MobileBffModule } from '../src/mobile-bff.module';
 import { graphqlRequest } from './utils';
+import { RadioAPI } from '@lib/music-discovery-api';
 
 describe('MobileBff (e2e)', () => {
   let app: INestApplication;
@@ -75,7 +76,19 @@ describe('MobileBff (e2e)', () => {
           video: "video.avi",
           plays: 1000,
           duration: 300
-        })
+        }),
+        findByIdIn: () => [
+          {
+            id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
+            title: "separate ways",
+            video: "video.avi"
+          },
+          {
+            id: "E8DDD874-EE3C-4B6E-85A6-0CFEAA592C79",
+            title: "chain reaction",
+            video: "video.avi"
+          }
+        ]
       })
       .overrideProvider(GenreAPI)
       .useValue({
@@ -94,7 +107,42 @@ describe('MobileBff (e2e)', () => {
           name: "rock"
         })
       })
-
+      .overrideProvider(RadioAPI)
+      .useValue({
+        findById:() => ({
+          id: "AF3FDAF8-407A-41C6-92DC-36618C2D0FCC",
+          name: "rock radio"
+        }),
+        findAll: () => [
+          {
+            id: "AF3FDAF8-407A-41C6-92DC-36618C2D0FCC",
+            name: "rock radio",
+            songs: [
+              {
+                id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
+                title: "separate ways",
+                video: "video.avi",
+                artist: "journey",
+                album: "frontiers",
+                genre: "rock"
+              },
+              {
+                id: "E8DDD874-EE3C-4B6E-85A6-0CFEAA592C79",
+                title: "chain reaction",
+                video: "video.avi",
+                artist: "journey",
+                album: "frontiers",
+                genre: "rock"
+              }
+            ]
+          },
+          {
+            id: "AF3FDAF8-407A-89C6-92DC-36618C2D0FCC",
+            name: "metal radio",
+            songs: []
+          }
+        ],
+      })
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -245,9 +293,63 @@ describe('MobileBff (e2e)', () => {
       `)
         const data = res.body.data
         expect(data.songById).toBeDefined()
-        console.log(data.songById)
         expect(data.songById.title).toBe('separate ways')
         expect(data.songById.plays).toBe(1000)
+      });
+    })
+
+    describe('Radio', () => {
+
+      it('query: radios', async () => {
+        const query = graphqlRequest(app)
+        const res = await query(`{ 
+        radios {
+          name
+        }
+      }
+      `)
+        const data = res.body.data
+        expect(data.radios).toBeDefined()
+        expect(data.radios).toHaveLength(2)
+        expect(data.radios.map(g => g.name)).toContain('rock radio')
+        expect(data.radios.map(g => g.name)).toContain('metal radio')
+      });
+
+      it('resolve: radios', async () => {
+        const query = graphqlRequest(app)
+        const res = await query(`{ 
+        radios {
+          name
+          songs {
+            title
+          }
+        }
+      }
+      `)
+        const data = res.body.data
+        expect(data.radios).toBeDefined()
+        expect(data.radios).toHaveLength(2)
+        expect(data.radios.map(g => g.name)).toContain('rock radio')
+        expect(data.radios.map(g => g.name)).toContain('metal radio')
+        expect(data.radios[0].songs).toHaveLength(2)
+        expect(data.radios[0].songs.map(s => s.title)).toContain('separate ways')
+        expect(data.radios[0].songs.map(s => s.title)).toContain('chain reaction')
+      });
+
+      it('query: radioById', async () => {
+        const query = graphqlRequest(app)
+        const res = await query(`{ 
+        radioById(id: "C52497F6-85FF-4F01-BC7E-8378E85AD325") {
+          name
+        }
+      }
+      `)
+
+        const data = res.body.data
+        console.log("res", data)
+        expect(data.radioById).toBeDefined()
+        expect(data.radioById.name).toBe('rock radio')
+  
       });
     })
 

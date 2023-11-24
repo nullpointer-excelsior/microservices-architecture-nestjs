@@ -41,6 +41,12 @@
       ],
       "@lib/utils/*": [
         "libs/utils/src/*"
+      ],
+      "@lib/music-discovery-api": [
+        "libs/music-discovery-api/src"
+      ],
+      "@lib/music-discovery-api/*": [
+        "libs/music-discovery-api/src/*"
       ]
     }
   }

@@ -97,6 +97,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/utils/tsconfig.lib.json"
       }
+    },
+    "music-discovery-api": {
+      "type": "library",
+      "root": "libs/music-discovery-api",
+      "entryFile": "index",
+      "sourceRoot": "libs/music-discovery-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/music-discovery-api/tsconfig.lib.json"
+      }
     }
   },
   "monorepo": true,
