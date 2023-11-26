@@ -10,6 +10,7 @@ Spotify con una arquitectura distribuida
 * docker-compose
 * postgres
 * rabbitmq
+* mongodb
 
 ## Modulos de aprendizaje:
 
@@ -23,6 +24,7 @@ Spotify con una arquitectura distribuida
     * Using Kong 
 * 6 - User managment in microservices
 * 7 - Security in API gateway
+* Patrones de resilencia
 * 8 - Escalando aplicaciones
 * 9 - Caching request
 * 10 - CQRS for read and queries 
@@ -36,7 +38,8 @@ Spotify con una arquitectura distribuida
 
 * `spotify-monolith`: Aplicacion monolitica clone de spotify la cual gestiona usuarios la libreria de canciones y las playlist.
 * `music-library-ms`: Microservicio que gestiona la libreria musical de artistas, albumens canciones y generos de nuestro clone de spotify
-* `player-ms`: Microservicio que gestiona la creacion de playlist y radios de spotify
+* `music-discovery-ms`: Microservicio que gestiona radios y playlist destinado a que el usuario conozca nueva musica
 * `accounts-ms`: Microservicio que gestiona las cuentas de usuario
 * `mobile-bff`: Backend For Frontend para aplicacion mobile: encoragada de obtener la libreria musical los playlist y radios y exponer los datos como api graphql´
+* `mailing-ms`: Microservicio que gestiona el envio de correos electronicos.
 
