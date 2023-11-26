@@ -106,6 +106,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/music-discovery-api/tsconfig.lib.json"
       }
+    },
+    "mailing-ms": {
+      "type": "application",
+      "root": "apps/mailing-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/mailing-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mailing-ms/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

@@ -16,6 +16,7 @@
     "start:discovery": "npx nest start -w music-discovery-ms",
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
+    "start:mailing": "npx nest start -w mailing-ms",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
