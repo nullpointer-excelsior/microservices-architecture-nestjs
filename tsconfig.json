@@ -24,10 +24,10 @@
       "@lib/shared/*": [
         "libs/shared/src/*"
       ],
-      "@app/rabbitmq-queue": [
+      "@lib/rabbitmq-queue": [
         "libs/rabbitmq-queue/src"
       ],
-      "@app/rabbitmq-queue/*": [
+      "@lib/rabbitmq-queue/*": [
         "libs/rabbitmq-queue/src/*"
       ],
       "@lib/music-library-api": [

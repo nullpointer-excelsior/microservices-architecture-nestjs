@@ -7,13 +7,15 @@ import { Artist } from '../../shared/database/entities/artist.entity';
 import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
 import { CreateAlbumRequest } from '../dto/create-album.request';
 import { AlbumModel } from '../model/album.model';
+import { RabbitmqClient } from '@lib/rabbitmq-queue/rabbitmq-queue/services/rabbitmq-client.service';
 
 @Injectable()
 export class AlbumService {
 
   constructor(
     @InjectRepository(Album) private albumRepository: Repository<Album>,
-    @InjectRepository(Artist) private artistRepository: Repository<Artist>
+    @InjectRepository(Artist) private artistRepository: Repository<Artist>,
+    private rabbitmqClient: RabbitmqClient,
   ) { }
 
   @Span("AlbumService/findAll")
@@ -51,6 +53,11 @@ export class AlbumService {
       year: album.year,
     })
 
+    this.rabbitmqClient.emitTo('new-album', { 
+      albumId: albumCreated.id,
+      title: albumCreated.title
+    })
+    
     return albumCreated
 
   }
