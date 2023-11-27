@@ -44,6 +44,8 @@ Instala las dependencias usando npm install.
 npm install
 ```
 
+> Todas las aplicaciones son configuradas mediante variables de ambiente definidas en el archivo `.env`, el archivo `infrastructure/local/docker-compose.yml` también lee estas variables. 
+
 Para ejecutar los componentes del proyecto, tienes disponible los siguientes scripts:
 
 ```bash
