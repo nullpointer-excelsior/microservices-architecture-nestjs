@@ -14,8 +14,8 @@ services:
     networks:
       - microservices-architecture-test
 
-  mongo-test-db:
-    container_name: mongo-test-db
+  test-mongo-db:
+    container_name: test-mongo-db
     image: mongo:latest
     environment:
       MONGO_INITDB_DATABASE: test

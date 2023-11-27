@@ -8,8 +8,8 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start:infra": "docker-compose up -d && docker ps",
-    "stop:infra": "docker-compose down && docker ps",
+    "start:infra": "cd infrastructure/local && docker compose --env-file ../../.env up -d && docker ps",
+    "stop:infra": "cd infrastructure/local && docker-compose down && docker ps",
     "start:e2e-infra": "cd infrastructure/test && docker-compose up -d && docker ps",
     "stop:e2e-infra": "cd infrastructure/test && docker-compose down && docker ps",
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
