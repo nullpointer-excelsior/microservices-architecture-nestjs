@@ -1,4 +1,5 @@
 
+# Construyendo aplicaciones escalables y mantenibles
 
 En este capítulo tomaremos nota de pequeños tips para generar aplicaciones escalables y mantenibles, las cuales podrán ayudarte de manera más sencilla en una posible transición de monolito a microservicios. No todos los sistemas en sus primeros pasos necesitan una arquitectura de microservicios, pero si puedes aplicar un poco de buenas prácticas te ahorrarás dolores de cabeza.
 
