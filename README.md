@@ -124,8 +124,10 @@ Cada microservicio y componente se describe acá:
 
 ## Módulos de aprendizaje:
 
-* 1 - Diseño de aplicaciones escalables y mantenibles
+* 1 - Diseño de aplicaciones
+    * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
 * 2 - Observabilidad
+    * [Trazas distribuidas](docs/distributed-traces.md)
 * XXX - **Work in progress...**
 
 ## Recursos adicionales
