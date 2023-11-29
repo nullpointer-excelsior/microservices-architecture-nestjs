@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Span } from 'nestjs-otel';
 import { In, Repository } from 'typeorm';
@@ -88,7 +88,6 @@ export class SongService {
 
     @Span("SongService/findByArtistId")
     findByArtistId(artistId: string): Promise<SongModel[]> {
-        console.log('ARTIST-ID', artistId)
         return this.repository.find({
             where: { artist: { id: artistId } },
         });
