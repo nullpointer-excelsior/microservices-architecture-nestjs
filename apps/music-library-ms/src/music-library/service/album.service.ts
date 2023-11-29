@@ -4,10 +4,10 @@ import { Span } from 'nestjs-otel';
 import { Repository } from 'typeorm';
 import { Album } from '../../shared/database/entities/album.entity';
 import { Artist } from '../../shared/database/entities/artist.entity';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
 import { CreateAlbumRequest } from '../dto/create-album.request';
 import { AlbumModel } from '../model/album.model';
 import { RabbitmqClient } from '@lib/rabbitmq-queue/rabbitmq-queue/services/rabbitmq-client.service';
+import { NotFoundExceptionIfUndefined } from '@lib/utils/decorators/not-found-exeption-if-undefined';
 
 @Injectable()
 export class AlbumService {
@@ -24,13 +24,13 @@ export class AlbumService {
   }
 
   @Span("AlbumService/findById")
-  @NotFoundExceptionIfUndefined
+  @NotFoundExceptionIfUndefined('Album not found')
   findById(id: string): Promise<Album> {
     return this.albumRepository.findOneBy({ id });
   }
 
   @Span("AlbumService/findByArtistId")
-  @NotFoundExceptionIfUndefined
+  @NotFoundExceptionIfUndefined('Album not found')
   findByArtistId(artistId: string): Promise<Album[]> {
     return this.albumRepository.find({
       where: { artist: { id: artistId } },

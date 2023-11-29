@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Genre } from '../../shared/database/entities/genre.entity';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
+import { NotFoundExceptionIfUndefined } from '@lib/utils/decorators/not-found-exeption-if-undefined';
 import { CreateGenreRequest } from '../dto/create-genre.request';
 import { GenreModel } from '../model/genre.model';
 import { Span } from 'nestjs-otel';
@@ -18,7 +18,7 @@ export class GenreService {
   }
 
   @Span("GenreService/findById")
-  @NotFoundExceptionIfUndefined
+  @NotFoundExceptionIfUndefined('Genre not found')
   findById(id: string): Promise<Genre> {
     return this.repository.findOneBy({ id});
   }

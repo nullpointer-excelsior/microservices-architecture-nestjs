@@ -8,7 +8,7 @@ import { Album } from '../../shared/database/entities/album.entity';
 import { Artist } from '../../shared/database/entities/artist.entity';
 import { Genre } from '../../shared/database/entities/genre.entity';
 import { Song } from '../../shared/database/entities/song.entity';
-import { NotFoundExceptionIfUndefined } from '../../shared/decorators/not-found-exception-if-undefined';
+import { NotFoundExceptionIfUndefined } from '@lib/utils/decorators/not-found-exeption-if-undefined';
 import { CreateSongRequest } from '../dto/create-song.request';
 import { SongModel } from '../model/song.model';
 
@@ -29,13 +29,13 @@ export class SongService {
     }
 
     @Span("SongService/findById")
-    @NotFoundExceptionIfUndefined
+    @NotFoundExceptionIfUndefined('Song not found')
     findById(id: string): Promise<SongModel> {
         return this.repository.findOneBy({ id });
     }
 
     @Span("SongService/findByIdIn")
-    @NotFoundExceptionIfUndefined
+    @NotFoundExceptionIfUndefined('Song not found')
     findByIdIn(ids: string[]): Promise<SongModel[]> {
         return this.repository.find({ 
             where: {
