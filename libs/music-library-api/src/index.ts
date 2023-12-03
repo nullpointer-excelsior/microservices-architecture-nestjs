@@ -3,3 +3,7 @@ export * from './api/artist.api';
 export * from './api/album.api';
 export * from './api/song.api';
 export * from './api/genre.api';
+export * from './model/album.model';
+export * from './model/artist.model';
+export * from './model/genre.model';
+export * from './model/song.model';

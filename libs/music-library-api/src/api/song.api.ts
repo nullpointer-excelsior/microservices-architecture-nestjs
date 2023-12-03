@@ -15,7 +15,7 @@ export class SongAPI {
 
     @Span("SongAPI/findByIdIn")
     findByIdIn(ids: string[]) {
-        return this.client.get<Song>('songs/search', { 
+        return this.client.get<Song[]>('songs/search', { 
             params: {
                 ids
             }

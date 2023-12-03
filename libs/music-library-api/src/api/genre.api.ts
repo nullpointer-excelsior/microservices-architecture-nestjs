@@ -10,8 +10,8 @@ export class GenreAPI {
 
 
     @Span("GenreAPI/findById")
-    findbyId(id: string) {
-        return this.client.get<Genre[]>(`genres/${id}`)
+    findById(id: string) {
+        return this.client.get<Genre>(`genres/${id}`)
     }
     
     @Span("GenreAPI/findAll")

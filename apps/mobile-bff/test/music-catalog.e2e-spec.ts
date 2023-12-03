@@ -102,7 +102,7 @@ describe('MobileBff (e2e)', () => {
             name: "metal"
           }
         ],
-        findbyId:() => ({
+        findById:() => ({
           id: "AF3FDAF8-407A-41C6-92DC-36618C2D0FCC",
           name: "rock"
         })

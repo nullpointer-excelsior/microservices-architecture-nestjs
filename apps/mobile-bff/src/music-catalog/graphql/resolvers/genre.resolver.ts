@@ -21,7 +21,7 @@ export class GenreResolver {
     @Span("GenreResolver/query/genreById")
     @Query(returns => Genre)
     async genreById(@Args('id') id: string) {
-        return this.genreAPI.findbyId(id)
+        return this.genreAPI.findById(id)
     }
 
     @Span("GenreResolver/field/songs")
