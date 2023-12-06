@@ -18,6 +18,8 @@
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
     "start:mailing": "npx nest start -w mailing-ms",
+    "start:iot-bff": "npx nest start -w iot-bff",
+    "e2e:all": "npm run e2e:music-library && npm run e2e:mobile-bff && npm run e2e:music-discovery",
     "e2e:monolith": "jest --config ./apps/spotify-monolith/test/jest-e2e.json",
     "e2e:music-library": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1",
     "e2e:mobile-bff": "env jest --config ./apps/mobile-bff/test/jest-e2e.json --maxWorkers 1",
@@ -31,6 +33,8 @@
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
+    "@grpc/grpc-js": "^1.9.12",
+    "@grpc/proto-loader": "^0.7.10",
     "@nestjs/apollo": "^12.0.9",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^10.0.0",
@@ -122,7 +126,8 @@
       "^@lib/rabbitmq-queue(|/.*)$": "<rootDir>/libs/rabbitmq-queue/src/$1",
       "^@lib/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1",
       "^@lib/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
-      "^@lib/music-discovery-api(|/.*)$": "<rootDir>/libs/music-discovery-api/src/$1"
+      "^@lib/music-discovery-api(|/.*)$": "<rootDir>/libs/music-discovery-api/src/$1",
+      "^@lib/music-library-grpc(|/.*)$": "<rootDir>/libs/music-library-grpc/src/$1"
     }
   }
 }

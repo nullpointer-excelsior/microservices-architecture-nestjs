@@ -47,6 +47,12 @@
       ],
       "@lib/music-discovery-api/*": [
         "libs/music-discovery-api/src/*"
+      ],
+      "@lib/music-library-grpc": [
+        "libs/music-library-grpc/src"
+      ],
+      "@lib/music-library-grpc/*": [
+        "libs/music-library-grpc/src/*"
       ]
     }
   }
