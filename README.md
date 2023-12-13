@@ -128,7 +128,8 @@ Cada microservicio y componente se describe acá:
     * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
 * 2 - Observabilidad
     * [Trazas distribuidas](docs/distributed-traces.md)
-* XXX - **Work in progress...**
+* 3 - [Comunicación entre microservicios](docs/microservices-communication.md)
+* **Work in progress...**
 
 ## Recursos adicionales
 
