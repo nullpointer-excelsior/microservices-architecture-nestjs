@@ -83,6 +83,20 @@ services:
       - "9411:9411"
     networks:
       - microservices-architecture
+  
+  minio-storage:
+    container_name: minio-storage
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9090"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - ${PWD}/minio/data:/data
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
+
 
 networks:
   microservices-architecture:
