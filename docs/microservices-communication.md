@@ -67,20 +67,21 @@ Crearemos un pequeño ejemplo de un cliente HTTP con NestJS, basandonos en nuest
 
 ### Creando un cliente HTTP reutilizable
 
-El siguiente código ejemplifica el uso de `HttpModule`` en NestJS. Esto nos permite establecer propiedades de manera global para el cliente HTTP. Esta aproximación nos brinda la oportunidad de configurar nuestro cliente HTTP de forma única, evitando repeticiones.
+El siguiente código ejemplifica el uso de `HttpModule` en NestJS. Esto nos permite establecer propiedades de manera global para el cliente HTTP. Esta aproximación nos brinda la oportunidad de configurar nuestro cliente HTTP de forma única, evitando repeticiones.
 
 ```typescript
+// ejemplo de uso de HttpModule
 @Module({
   imports: [
     HttpModule.register({
+      baseURL: 'http://localhost:3000/api-url',
       timeout: 5000,
       maxRedirects: 5,
     }),
   ],
   providers: [MusicLibraryCLient],
 })
-export class MusicLibraryModule {}
-
+export class MyModule {}
  ```
 Ahora crearemos un servicio llamado `MusicLibraryClient`, el cual será el cliente HTTP del microservicio `music-library`. Este microservicio es el encargado de obtener información sobre artistas, álbumes y canciones de **Spotify-Clone**.
 
@@ -112,7 +113,7 @@ export class HttpClientError extends Error {
 
 // definimos nuestro cliente reutilizable
 @Injectable()
-export class MusicLibraryCLient {
+export class HttpCLient {
 
     constructor(private readonly http: HttpService) { }
 
@@ -135,6 +136,33 @@ export class MusicLibraryCLient {
     }
 
 } 
+
+// definimos nuestro modulo personalizado para ser usado con aplicaciones basadas en NestJS
+
+import { Module } from '@nestjs/common';
+import { HttpClient } from './client/http-client';
+import { HttpModule, HttpModuleAsyncOptions } from '@nestjs/axios';
+
+@Module({
+})
+export class HttpClientModule {
+
+    static registerAsync(options: HttpModuleAsyncOptions) {
+        return {
+            module: HttpClientModule,
+            imports: [
+                HttpModule.registerAsync(options)
+            ],
+            providers: [
+                HttpClient
+            ],
+            exports: [
+                HttpClient
+            ]
+        }
+    }
+}
+
 ```
 
  Y utilizamos nuestro componente en clases de tipo servicio.
