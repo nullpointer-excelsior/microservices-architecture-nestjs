@@ -34,6 +34,13 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+
+# runtimes
+**/venv/
+**/.venv/
+
 apps/mobile-bff/schema.gql
 
 **/minio/data/
+etl/load-songs/library
+

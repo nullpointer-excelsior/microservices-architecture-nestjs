@@ -101,11 +101,3 @@ services:
 networks:
   microservices-architecture:
     driver: bridge
-
-volumes:
-  pgadmin_root_prefs:
-    driver: local
-  postgresql_data:
-    driver: local
-  postgresql_bin:
-    driver: local
