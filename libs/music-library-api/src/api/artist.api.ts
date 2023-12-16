@@ -1,12 +1,12 @@
+import { HttpClient } from "@lib/utils/http-client";
 import { Injectable } from "@nestjs/common";
-import { Artist } from "../model/artist.model";
 import { Span } from "nestjs-otel";
-import { MusicLibraryCLient } from "./client/music-library.client";
+import { Artist } from "../model/artist.model";
 
 @Injectable()
 export class ArtistAPI {
 
-  constructor(private client: MusicLibraryCLient) { }
+  constructor(private client: HttpClient) { }
 
   @Span("ArtistAPI/findById")
   findById(id: string) {

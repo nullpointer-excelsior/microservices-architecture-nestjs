@@ -26,7 +26,7 @@ export class RadioUseCases {
     }
 
     async findAll() {
-        return this.repository.findAll()
+       return this.repository.findAll()
     }
 
     @NotFoundExceptionIfUndefined('Radio no encontrada')

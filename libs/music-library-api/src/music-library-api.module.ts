@@ -1,11 +1,10 @@
+import { HttpClientModule } from '@lib/utils/http-client';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AlbumAPI } from './api/album.api';
 import { ArtistAPI } from './api/artist.api';
 import { GenreAPI } from './api/genre.api';
 import { SongAPI } from './api/song.api';
-import { ConfigModule } from '@nestjs/config';
-import { MusicLibraryCLient } from './api/client/music-library.client';
-import { HttpModule } from '@nestjs/axios';
 
 type Options = {
   url: string
@@ -21,37 +20,12 @@ type AsyncOptions = {
 @Module({})
 export class MusicLibraryApiModule {
 
-  static forRoot({ url }: Options) {
-    return {
-      module: MusicLibraryApiModule,
-      imports: [
-        ConfigModule,
-        HttpModule.register({
-          baseURL: url
-        })
-      ],
-      providers: [
-        MusicLibraryCLient,
-        AlbumAPI,
-        ArtistAPI,
-        GenreAPI,
-        SongAPI
-      ],
-      exports: [
-        AlbumAPI,
-        ArtistAPI,
-        GenreAPI,
-        SongAPI
-      ],
-    }
-  }
-
   static forAsyncRoot(options: AsyncOptions) {
     return {
       module: MusicLibraryApiModule,
       imports: [
         ConfigModule,
-        HttpModule.registerAsync({
+        HttpClientModule.registerAsync({
           useFactory(...args: any[]) {
             const config = options.useFactory(...args)
             return {
@@ -63,7 +37,6 @@ export class MusicLibraryApiModule {
         })
       ],
       providers: [
-        MusicLibraryCLient,
         AlbumAPI,
         ArtistAPI,
         GenreAPI,

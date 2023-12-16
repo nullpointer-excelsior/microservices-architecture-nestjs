@@ -1,8 +1,7 @@
+import { HttpClientModule } from '@lib/utils/http-client';
 import { Module } from '@nestjs/common';
-import { RadioAPI } from './api/radio.api';
-import { MusicDiscoveryCLient } from './api/client/music-discovery.client';
 import { ConfigModule } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
+import { RadioAPI } from './api/radio.api';
 
 type Options = {
   url: string
@@ -16,31 +15,13 @@ type AsyncOptions = {
 
 @Module({})
 export class MusicDiscoveryApiModule {
-  static forRoot({ url }: Options) {
-    return {
-      module: MusicDiscoveryApiModule,
-      imports: [
-        ConfigModule,
-        HttpModule.register({
-          baseURL: url
-        })
-      ],
-      providers: [
-        MusicDiscoveryCLient,
-        RadioAPI
-      ],
-      exports: [
-        RadioAPI
-      ],
-    }
-  }
 
   static forAsyncRoot(options: AsyncOptions) {
     return {
       module: MusicDiscoveryApiModule,
       imports: [
         ConfigModule,
-        HttpModule.registerAsync({
+        HttpClientModule.registerAsync({
           useFactory(...args: any[]) {
             const config = options.useFactory(...args)
             return {
@@ -52,7 +33,6 @@ export class MusicDiscoveryApiModule {
         })
       ],
       providers: [
-        MusicDiscoveryCLient,
         RadioAPI
       ],
       exports: [
