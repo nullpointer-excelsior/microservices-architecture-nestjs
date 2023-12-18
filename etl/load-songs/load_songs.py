@@ -1,75 +1,125 @@
 import os
+import requests
 from minio import Minio
 from minio.error import S3Error
-import os
+from dotenv import load_dotenv
 
-# Configurar las credenciales de AWS
-access_key_id = "N6MihZ1IE4i60WhohE91"#os.environ.get('MINIO_ACCESS_KEY')
-secret_access_key = "jI1rbJPxauGG8F7P6MCWEqk5j1Izdwg0A42kof3L"#os.environ.get('MINIO_SECRET_KEY')
+load_dotenv()
+
+MINIO_HOSTNAME = f"{os.environ.get('MINIO_HOSTNAME')}:{os.environ.get('MINIO_PORT')}"
+ACCESS_KEY_ID = os.environ.get('MINIO_ACCESS_KEY')
+SECRET_ACCESS_KEY = os.environ.get('MINIO_SECRET_KEY')
+MUSIC_LIBRARY_DIRECTORY = "library"
+BUCKET_NAME = os.environ.get('MUSIC_LIBRARY_BUCKET_NAME')
+MUSIC_LIBRARY_MS = 'http://localhost:3011'
+
+def create_genre(genre):
+    res = requests.post(f"{MUSIC_LIBRARY_MS}/genres", data={'name': genre}) 
+    return res.json()
+
+def create_artist(artist):
+    res = requests.post(f"{MUSIC_LIBRARY_MS}/artists", data={'name': artist, 'biography': 'n/a', 'photo': f'{artist}/cover.jpg'}) 
+    return res.json()
+
+def create_album(artist, album):
+    data = {
+        'title': album, 
+        'artistId': artist['id'], 
+        'photo': f'{artist["name"]}/{album}/cover.jpg',
+        'year': 2021,
+    }
+    res = requests.post(f"{MUSIC_LIBRARY_MS}/albums", json=data)
+    return res.json()
 
 
-def get_song_info(directory):
-    song_info_list = []
-    for root, dirs, files in os.walk(directory):
-        parts = root.split(os.sep)
-        if len(parts) > 3:
-            genre = parts[-3]
-            artist = parts[-2]
-            album = parts[-1]
-            for file in files:
-                if file.endswith('.mp3'):
-                    song = file
-                    filepath = os.path.join(root, file)
-                    song_info = {'genre': genre, 'artist': artist, 'album': album, 'song': song, 'filepath': filepath}
-                    song_info_list.append(song_info)
-    return song_info_list
+def create_song(genre, artist, album, song):
+    data = {
+        'albumId': album['id'], 
+        'artistId': artist['id'], 
+        'genreId': genre['id'],
+        'title': song['object'].split('/')[3].split('.')[0],
+        'video': '',
+        'duration': 100,
+        'plays': 1,
+        'storage': song['object']
+    }
+    res = requests.post(f"{MUSIC_LIBRARY_MS}/songs", json=data)
+    return res.json()
 
-
-def get_cover_info(directory):
-    cover_info_list = []
+def get_music_library_resources(directory):
+    resources = []
     for root, dirs, files in os.walk(directory):
         for file in files:
-            if file == 'cover.jpg':
-                cover_object = f"{root}/{file}".replace(directory, '')
-                coverpath = os.path.join(root, file)
-                cover_info = {'object': cover_object[1:], 'filepath': coverpath}
-                cover_info_list.append(cover_info)
-    return cover_info_list
+            if file.endswith(('.jpg', 'jpeg', 'png', 'webp')) or file.endswith('.mp3'):
+                object_name = f"{root}/{file}".replace(directory, '')
+                filepath = os.path.join(root, file)
+                resource = {
+                    'object': object_name[1:], 
+                    'filepath': filepath,
+                    'type': 'audio' if file.endswith('.mp3') else 'image'
+                }
+                resources.append(resource)
+    return resources
+
+resources = get_music_library_resources(MUSIC_LIBRARY_DIRECTORY)
+songs = [resource for resource in resources if resource['type'] == 'audio']
 
 
-files = get_cover_info("/Users/benjamin/Repositories/nullpointer-excelsior/microservices-architecture-nestjs/etl/load-songs/library")
-for x in files:
-    print(x)
+def build_library(songs):
+    library = dict()
+    for song in songs:
+        genre = song['object'].split('/')[0]
+        artist = song['object'].split('/')[1]
+        album = song['object'].split('/')[2]
+        if genre not in library:
+            library[genre] = dict()
+            library[genre][artist] = dict()
+            library[genre][artist][album] = []
+        if artist not in library[genre]:
+            library[genre][artist] = dict()
+            library[genre][artist][album] = []
+        if album not in library[genre][artist]:
+            library[genre][artist][album] = []
+        library[genre][artist][album].append(song)
+    return library
+    
+library = build_library(songs)
+
+for genre_name, genres in library.items():
+    saved_genre = create_genre(genre_name)
+    for artist_name, artists in genres.items():
+        saved_artist = create_artist(artist_name)
+        for album_name, album in artists.items():
+            saved_album = create_album(saved_artist, album_name)
+            for song in album:
+                res = create_song(saved_genre, saved_artist, saved_album, song)
+                print(res)
+    
+   
 
 def main():
-    # Create a client with the MinIO server playground, its access key
-    # and secret key.
+    # init client
     client = Minio(
-        "localhost:9000",
+        MINIO_HOSTNAME,
         secure=False,
-        access_key=access_key_id,
-        secret_key=secret_access_key
+        access_key=ACCESS_KEY_ID,
+        secret_key=SECRET_ACCESS_KEY
     )
+    # verify bucket
+    if client.bucket_exists(BUCKET_NAME):
+        client.make_bucket(BUCKET_NAME)
 
-    # Make 'asiatrip' bucket if not exist.
-    found = client.bucket_exists("music-library")
-    if not found:
-        client.make_bucket("music-library")
-    else:
-        print("Bucket 'music-library' already exists")
-
-    for song in get_song_info("/Users/benjamin/Repositories/nullpointer-excelsior/microservices-architecture-nestjs/etl/load-songs/library"):
-        client.fput_object(
-            "music-library", f"{song['genre']}/{song['artist']}/{song['album']}/{song['song']}", song['filepath'],
-        )
-    for cover in get_cover_info("/Users/benjamin/Repositories/nullpointer-excelsior/microservices-architecture-nestjs/etl/load-songs/library"):
-        client.fput_object(
-            "music-library", cover['object'], cover['filepath'],
-        )
+    # for song in get_song_info(MUSIC_LIBRARY_DIRECTORY):
+    #     res = client.fput_object(
+    #         "music-library", f"{song['genre']}/{song['artist']}/{song['album']}/{song['song']}", song['filepath'],
+    #     )
+    #     print(res)
 
 
-if __name__ == "__main__":
-    try:
-        main()
-    except S3Error as exc:
-        print("error occurred.", exc)
+
+
+# if __name__ == "__main__":
+#     try:
+#         main()
+#     except S3Error as exc:
+#         print("error occurred.", exc)
