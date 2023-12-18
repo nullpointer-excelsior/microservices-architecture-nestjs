@@ -58,7 +58,8 @@ export class SongService {
             duration: song.duration,
             plays: song.plays,
             title: song.title,
-            video: song.video
+            video: song.video,
+            storage: song.storage,
         })
 
         const message: NewSongDataMessage = {

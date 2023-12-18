@@ -39,7 +39,6 @@ export class AlbumService {
 
   @Span("AlbumService/save")
   async save(album: CreateAlbumRequest) {
-
     const artist = await this.artistRepository.findOneBy({ id: album.artistId })
 
     if (!artist) {

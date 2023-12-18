@@ -22,6 +22,9 @@ export class Song {
   @Column()
   duration: number;
 
+  @Column()
+  storage: string;
+
   @ManyToOne(() => Album, album => album.songs, { nullable: false })
   album: Album;
 

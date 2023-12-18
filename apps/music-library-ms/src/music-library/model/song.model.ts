@@ -16,6 +16,10 @@ export class SongModel {
   @IsString()
   @ApiProperty({ description: 'The video of the song' })
   video: string;
+  
+  @IsString()
+  @ApiProperty({ description: 'S3 storage object name' })
+  storage: string;
 
   @IsPositive()
   @IsNumber()
