@@ -10,6 +10,10 @@ import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
 import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { MusicDiscoveryApiModule } from '@lib/music-discovery-api';
 import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver';
+import { PlayerModule } from './player/player.module';
+import { PlayerController } from './player/controllers/player.controller';
+import { PlayerService } from './player/services/player.service';
+import { StorageService } from './player/services/storage.service';
 
 @Module({
   imports: [
@@ -35,14 +39,18 @@ import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver'
       },
       imports: [ConfigModule],
       inject: [ConfigService]
-    })
+    }),
+    PlayerModule
   ],
   providers: [
     ArtistResolver,
     AlbumResolver,
     GenreResolver,
     SongResolver,
-    RadioResolver
-  ]
+    RadioResolver,
+    PlayerService,
+    StorageService
+  ],
+  controllers: [PlayerController]
 })
 export class MobileBffModule { }

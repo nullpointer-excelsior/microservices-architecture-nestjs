@@ -4,5 +4,6 @@ export class Song {
   title: string;
   video: string;
   plays: number;
+  storage: string;
   duration: number;
 }

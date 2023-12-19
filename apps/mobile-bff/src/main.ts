@@ -8,8 +8,9 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 async function bootstrap() {
   
   const app = await NestFactory.create(MobileBffModule);
+  app.enableCors();
+  
   const port = +process.env.MOBILE_BFF_APP_PORT
-
   await app.listen(port, () => {
     Logger.log(`Mobile BFF ready on http://localhost:${port}/graphql`, "Main")
   });
