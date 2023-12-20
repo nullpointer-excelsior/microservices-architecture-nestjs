@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { IotBffModule } from './iot-bff.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
-import { MusicCatalogClient } from '../../../libs/music-library-grpc/src/music-catalog.client';
+import { MusicCatalogClient } from '@lib/music-library-grpc';
 
 async function bootstrap() {
 

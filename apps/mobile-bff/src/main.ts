@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { MobileBffModule } from './mobile-bff.module';
 import { Logger } from '@nestjs/common';
-import { startOpenTelemetry } from '../../../libs/shared/src/instrumentation/opentelemetry/start-opentelemetry';
+import { startOpenTelemetry } from '@lib/shared/instrumentation';
 import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 

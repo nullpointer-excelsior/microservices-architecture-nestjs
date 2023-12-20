@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MusicLibraryMsModule } from './music-library-ms.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { startOpenTelemetry } from '../../../libs/shared/src/instrumentation/opentelemetry/start-opentelemetry';
+import { startOpenTelemetry } from '@lib/shared/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';

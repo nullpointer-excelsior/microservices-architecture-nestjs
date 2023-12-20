@@ -56,6 +56,7 @@ export function createSongEntity(app: INestApplication) {
     duration = 230,
     plays = 0,
     video = "song.avi",
+    storage = "song.mp3",
     albumId,
     artistId,
     genreId
@@ -73,6 +74,7 @@ export function createSongEntity(app: INestApplication) {
       video,
       album,
       artist,
+      storage,
       genre
     })
   }

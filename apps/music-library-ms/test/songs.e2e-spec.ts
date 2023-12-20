@@ -198,7 +198,8 @@ describe('Songs (e2e)', () => {
           genreId: rock.id,
           plays: 10000,
           title: "separate ways",
-          video: "video.avi"
+          video: "video.avi",
+          storage: "storage.avi"
     }
     const res = await request(app.getHttpServer())
       .post(`/songs`)

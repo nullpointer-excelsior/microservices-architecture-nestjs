@@ -1,8 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { MusicDiscoveryMsModule } from './music-discovery-ms.module';
-import { RabbitmqQueueModule } from '../../../libs/rabbitmq-queue/rabbitmq-queue.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { MusicDiscoveryMsModule } from './music-discovery-ms.module';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
+import { startOpenTelemetry } from '@lib/shared/instrumentation';
 
 async function bootstrap() {
   
@@ -26,4 +28,17 @@ async function bootstrap() {
   // Logger.log(`RabbitMQ Manager on http://localhost:15672/`, "RabbitmqQueueModule")
 
 }
+
+startOpenTelemetry({
+  serviceName: "music-discovery-ms",
+  serviceVersion: "1.0",
+  instrumentations: [
+    new HttpInstrumentation(),
+    new ExpressInstrumentation({
+      ignoreLayersType: [ExpressLayerType.REQUEST_HANDLER, ExpressLayerType.MIDDLEWARE]
+    }),
+  ],
+})
+
+
 bootstrap();
