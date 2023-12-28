@@ -8,14 +8,14 @@ import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 async function bootstrap() {
   const app = await NestFactory.create(MediaMsModule);
   
-  const port = +process.env.PLAYER_MS_APP_PORT
+  const port = +process.env.MEDIA_MS_APP_PORT
   await app.listen(port, () => {
-    Logger.log(`Player microservice ready on http://localhost:${port}/graphql`, "Main")
+    Logger.log(`Media microservice ready on http://localhost:${port}`, "Main")
   });
 }
 
 startOpenTelemetry({
-  serviceName: "player-ms",
+  serviceName: "media-ms",
   serviceVersion: "1.0",
   instrumentations: [
     new HttpInstrumentation(),
