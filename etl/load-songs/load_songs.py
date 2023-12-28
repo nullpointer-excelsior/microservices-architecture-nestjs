@@ -19,15 +19,21 @@ def create_genre(genre):
     res = requests.post(f"{MUSIC_LIBRARY_MS}/genres", data={'name': genre}) 
     return res.json()
 
-def create_artist(artist):
-    res = requests.post(f"{MUSIC_LIBRARY_MS}/artists", data={'name': artist, 'biography': 'n/a', 'photo': f'{artist}/cover.jpg'}) 
+def create_artist(genre_name, artist):
+    data = {
+        'name': artist, 
+        'biography': 'n/a', 
+        'photo': f'{genre_name}/{artist}/cover.jpg'
+    }
+    res = requests.post(f"{MUSIC_LIBRARY_MS}/artists", data=data) 
     return res.json()
 
-def create_album(artist, album):
+def create_album(genre_name, artist, album):
+    print(genre_name, artist, album)
     data = {
         'title': album, 
         'artistId': artist['id'], 
-        'photo': f'{artist["name"]}/{album}/cover.jpg',
+        'photo': f'{genre_name}/{artist["name"]}/{album}/cover.jpg',
         'year': 2021,
     }
     res = requests.post(f"{MUSIC_LIBRARY_MS}/albums", json=data)
@@ -90,9 +96,9 @@ def save_library(library):
     for genre_name, genres in library.items():
         saved_genre = create_genre(genre_name)
         for artist_name, artists in genres.items():
-            saved_artist = create_artist(artist_name)
+            saved_artist = create_artist(genre_name, artist_name)
             for album_name, album in artists.items():
-                saved_album = create_album(saved_artist, album_name)
+                saved_album = create_album(genre_name, saved_artist, album_name)
                 for song in album:
                     res = create_song(saved_genre, saved_artist, saved_album, song)
                     print(f"saved {res['title']}")
@@ -117,8 +123,8 @@ def main():
     library = build_library(songs)
     save_library(library)
     for resource in resources:
+        print('saving-object', resource['object'])
         client.fput_object(BUCKET_NAME, resource['object'], resource['filepath'])
-
 
 
 
