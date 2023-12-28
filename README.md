@@ -87,8 +87,14 @@ npm run start:accounts
 ## BFF Móvil
 npm run start:mobile-bff
 
+## BFF Web
+npm run start:web-bff
+
 ## Servicio de Correo
 npm run start:mailing
+
+## Media server
+npm run start:media
 
 # Ejecutar Pruebas de Extremo a Extremo
 
