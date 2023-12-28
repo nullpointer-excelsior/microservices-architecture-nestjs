@@ -1,12 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { PlayerMsModule } from './player-ms.module';
+import { MediaMsModule } from './media-ms.module';
 import { Logger } from '@nestjs/common';
 import { startOpenTelemetry } from '@lib/shared/instrumentation';
 import { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 
 async function bootstrap() {
-  const app = await NestFactory.create(PlayerMsModule);
+  const app = await NestFactory.create(MediaMsModule);
   
   const port = +process.env.PLAYER_MS_APP_PORT
   await app.listen(port, () => {

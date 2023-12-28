@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { PlayerMsModule } from './../src/player-ms.module';
+import { PlayerMsModule } from '../src/media-ms.module';
 
 describe('PlayerMsController (e2e)', () => {
   let app: INestApplication;

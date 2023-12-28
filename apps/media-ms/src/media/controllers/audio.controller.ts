@@ -1,15 +1,15 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { PlayerService } from '../services/player.service';
+import { AudioService } from '../services/audio.service';
 
 @Controller('player')
-export class PlayerController {
+export class AudioController {
 
-    constructor(private player: PlayerService) { }
+    constructor(private player: AudioService) { }
 
     @Get('songs/:id')
     async getSong(@Param('id') id: string, @Res() res: Response) {
-
+        Logger.log(`audio-media:${id}`, 'PlayerController')
         const { Body, ContentType, ContentLength } = await this.player.getSongObject(id);
 
         const bytesArray = await Body.transformToByteArray()

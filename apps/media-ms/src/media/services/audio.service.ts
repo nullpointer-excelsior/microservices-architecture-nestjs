@@ -5,7 +5,7 @@ import { StorageCLient } from '../../s3/client/storage.client';
 import { S3ObjectResponseDTO } from "../model/s3object-response.dto";
 
 @Injectable()
-export class PlayerService {
+export class AudioService {
 
     constructor(
         private readonly songAPI: SongAPI,

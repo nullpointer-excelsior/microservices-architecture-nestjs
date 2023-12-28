@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PlayerModule } from './player/player.module';
+import { MediaModule } from './media/media.module';
 import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
-    PlayerModule,
+    MediaModule,
     S3Module
   ]
 })
-export class PlayerMsModule {}
+export class MediaMsModule {}

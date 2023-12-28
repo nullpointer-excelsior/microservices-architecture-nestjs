@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MusicLibraryApiModule } from '../../../../libs/music-library-api/src';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PlayerService } from './services/player.service';
-import { PlayerController } from './controllers/player.controller';
+import { AudioService } from './services/audio.service';
+import { AudioController } from './controllers/audio.controller';
 import { S3Module } from '../s3/s3.module';
+import { CoverController } from './controllers/cover.controller';
+import { CoverService } from './services/cover.service';
 
 export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
 
@@ -23,7 +25,8 @@ export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
         S3Module
     ],
     providers: [
-        PlayerService,
+        AudioService,
+        CoverService,
         {
             provide: 'MUSIC_CATALOG_BUCKET',
             useFactory(config: ConfigService) {
@@ -34,7 +37,8 @@ export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
         }
     ],
     controllers: [
-        PlayerController
+        AudioController,
+        CoverController
     ]
 })
-export class PlayerModule { }
+export class MediaModule { }

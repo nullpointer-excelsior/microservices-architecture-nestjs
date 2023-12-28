@@ -138,13 +138,22 @@
         "tsConfigPath": "libs/music-library-grpc/tsconfig.lib.json"
       }
     },
-    "player-ms": {
+    "media-ms": {
       "type": "application",
-      "root": "apps/player-ms",
+      "root": "apps/media-ms",
       "entryFile": "main",
-      "sourceRoot": "apps/player-ms/src",
+      "sourceRoot": "apps/media-ms/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/player-ms/tsconfig.app.json"
+        "tsConfigPath": "apps/media-ms/tsconfig.app.json"
+      }
+    },
+    "web-bff": {
+      "type": "application",
+      "root": "apps/web-bff",
+      "entryFile": "main",
+      "sourceRoot": "apps/web-bff/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/web-bff/tsconfig.app.json"
       }
     }
   },
