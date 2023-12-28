@@ -14,7 +14,7 @@ export class AlbumAPI {
 
     @Span("AlbumAPI/findArtistById")
     findByArtistId(id: string) {
-        return this.client.get<Album>(`albums/artist/${id}`)
+        return this.client.get<Album[]>(`albums/artist/${id}`)
     }
 
 }
