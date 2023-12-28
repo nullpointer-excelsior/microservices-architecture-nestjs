@@ -10,14 +10,14 @@ export class CoverController {
 
     @Get('artists/:id')
     async getArtistCover(@Param('id') id: string, @Res() res: Response) {
-        Logger.log(`artist-media:${id}`, 'CoverController')
+        Logger.log(`cover-artist:${id}`, 'CoverController')
         const s3object = await this.cover.getArtistCoverObject(id);
         await generateStream(res, s3object);
     }
 
     @Get('albums/:id')
     async getAlbumCover(@Param('id') id: string, @Res() res: Response) {
-        Logger.log(`album-media:${id}`, 'CoverController')
+        Logger.log(`cover-album:${id}`, 'CoverController')
         const s3object = await this.cover.getAlbumCoverObject(id);
         await generateStream(res, s3object);
     }

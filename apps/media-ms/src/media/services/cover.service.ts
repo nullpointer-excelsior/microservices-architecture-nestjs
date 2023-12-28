@@ -1,6 +1,6 @@
 import { AlbumAPI, ArtistAPI } from '@lib/music-library-api';
 import { Inject, Injectable } from '@nestjs/common';
-import { lastValueFrom, map, switchMap, tap } from 'rxjs';
+import { lastValueFrom, map, switchMap } from 'rxjs';
 import { StorageCLient } from '../../s3/client/storage.client';
 
 @Injectable()
@@ -25,7 +25,6 @@ export class CoverService {
     getAlbumCoverObject(id: string) {
         const s3object$ = this.albumAPI.findById(id).pipe(
             map(album => album.photo),
-            tap(console.log),
             switchMap(storageId => this.storageClient.getObject(this.bucket, storageId)),
             map(s3object => ({ Body: s3object.Body, ContentType: s3object.ContentType, ContentLength: s3object.ContentLength }))
         )

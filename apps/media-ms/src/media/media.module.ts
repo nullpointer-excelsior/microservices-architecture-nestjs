@@ -14,7 +14,6 @@ export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
         ConfigModule.forRoot(),
         MusicLibraryApiModule.forAsyncRoot({
             useFactory(config: ConfigService) {
-                console.log('player-module', config)
                 return {
                     url: config.get('MOBILE_BFF_MUSIC_LIBRARY_API')
                 }
@@ -30,7 +29,6 @@ export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
         {
             provide: 'MUSIC_CATALOG_BUCKET',
             useFactory(config: ConfigService) {
-                console.log('config-value', config.get('MUSIC_LIBRARY_BUCKET_NAME'))
                 return config.get('MUSIC_LIBRARY_BUCKET_NAME')
             },
             inject: [ConfigService],
