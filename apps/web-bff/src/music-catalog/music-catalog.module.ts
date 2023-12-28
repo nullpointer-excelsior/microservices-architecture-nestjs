@@ -20,9 +20,9 @@ import { CatalogService } from "./restful/services/catalog.service";
     providers:[
         CatalogService,
         {
-            provide: 'PLAYER_API',
+            provide: 'MEDIA_SERVER_URL',
             useFactory(config: ConfigService) {
-                return config.get('PLAYER_API')
+                return config.get('WEB_BFF_MEDIA_SERVER')
             },
             inject: [ConfigService]
         }

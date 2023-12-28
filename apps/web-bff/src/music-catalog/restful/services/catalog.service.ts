@@ -23,7 +23,7 @@ export class CatalogService {
         private readonly artistAPI: ArtistAPI,
         private readonly albumAPI: AlbumAPI,
         private readonly songAPI: SongAPI,
-        @Inject('PLAYER_API') private readonly playerApiUrl: string
+        @Inject('MEDIA_SERVER_URL') private readonly mediaServerUrl: string
     ) { }
 
     getHomeLibrary() {
@@ -43,7 +43,7 @@ export class CatalogService {
                 albumId: album.id,
                 title: album.title,
                 color: getRandomColor(),
-                cover: `${this.playerApiUrl}/cover/albums/${album.id}`,
+                cover: `${this.mediaServerUrl}/cover/albums/${album.id}`,
                 artists: [album.artist],
                 id: toMD5(`${album.artist}-${album.title}`),
             })),
@@ -61,11 +61,11 @@ export class CatalogService {
                         id: song.id,
                         albumId: album.id,
                         album: album.title,
-                        image: `${this.playerApiUrl}/cover/albums/${album.id}`,
+                        image: `${this.mediaServerUrl}/cover/albums/${album.id}`,
                         artists: [artist.name],
                         title: song.title,
                         duration: song.duration,
-                        url: `${this.playerApiUrl}/audio/songs/${song.id}`,
+                        url: `${this.mediaServerUrl}/audio/songs/${song.id}`,
                     }))
                 ))
             )
