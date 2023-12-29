@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { PlayerProxyMiddleware } from './middlewares/player-proxy.middleware';
+import { MediaServerProxyMiddleware } from './middlewares/media-server-proxy.middleware';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -7,15 +7,15 @@ import { ConfigModule } from '@nestjs/config';
         ConfigModule.forRoot()
     ],
     providers: [
-        PlayerProxyMiddleware
+        MediaServerProxyMiddleware
     ],
 })
 export class MediaServerModule implements NestModule {
 
     configure(consumer: MiddlewareConsumer) {
         consumer
-            .apply(PlayerProxyMiddleware)
-            .forRoutes('/audio/*', 'cover/*');
+            .apply(MediaServerProxyMiddleware)
+            .forRoutes('audio/*', 'cover/*');
     }
 
 }
