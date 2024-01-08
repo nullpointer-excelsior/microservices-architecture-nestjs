@@ -12,6 +12,7 @@
     "stop:infra": "cd infrastructure/local && docker-compose down && docker ps",
     "start:e2e-infra": "cd infrastructure/test && docker-compose up -d && docker ps",
     "stop:e2e-infra": "cd infrastructure/test && docker-compose down && docker ps",
+    "start:frontend": "cd scripts && ./start-frontend.sh",
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
     "start:music-library": "npx nest start -w music-library-ms",
     "start:discovery": "npx nest start -w music-discovery-ms",
@@ -22,7 +23,6 @@
     "start:media": "npx nest start -w media-ms",
     "start:web-bff": "npx nest start -w web-bff",
     "e2e:all": "npm run e2e:music-library && npm run e2e:mobile-bff && npm run e2e:music-discovery",
-    "e2e:monolith": "jest --config ./apps/spotify-monolith/test/jest-e2e.json",
     "e2e:music-library": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1",
     "e2e:mobile-bff": "env jest --config ./apps/mobile-bff/test/jest-e2e.json --maxWorkers 1",
     "e2e:music-discovery": "env MUSIC_DISCOVERY_MS_DATABASE_HOST=localhost MUSIC_DISCOVERY_MS_DATABASE_NAME=test MUSIC_DISCOVERY_MS_DATABASE_PORT=27020 MUSIC_DISCOVERY_MS_DATABASE_USER=test MUSIC_DISCOVERY_MS_DATABASE_PASS=test jest --detectOpenHandles --config ./apps/music-discovery-ms/test/jest-e2e.json --maxWorkers 1 ",
@@ -30,8 +30,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "container:postgres:monolith": "docker exec -it spotify-monolith-db psql -U spotify-monolith"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",

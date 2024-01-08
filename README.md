@@ -1,6 +1,6 @@
 # Arquitectura de microservicios con Nestjs
 
-Este repositorio tiene como objetivo proporcionar ejemplos y guías sobre cómo implementar patrones de arquitectura de microservicios utilizando NestJS. Está inspirado en la complejidad y desafíos que presenta una plataforma como Spotify. Crearemos un clon que emulará las funcionalidades clave de la famosa plataforma de música. A través de este proyecto, podrás explorar las mejores prácticas, estructuras y conceptos clave para desarrollar aplicaciones escalables basadas en microservicios.
+Este repositorio tiene como objetivo proporcionar ejemplos y guías sobre cómo implementar patrones de arquitectura de microservicios utilizando NestJS. Está inspirado en la complejidad y desafíos que presenta una plataforma como Spotify. Crearemos un clon que emulará las funcionalidades mas comunes de la famosa plataforma de música. A través de este proyecto, podrás explorar las mejores prácticas, estructuras y conceptos clave para desarrollar aplicaciones escalables y mantenibles basadas en microservicios.
 
 ## Objetivo
 
@@ -21,7 +21,7 @@ El propósito principal de este proyecto es:
 
 ## Arquitectura de microservicios
 
-El siguiente diagrama de arquitectura 
+El siguiente diagrama de arquitectura muestra los microservicios disponibles y las tecnologías utilizadas.
 
 ![architecture-image](docs/images/spotify-clone-architecture.png)
 
@@ -34,7 +34,7 @@ Todos los microservicios y componentes se describen acá:
 * `music-discovery-ms`: Microservicio que gestiona radios y listas de reproducción destinado a que el usuario conozca nueva música.
 * `accounts-ms`: Microservicio que gestiona las cuentas de usuario.
 * `mobile-bff`: Backend For Frontend para aplicación móvil, encargada de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API GraphQL.
-* `web-bff`: Backend For Frontend para aplicación web integrada con una aplicación [cliente basada en astro](https://github.com/nullpointer-excelsior/spotify-clone-frontend). este BFF se encarga de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API GraphQL.
+* `web-bff`: Backend For Frontend para aplicación web integrada con una aplicación [basada en AstroJs](https://github.com/nullpointer-excelsior/spotify-clone-frontend). Este BFF se encarga de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API REST.
 * `mailing-ms`: Microservicio encargado del envío de correos electrónicos.
 * `media-ms`: Microservicio encargado de entregar los recursos de audio e imágenes relacionadas al catálogo musical.
 
@@ -63,30 +63,102 @@ La estructura de carpetas es la siguiente:
 * `infrastructure`: todo lo relacionado a la infraestructura necesaria para que nuestros microservicios puedan ser ejecutados.
 * `docs`: documentación de patrones y técnicas utilizados en microservicios.
 * `etl`: jobs encargados de cargar datos iniciales.
+* `scripts`: definición de scripts complejos que no se puedan manejar desde package.json
 
 ## Ejecución de aplicaciones
 
+Puedes ejecutar un stack mínimo para poder visualizar una aplicación frontend robada de un [tutorial de midudev](https://www.youtube.com/watch?v=WRc8lz-bp78) y adaptada para poder conectarse con el stack de microservicios de Spotify-clone. También puedes levantar otros servicios para poder ver los ejemplos funcionando de cada artículo expuesto en este repositorio.
+
 Asegúrate de tener instalado:
 
-* Node.js
+* Node versión 18 o superior
 * Docker
+* python3
+
+### Levantar infraestructura
 
 Instala las dependencias usando npm install.
 
 ```bash
+#!/bin/bash
 npm install
 ```
+Levanta la infraestructura de base de datos, S3, telemetría y Broker de mensajería.
+
+```bash
+#!/bin/bash
+npm run start:infra
+```
+### Levantar stack de ejemplo
+
+```bash
+#!/bin/bash
+
+# api catalogo de musica.
+npm run start:music-library
+# servidor de media para audio e imagenes.
+npm run start:media-ms
+# backend for frontend encargado de consolidar todos los endpoints de microservicios en 1 solo punto de entrada para las aplicaciones cliente.
+npm run start:web-bff
+# frontend spotify de ejemplo
+npm run start:frontend
+```
+
+Ahora deberías tener ejecutándose en http://localhost:4321/ el frontend de Spotify.
 
 > Todas las aplicaciones son configuradas mediante variables de ambiente definidas en el archivo `.env`, el archivo `infrastructure/local/docker-compose.yml` también lee estas variables. 
 
-Para ejecutar los componentes del proyecto, tienes disponible los siguientes scripts:
+## Purebas unitarias y E2E
+
+puedes ejecutar las pruebas unitarias con:
+
+```bash
+#!/bin/bash
+npm run test
+```
+Y ejecutar las pruebas e2e de la siguiente manera:
+
+```bash
+#!/bin/bash
+
+# levanta infra destinada a pruebas e2e
+npm run start:e2e-infra
+
+# ejecuta todas las pruebas e2e de la arquitectura de microservicios
+npm run e2e:all
+
+```
+Tambien puedes ejecutar las pruebas e2e de forma separada por cada microservicio
+
+```bash
+#!/bin/bash
+
+npm run e2e:music-library
+
+npm run e2e:music-discovery
+
+npm run e2e:mobile-bff
+
+```
+### Detener infraestructura
+
+Si deseas terminar con la infraestructura, tienes disponibles los siguientes comandos:
+
+```bash
+#!/bin/bash
+
+# detiene la infraestructura principal de microservicios
+npm run stop:infra
+# detiene la infraestructura de pruebas e2e
+npm run stop:e2e-infra
+
+```
+
+Para ejecutar los componentes del proyecto de forma individual, tienes disponibles los siguientes scripts:
 
 ```bash
 # Instala las dependencias usando npm install.
 npm install
-
-# Construir la Aplicación
-npm run build
 
 # Formatear Código
 npm run format
@@ -129,6 +201,10 @@ npm run start:mailing
 ## Media server
 npm run start:media
 
+# Ejecutar Pruebas Unitarias de todas las aplicaciones
+
+npm test
+
 # Ejecutar Pruebas de Extremo a Extremo
 
 ## Monolito de Spotify
@@ -143,13 +219,14 @@ npm run e2e:mobile-bff
 ## Descubrimiento Musical
 npm run e2e:music-discovery
 
+## Todos las pruebas unitarias
+npm run e2e:all
+
 # Linting
 npm run lint
 
-# Ejecutar Pruebas Unitarias de todas las aplicaciones
-npm test
-```
 
+```
 
 ## Recursos adicionales
 
