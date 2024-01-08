@@ -10,6 +10,35 @@ El propósito principal de este proyecto es:
 * Presentar ejemplos prácticos que representen características clave de una plataforma de música, como la gestión de usuarios, autenticación, gestión de música y listas de reproducción.
 * Facilitar un entorno de aprendizaje donde puedas comprender no solo los fundamentos de NestJS, sino también su aplicación práctica en un entorno de microservicios.
 
+## Módulos de aprendizaje:
+
+* 1 - Diseño de aplicaciones
+    * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
+* 2 - Observabilidad
+    * [Trazas distribuidas](docs/distributed-traces.md)
+* 3 - [Comunicación entre microservicios](docs/microservices-communication.md)
+* **Work in progress...**
+
+## Arquitectura de microservicios
+
+El siguiente diagrama de arquitectura 
+
+![architecture-image](docs/images/spotify-clone-architecture.png)
+
+## Aplicaciones disponibles:
+
+Todos los microservicios y componentes se describen acá:
+
+* `spotify-monolith`: Aplicación monolítica clon de Spotify que gestiona usuarios, la librería de canciones y las listas de reproducción.
+* `music-library-ms`: Microservicio que gestiona la librería musical de artistas, álbumes, canciones y géneros de nuestro clon de Spotify.
+* `music-discovery-ms`: Microservicio que gestiona radios y listas de reproducción destinado a que el usuario conozca nueva música.
+* `accounts-ms`: Microservicio que gestiona las cuentas de usuario.
+* `mobile-bff`: Backend For Frontend para aplicación móvil, encargada de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API GraphQL.
+* `web-bff`: Backend For Frontend para aplicación web integrada con una aplicación [cliente basada en astro](https://github.com/nullpointer-excelsior/spotify-clone-frontend). este BFF se encarga de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API GraphQL.
+* `mailing-ms`: Microservicio encargado del envío de correos electrónicos.
+* `media-ms`: Microservicio encargado de entregar los recursos de audio e imágenes relacionadas al catálogo musical.
+
+
 ## Tecnologías empleadas:
 
 * `NestJs`: Framework Node.js con TypeScript.
@@ -17,6 +46,9 @@ El propósito principal de este proyecto es:
 * `Postgres`: Sistema de gestión de bases de datos relacional.
 * `MongoDB`: Base de datos NoSQL orientada a documentos. 
 * `RabbitMQ`: Broker de mensajes para la comunicación entre microservicios.
+* `Minio Storage`: Servicio de administración para el almacenamiento de objetos compatible con S3.
+* `OpenTelemetry`: Librería destinada a recolectar datos de telemetría y enviarlos al servidor OTLP configurado.
+* `Jeager UI`: Servicio OTLP destinado a recolectar datos de telemetría de los microservicios y disponibilizar información de las trazas.
 
 ## Monorepositorio con NestJs
 
@@ -30,6 +62,7 @@ La estructura de carpetas es la siguiente:
 * `libs`: librerías de uso compartido por los microservicios para reutilizar componentes.
 * `infrastructure`: todo lo relacionado a la infraestructura necesaria para que nuestros microservicios puedan ser ejecutados.
 * `docs`: documentación de patrones y técnicas utilizados en microservicios.
+* `etl`: jobs encargados de cargar datos iniciales.
 
 ## Ejecución de aplicaciones
 
@@ -117,25 +150,6 @@ npm run lint
 npm test
 ```
 
-## Arquitectura del proyecto:
-
-Cada microservicio y componente se describe acá:
-
-* `spotify-monolith`: Aplicación monolítica clon de Spotify que gestiona usuarios, la librería de canciones y las listas de reproducción.
-* `music-library-ms`: Microservicio que gestiona la librería musical de artistas, álbumes, canciones y géneros de nuestro clon de Spotify.
-* `music-discovery-ms`: Microservicio que gestiona radios y listas de reproducción destinado a que el usuario conozca nueva música.
-* `accounts-ms`: Microservicio que gestiona las cuentas de usuario.
-* `mobile-bff`: Backend For Frontend para aplicación móvil: encargada de obtener la librería musical, las listas de reproducción y radios, y exponer los datos como API GraphQL.
-* `mailing-ms`: Microservicio que gestiona el envío de correos electrónicos.
-
-## Módulos de aprendizaje:
-
-* 1 - Diseño de aplicaciones
-    * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
-* 2 - Observabilidad
-    * [Trazas distribuidas](docs/distributed-traces.md)
-* 3 - [Comunicación entre microservicios](docs/microservices-communication.md)
-* **Work in progress...**
 
 ## Recursos adicionales
 
