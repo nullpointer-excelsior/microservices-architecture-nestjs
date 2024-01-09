@@ -62,20 +62,21 @@ La estructura de carpetas es la siguiente:
 * `libs`: librerías de uso compartido por los microservicios para reutilizar componentes.
 * `infrastructure`: todo lo relacionado a la infraestructura necesaria para que nuestros microservicios puedan ser ejecutados.
 * `docs`: documentación de patrones y técnicas utilizados en microservicios.
-* `etl`: jobs encargados de cargar datos iniciales.
-* `scripts`: definición de scripts complejos que no se puedan manejar desde package.json
+* `jobs`: jobs encargados de configuraciones o carga de datos iniciales.
+* `scripts`: definición de bash scripts complejos que no se puedan manejar desde package.json
 
 ## Ejecución de aplicaciones
 
 Puedes ejecutar un stack mínimo para poder visualizar una aplicación frontend robada de un [tutorial de midudev](https://www.youtube.com/watch?v=WRc8lz-bp78) y adaptada para poder conectarse con el stack de microservicios de Spotify-clone. También puedes levantar otros servicios para poder ver los ejemplos funcionando de cada artículo expuesto en este repositorio.
 
-Asegúrate de tener instalado:
+## Instalación:
+
+Asegúrate de tener:
 
 * Node versión 18 o superior
 * Docker
 * python3
 
-### Levantar infraestructura
 
 Instala las dependencias usando npm install.
 
@@ -83,13 +84,23 @@ Instala las dependencias usando npm install.
 #!/bin/bash
 npm install
 ```
-Levanta la infraestructura de base de datos, S3, telemetría y Broker de mensajería.
+
+### Variables de entorno
+
+Todas las aplicaciones, jobs e infraestructura son configuradas mediante variables de ambiente definidas en el archivo `.env` 
+
+### Levantar infraestructura
+
+Para levantar la infraestructura de base de datos, S3, telemetría y Broker de mensajería ejecuta el siguiente comando:
 
 ```bash
 #!/bin/bash
 npm run start:infra
 ```
+
 ### Levantar stack de ejemplo
+
+Dependiendo del caso o ejemplo que estés viendo, puedes ejecutar una o más aplicaciones. Para levantar un stack básico con una aplicación cliente frontend, puedes levantar los siguientes servicios:
 
 ```bash
 #!/bin/bash
@@ -104,9 +115,23 @@ npm run start:web-bff
 npm run start:frontend
 ```
 
-Ahora deberías tener ejecutándose en http://localhost:4321/ el frontend de Spotify.
+### Cargar catálogo musical
 
-> Todas las aplicaciones son configuradas mediante variables de ambiente definidas en el archivo `.env`, el archivo `infrastructure/local/docker-compose.yml` también lee estas variables. 
+Para cargar el catálogo de música de ejemplo, deberás ejecutar el script `jobs/create_music_library.py`
+
+```bash
+#!/bin/bash
+
+
+pip install -r jobs/requirements.txt
+
+python jobs/create_music_library.py
+
+```
+
+Ahora deberías tener ejecutándose en http://localhost:4321/ el frontend de Clon-spotify con un catálogo musical de ejemplo.
+
+
 
 ## Purebas unitarias y E2E
 
@@ -224,7 +249,6 @@ npm run e2e:all
 
 # Linting
 npm run lint
-
 
 ```
 
