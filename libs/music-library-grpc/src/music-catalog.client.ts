@@ -1,6 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { AlbumService, ArtistService, GenreService, SongService } from './grpc/services';
+import { tap } from 'rxjs';
 
 @Injectable()
 export class MusicCatalogClient implements OnModuleInit {
@@ -24,7 +25,7 @@ export class MusicCatalogClient implements OnModuleInit {
     }
 
     findArtistById(id: string) {
-        return this.artistService.GetArtistById({ id });
+        return this.artistService.GetArtistById({ id })
     }   
 
     findAllAlbums() {

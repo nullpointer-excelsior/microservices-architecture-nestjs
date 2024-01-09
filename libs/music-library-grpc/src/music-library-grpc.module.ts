@@ -19,6 +19,9 @@ import { MusicCatalogClient } from './music-catalog.client';
   providers: [
     MusicCatalogClient
   ],
+  exports: [
+    MusicCatalogClient
+  ]
   
 })
 export class MusicLibraryGrpcModule {}
