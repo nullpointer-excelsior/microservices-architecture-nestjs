@@ -69,6 +69,8 @@ La estructura de carpetas es la siguiente:
 
 Puedes ejecutar un stack mínimo para poder visualizar una aplicación frontend robada de un [tutorial de midudev](https://www.youtube.com/watch?v=WRc8lz-bp78) y adaptada para poder conectarse con el stack de microservicios de Spotify-clone. También puedes levantar otros servicios para poder ver los ejemplos funcionando de cada artículo expuesto en este repositorio.
 
+> Spotify clone frontend con AstroJs esta [acá](https://github.com/nullpointer-excelsior/spotify-clone-frontend)
+
 ## Instalación:
 
 Asegúrate de tener:
