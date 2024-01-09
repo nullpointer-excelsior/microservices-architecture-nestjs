@@ -1,8 +1,8 @@
 import { HttpStatus, INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import * as request from 'supertest';
+import { MusicLibraryMsModule } from "../src/music-library-ms.module";
 import { CreateGenreRequest } from "../src/music-library/dto/create-genre.request";
-import { MusicLibraryModule } from "../src/music-library/music-library.module";
 import { cleanDatabase, createGenreEntity } from "./utils";
 
 
@@ -14,7 +14,7 @@ describe('Genre (e2e)', () => {
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [
-                MusicLibraryModule
+                MusicLibraryMsModule
             ]
         })
             .compile();

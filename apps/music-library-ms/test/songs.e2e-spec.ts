@@ -2,8 +2,8 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { RabbitmqClient } from '../../../libs/rabbitmq-queue/src/rabbitmq-queue/services/rabbitmq-client.service';
+import { MusicLibraryMsModule } from '../src/music-library-ms.module';
 import { CreateSongRequest } from '../src/music-library/dto/create-song.request';
-import { MusicLibraryModule } from '../src/music-library/music-library.module';
 import { cleanDatabase, createAlbumEntity, createArtistEntity, createGenreEntity, createSongEntity } from './utils';
 
 
@@ -16,7 +16,7 @@ describe('Songs (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        MusicLibraryModule
+        MusicLibraryMsModule
       ]
     })
       .overrideProvider(RabbitmqClient)

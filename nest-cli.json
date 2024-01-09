@@ -32,7 +32,11 @@
       "entryFile": "main",
       "sourceRoot": "apps/music-library-ms/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/music-library-ms/tsconfig.app.json"
+        "tsConfigPath": "apps/music-library-ms/tsconfig.app.json",
+        "assets": [
+          "**/*.proto"
+        ],
+        "watchAssets": true
       }
     },
     "rabbitmq-queue": {
@@ -68,7 +72,11 @@
       "entryFile": "main",
       "sourceRoot": "apps/mobile-bff/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/mobile-bff/tsconfig.app.json"
+        "tsConfigPath": "apps/mobile-bff/tsconfig.app.json",
+        "assets": [
+          "**/*.proto"
+        ],
+        "watchAssets": true
       }
     },
     "music-discovery-ms": {

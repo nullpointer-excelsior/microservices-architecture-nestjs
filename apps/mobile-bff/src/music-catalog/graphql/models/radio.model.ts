@@ -1,5 +1,5 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Song } from "./song.model";
-import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class Radio {

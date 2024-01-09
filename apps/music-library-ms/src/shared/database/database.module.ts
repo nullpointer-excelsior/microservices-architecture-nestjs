@@ -11,6 +11,7 @@ type Options = {
   database: string
   username: string
   password: string
+  sync: boolean
 }
 
 type AsyncOptions = {
@@ -34,6 +35,7 @@ export class DatabaseModule {
   
     return {
       module: DatabaseModule,
+      global: true,
       imports: [
         TypeOrmModule.forRoot({
           type: 'postgres',
@@ -43,7 +45,7 @@ export class DatabaseModule {
           password: options.password,
           database: options.database,
           entities: entities,
-          synchronize: true,
+          synchronize: options.sync,
           logging: ['query']
         }),
         repositoriesModule    
@@ -68,6 +70,7 @@ export class DatabaseModule {
   
     return {
       module: DatabaseModule,
+      global: true,
       imports: [
         TypeOrmModule.forRootAsync({
           useFactory: (...args: any[]) => {

@@ -6,6 +6,9 @@ import { startOpenTelemetry } from '@lib/shared/instrumentation';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
 import { PgInstrumentation } from '@opentelemetry/instrumentation-pg';
 import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
+import { Transport } from '@nestjs/microservices';
+import { join } from 'path';
+
 
 async function bootstrap() {
 
@@ -20,7 +23,16 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
+  
+  app.connectMicroservice({
+    transport: Transport.GRPC,
+    options: {
+      package: 'catalog',
+      protoPath: join(__dirname, 'music-catalog.proto'),
+    },
+  })
+  await app.startAllMicroservices()
+  
   const port = process.env.MUSIC_LIBRARY_MS_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Music library microservice listen on port: ${port}`, "Main")

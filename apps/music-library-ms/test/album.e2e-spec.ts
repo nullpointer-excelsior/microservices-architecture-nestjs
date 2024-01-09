@@ -1,7 +1,7 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { MusicLibraryModule } from '../src/music-library/music-library.module';
+import { MusicLibraryMsModule } from '../src/music-library-ms.module';
 import { cleanDatabase, createAlbumEntity, createArtistEntity } from './utils';
 
 
@@ -13,7 +13,7 @@ describe('Album (e2e)', () => {
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
-        MusicLibraryModule
+        MusicLibraryMsModule
       ]
     })
       .compile();

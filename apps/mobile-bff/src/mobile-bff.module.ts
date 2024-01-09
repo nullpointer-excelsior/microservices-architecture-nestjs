@@ -11,6 +11,7 @@ import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { MusicDiscoveryApiModule } from '@lib/music-discovery-api';
 import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver';
 import { MusciPlayerModule } from './music-player/music-player.module';
+import { MusicLibraryGrpcModule } from '../../../libs/music-library-grpc/src';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { MusciPlayerModule } from './music-player/music-player.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'apps/mobile-bff/schema.gql'),
     }),
+    MusicLibraryGrpcModule,
     MusicLibraryApiModule.forAsyncRoot({
       useFactory(config: ConfigService) {
         return {
