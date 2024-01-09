@@ -1,10 +1,10 @@
+import { RadioAPI } from '@lib/music-discovery-api';
+import { MusicCatalogClient } from '@lib/music-library-grpc';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AlbumAPI, ArtistAPI, GenreAPI, SongAPI } from '@lib/music-library-api';
-import { Artist } from '@lib/music-library-api/model/artist.model';
+import { from, of } from 'rxjs';
 import { MobileBffModule } from '../src/mobile-bff.module';
 import { graphqlRequest } from './utils';
-import { RadioAPI } from '@lib/music-discovery-api';
 
 describe('MobileBff (e2e)', () => {
   let app: INestApplication;
@@ -13,9 +13,9 @@ describe('MobileBff (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [MobileBffModule],
     })
-      .overrideProvider(ArtistAPI)
+      .overrideProvider(MusicCatalogClient)
       .useValue({
-        findAll: (): Artist[] => [
+        findAllArtists: () => from([
           {
             id: "42456925-999C-4DC1-9DF6-ECD441060891",
             name: "journey",
@@ -28,25 +28,19 @@ describe('MobileBff (e2e)', () => {
             photo: "photo.jpg",
             biography: "another amazing band"
           }
-        ],
-        findById: () => ({
+        ]),
+        findArtistById: () => of({
           id: "42456925-999C-4DC1-9DF6-ECD441060891",
           name: "journey",
           photo: "photo.jpg",
           biography: "amazing band"
-        })
-      })
-      .overrideProvider(AlbumAPI)
-      .useValue({
-        findByArtistId: () => [{
+        }),
+        findAlbumsByArtistId: () => from([{
           id: "EF1B2BE9-C3CD-4213-8532-B1F6F14540D5",
           title: "frontiers",
           photo: "xxx.jpg"
-        }]
-      })
-      .overrideProvider(SongAPI)
-      .useValue({
-        findByAlbumId: () => [
+        }]),
+        findSongsByAlbumId: () => from([
           {
             id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
             title: "separate ways",
@@ -57,8 +51,8 @@ describe('MobileBff (e2e)', () => {
             title: "chain reaction",
             video: "video.avi"
           }
-        ],
-        findByGenreId: () => [
+        ]),
+        findSongsByGenreId: () =>from([
           {
             id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
             title: "separate ways",
@@ -69,15 +63,15 @@ describe('MobileBff (e2e)', () => {
             title: "chain reaction",
             video: "video.avi"
           }
-        ],
-        findById: () => ({
+        ]),
+        findSongById: () => of({
           id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
           title: "separate ways",
           video: "video.avi",
           plays: 1000,
           duration: 300
         }),
-        findByIdIn: () => [
+        findSongsByIds:() => from([
           {
             id: "1F52B96E-7B4A-4FA5-88BD-2D46186ED989",
             title: "separate ways",
@@ -88,11 +82,8 @@ describe('MobileBff (e2e)', () => {
             title: "chain reaction",
             video: "video.avi"
           }
-        ]
-      })
-      .overrideProvider(GenreAPI)
-      .useValue({
-        findAll: () => [
+        ]),
+        findAllGenres: () => from([
           {
             id: "AF3FDAF8-407A-41C6-92DC-36618C2D0FCC",
             name: "rock"
@@ -101,8 +92,8 @@ describe('MobileBff (e2e)', () => {
             id: "AF3FDAF8-407A-89C6-92DC-36618C2D0FCC",
             name: "metal"
           }
-        ],
-        findById:() => ({
+        ]),
+        findGenreById: () => of({
           id: "AF3FDAF8-407A-41C6-92DC-36618C2D0FCC",
           name: "rock"
         })

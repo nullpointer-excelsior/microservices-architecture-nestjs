@@ -10,6 +10,7 @@
     "@lib/utils(|/.*)$": "<rootDir>/../../../libs/utils/src/$1",
     "@lib/shared(|/.*)$": "<rootDir>/../../../libs/shared/src/$1",
     "@lib/music-library-api(|/.*)$": "<rootDir>/../../../libs/music-library-api/src/$1",
-    "@lib/music-discovery-api(|/.*)$": "<rootDir>/../../../libs/music-discovery-api/src/$1"
+    "@lib/music-discovery-api(|/.*)$": "<rootDir>/../../../libs/music-discovery-api/src/$1",
+    "@lib/music-library-grpc(|/.*)$": "<rootDir>/../../../libs/music-library-grpc/src/$1"
   }
 }
