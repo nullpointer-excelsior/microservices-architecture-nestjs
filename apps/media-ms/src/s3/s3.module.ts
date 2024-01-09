@@ -15,8 +15,8 @@ import { S3Client } from '@aws-sdk/client-s3';
                 return new S3Client({
                     endpoint: config.get('MINIO_ENDPOINT').replace('localhost', '127.0.01'),
                     credentials: {
-                        accessKeyId: config.get('MINIO_ACCESS_KEY'),
-                        secretAccessKey: config.get('MINIO_SECRET_KEY'),
+                        accessKeyId: config.get('MINIO_ROOT_USER'),
+                        secretAccessKey: config.get('MINIO_ROOT_PASSWORD'),
                     }
                 });
             },
