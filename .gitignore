@@ -42,7 +42,7 @@ lerna-debug.log*
 apps/mobile-bff/schema.gql
 
 **/minio/data/
-jobs/create-music-library/library
+jobs/library
 temp/
 scripts/spotify-clone-frontend/
 
