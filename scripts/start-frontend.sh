@@ -2,7 +2,7 @@
 
 # Función de limpieza
 cleanup() {
-  echo "Script interrumpido. Eliminando el directorio..."
+  echo "Script interrumpido. Eliminando el repositorio..."
   cd ..
   rm -rf spotify-clone-frontend
 }

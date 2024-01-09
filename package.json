@@ -15,6 +15,7 @@
     "start:frontend": "cd scripts && ./start-frontend.sh",
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
     "start:music-library": "npx nest start -w music-library-ms",
+    "job:create-music-library":"python jobs/create_music_library.py",
     "start:discovery": "npx nest start -w music-discovery-ms",
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
