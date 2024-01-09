@@ -20,7 +20,6 @@
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
     "start:mailing": "npx nest start -w mailing-ms",
-    "start:iot-bff": "npx nest start -w iot-bff",
     "start:media": "npx nest start -w media-ms",
     "start:web-bff": "npx nest start -w web-bff",
     "e2e:all": "npm run e2e:music-library && npm run e2e:mobile-bff && npm run e2e:music-discovery",

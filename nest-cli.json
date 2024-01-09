@@ -124,19 +124,6 @@
         "tsConfigPath": "apps/mailing-ms/tsconfig.app.json"
       }
     },
-    "iot-bff": {
-      "type": "application",
-      "root": "apps/iot-bff",
-      "entryFile": "main",
-      "sourceRoot": "apps/iot-bff/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/iot-bff/tsconfig.app.json",
-        "assets": [
-          "**/*.proto"
-        ],
-        "watchAssets": true
-      }
-    },
     "music-library-grpc": {
       "type": "library",
       "root": "libs/music-library-grpc",
