@@ -16,7 +16,14 @@ El propósito principal de este proyecto es:
     * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
 * 2 - Observabilidad
     * [Trazas distribuidas](docs/distributed-traces.md)
-* 3 - [Comunicación entre microservicios](docs/microservices-communication.md)
+* 3 - Comunicaciones entre microservicios
+    * [Comunicación entre microservicios](docs/microservices-communication.md)
+    * [Comunicación síncrona avanzada](docs/advanced-sync-communication.md)
+    * Comunicación asíncrona avanzada
+* 4 - Exponiendo microservicios al cliente
+* 5 - Seguridad en microservicios
+* 6 - Patrones de resilencia
+* 7 - Patrones de alto rendimiento
 * **Work in progress...**
 
 ## Arquitectura de microservicios
