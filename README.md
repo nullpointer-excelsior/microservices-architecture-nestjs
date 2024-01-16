@@ -142,7 +142,7 @@ python jobs/create_music_library.py
 
 Ahora deberías tener ejecutándose en http://localhost:4321/ el frontend de Clon-spotify con un catálogo musical de ejemplo.
 
-
+![frontend](docs/images/spotify-app-frontend.webp)
 
 ## Purebas unitarias y E2E
 
