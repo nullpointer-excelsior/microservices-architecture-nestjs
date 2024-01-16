@@ -14,6 +14,7 @@ El propósito principal de este proyecto es:
 
 * 1 - Diseño de aplicaciones
     * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
+    * [Simplificando el Testing e2e](docs/e2e-testing.md)
 * 2 - Observabilidad
     * [Trazas distribuidas](docs/distributed-traces.md)
 * 3 - Comunicaciones entre microservicios
