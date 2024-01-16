@@ -1,12 +1,13 @@
 import { NotFoundException } from "@nestjs/common"
 import { RadioUseCases } from "./radio.use-cases"
+import { RadioRepository } from "../domain/repositories/radio.repository"
 
 describe('RadioUseCase', () => {
 
     let usecase: RadioUseCases
 
     it('updateSongs: throw NotFoundExeption if radio is not in database', async () => {
-        const mockRepository = {
+        const mockRepository: RadioRepository = {
             findById: jest.fn().mockReturnValue(undefined),
             save: jest.fn(),
             update: jest.fn(),

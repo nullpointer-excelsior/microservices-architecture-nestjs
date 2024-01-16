@@ -4,7 +4,7 @@ import { Radio } from "../domain/model/radio.model";
 import { RadioRepository } from "../domain/repositories/radio.repository";
 import { ValidateArgumentModel } from "../infrastructure/validate-model";
 import { CreateRadioDTO } from "./dto/create-radio.dto";
-import { UpdateSOngsByRadioDTO as UpdateSongsByRadioDTO } from "./dto/update-songs-by-radio.dto";
+import { UpdateSongsByRadioDTO } from "./dto/update-songs-by-radio.dto";
 
 @Injectable()
 export class RadioUseCases {

@@ -1,3 +1,3 @@
 import { UpdateSongsDTO } from "./update-songs.dto";
 
-export type UpdateSOngsByRadioDTO = { radioId: string } & UpdateSongsDTO
+export type UpdateSongsByRadioDTO = { radioId: string } & UpdateSongsDTO
