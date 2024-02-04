@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { MusicLibraryModule } from './music-library/music-library.module';
-import { MusicCatalogModule } from './music-catalog/music-catalog.module';
-import { DatabaseModule } from './shared/database/database.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MusicCatalogModule } from './music-catalog/music-catalog.module';
+import { MusicLibraryModule } from './music-library/music-library.module';
+import { DatabaseModule } from './shared/database/database.module';
 
 @Module({
   imports: [

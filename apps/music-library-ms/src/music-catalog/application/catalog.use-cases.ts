@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { from, mergeMap, tap } from "rxjs";
+import { from, mergeMap } from "rxjs";
 import { AlbumRepository } from "../domain/repositories/album.repository";
 import { ArtistRepository } from "../domain/repositories/artist.repository";
 import { GenreRepository } from "../domain/repositories/genre.repository";
