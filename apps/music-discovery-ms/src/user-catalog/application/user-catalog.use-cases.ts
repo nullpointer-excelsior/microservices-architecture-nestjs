@@ -1,23 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { FavoritesUpdatedEvent } from "../../shared/domain-events/user-music-catalog/favorites-updated.event";
-import { UserMusicCatalog } from "../domain/model/user-music-catalog.model";
-import { UserMusicCatalogService } from "../domain/services/user-music-catalog.service";
-import { CreateUserMusicCatalogDto } from "./dto/create-user-music-catalog.dto";
+import { UserCatalog } from "../domain/model/user-catalog.model";
+import { UserCatalogService } from "../domain/services/user-catalog.service";
+import { CreateUserCatalogDto } from "./dto/create-user-catalog.dto";
 import { UpdateFavoritesDto } from "./dto/update-favorites.dto";
 import { UpdatePlaylistsDto } from "./dto/update-playlists.dto";
 import { Model, EventBus } from "@lib/utils/seedwork";
 import { PlaylistUpdatedEvent } from "../../shared/domain-events/user-music-catalog/playlist-updated.event";
 
 @Injectable()
-export class UserMusicCatalogUseCases {
+export class UserCatalogUseCases {
 
     constructor(
-        private readonly catalog: UserMusicCatalogService,
+        private readonly catalog: UserCatalogService,
         private readonly eventbus: EventBus
     ) { }
 
-    async createMusicCatalog(dto: CreateUserMusicCatalogDto) {
-        const catalog = new UserMusicCatalog();
+    async createMusicCatalog(dto: CreateUserCatalogDto) {
+        const catalog = new UserCatalog();
         catalog.id = Model.generateUUID();
         catalog.userId = dto.userId;
         catalog.username = dto.username;

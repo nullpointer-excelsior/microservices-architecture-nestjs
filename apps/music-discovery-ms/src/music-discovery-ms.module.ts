@@ -3,7 +3,7 @@ import { MusicLibraryApiModule } from '../../../libs/music-library-api/src';
 import { RadioModule } from './radio/radio.module';
 import { PlaylistsModule } from './playlist-catalog/playlists.module';
 import { SharedModule } from './shared/shared.module';
-import { UserMusicCatalogModule } from './user-music-catalog/user-music-catalog.module';
+import { UserCatalogModule } from './user-catalog/user-catalog.module';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { UserMusicCatalogModule } from './user-music-catalog/user-music-catalog.
     RadioModule,
     PlaylistsModule,
     SharedModule,
-    UserMusicCatalogModule,
+    UserCatalogModule,
   ],
   
 })

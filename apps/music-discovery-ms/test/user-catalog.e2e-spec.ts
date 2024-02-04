@@ -2,11 +2,11 @@ import { HttpStatus, INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import * as request from 'supertest';
 import { SharedModule } from "../src/shared/shared.module";
-import { CreateUserMusicCatalogDto } from "../src/user-music-catalog/application/dto/create-user-music-catalog.dto";
-import { UserMusicCatalogModule } from "../src/user-music-catalog/user-music-catalog.module";
-import { UpdatePlaylistsDto } from "../src/user-music-catalog/application/dto/update-playlists.dto";
+import { UserCatalogModule } from "../src/user-catalog/user-catalog.module";
 import { PlaylistsModule } from "../src/playlist-catalog/playlists.module";
-import { UpdateFavoritesDto } from "../src/user-music-catalog/application/dto/update-favorites.dto";
+import { CreateUserCatalogDto } from "../src/user-catalog/application/dto/create-user-catalog.dto";
+import { UpdatePlaylistsDto } from "../src/user-catalog/application/dto/update-playlists.dto";
+import { UpdateFavoritesDto } from "../src/user-catalog/application/dto/update-favorites.dto";
 
 describe('UserMusicCatalog', () => {
 
@@ -14,7 +14,7 @@ describe('UserMusicCatalog', () => {
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [UserMusicCatalogModule, SharedModule, PlaylistsModule],
+            imports: [UserCatalogModule, SharedModule, PlaylistsModule],
         })
             .compile();
 
@@ -27,42 +27,42 @@ describe('UserMusicCatalog', () => {
         await app.close()
     })
 
-    it('/user-music-catalog/user/:id (GET): get user music catalog', async () => {
+    it('/user-catalog/user/:id (GET): get user music catalog', async () => {
             
             const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
             const user = "dummy"
-            const userMusicCatalog: CreateUserMusicCatalogDto = {
+            const userMusicCatalog: CreateUserCatalogDto = {
                 userId: uuid,
                 username: user,
             }
             const catalog = await request(app.getHttpServer())
-                .post('/user-music-catalog')
+                .post('/user-catalog')
                 .send(userMusicCatalog)
                 .expect(HttpStatus.CREATED)
 
             const res = await request(app.getHttpServer())  
-                .get(`/user-music-catalog/user/${uuid}`)
+                .get(`/user-catalog/user/${uuid}`)
                 .expect(HttpStatus.OK)
             
             expect(res.body).toBeDefined()
 
         });
 
-    it('/user-music-catalog (POST): create a user music catalog', async () => {
+    it('/user-catalog (POST): create a user music catalog', async () => {
 
         const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
         const user = "dummy"
-        const userMusicCatalog: CreateUserMusicCatalogDto = {
+        const userMusicCatalog: CreateUserCatalogDto = {
             userId: uuid,
             username: user,
         }
         await request(app.getHttpServer())
-            .post('/user-music-catalog')
+            .post('/user-catalog')
             .send(userMusicCatalog)
             .expect(HttpStatus.CREATED)
 
         const res = await request(app.getHttpServer())
-            .get(`/user-music-catalog/user/${uuid}`)
+            .get(`/user-catalog/user/${uuid}`)
 
         expect(res.body).toBeDefined()
         expect(res.body.username).toBe(user)
@@ -72,17 +72,17 @@ describe('UserMusicCatalog', () => {
 
     });
 
-    it('/user-music-catalog/ (PUT) update playlists', async () => {
+    it('/user-catalog/ (PUT) update playlists', async () => {
 
         const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
         const user = "dummy"
 
-        const userMusicCatalog: CreateUserMusicCatalogDto = {
+        const userMusicCatalog: CreateUserCatalogDto = {
             userId: uuid,
             username: user,
         }
         const userCatalog = await request(app.getHttpServer())
-            .post('/user-music-catalog')
+            .post('/user-catalog')
             .send(userMusicCatalog)
 
         const updatePlaylists: UpdatePlaylistsDto = {
@@ -97,7 +97,7 @@ describe('UserMusicCatalog', () => {
         expect(userCatalog.body.playlists).toEqual([])
 
         const playlistUpdated = await request(app.getHttpServer())
-            .put('/user-music-catalog/playlists')
+            .put('/user-catalog/playlists')
             .send(updatePlaylists)
 
         expect(playlistUpdated.body).toBeDefined()
@@ -112,16 +112,16 @@ describe('UserMusicCatalog', () => {
     });
 
 
-    it('/user-music-catalog/ (PUT) update favorites', async () => {
+    it('/user-catalog/ (PUT) update favorites', async () => {
 
         const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
         const user = "dummy"
-        const userMusicCatalog: CreateUserMusicCatalogDto = {
+        const userMusicCatalog: CreateUserCatalogDto = {
             userId: uuid,
             username: user,
         }
         await request(app.getHttpServer())
-            .post('/user-music-catalog')
+            .post('/user-catalog')
             .send(userMusicCatalog)
             .expect(HttpStatus.CREATED)
 
@@ -138,7 +138,7 @@ describe('UserMusicCatalog', () => {
         }
 
         const userCatalog = await request(app.getHttpServer())
-            .put('/user-music-catalog/favorites')
+            .put('/user-catalog/favorites')
             .send(updateFavorites)
             .expect(HttpStatus.OK)
 

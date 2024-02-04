@@ -1,5 +1,5 @@
-import { DomainEvent } from "../../../../../../libs/utils/src/seedwork/domain/events/domain.event";
-import { Playlist } from "../../../user-music-catalog/domain/model/playlist.model";
+import { DomainEvent } from "@lib/utils/seedwork";
+import { Playlist } from "../../../playlist-catalog/domain/model/playlist.model";
 
 export class PlaylistUpdatedEvent extends DomainEvent<Playlist> { 
     

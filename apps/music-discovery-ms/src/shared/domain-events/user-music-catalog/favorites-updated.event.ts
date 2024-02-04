@@ -1,5 +1,5 @@
-import { DomainEvent } from "../../../../../../libs/utils/src/seedwork/domain/events/domain.event";
-import { UpdateFavoritesDto } from "../../../user-music-catalog/application/dto/update-favorites.dto";
+import { DomainEvent } from "@lib/utils/seedwork";
+import { UpdateFavoritesDto } from "../../../user-catalog/application/dto/update-favorites.dto";
 
 
 export class FavoritesUpdatedEvent extends DomainEvent<UpdateFavoritesDto> { 

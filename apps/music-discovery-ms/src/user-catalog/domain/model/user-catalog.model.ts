@@ -5,7 +5,7 @@ import { Favorites } from "./favorites.model";
 import { Playlist } from "./playlist.model";
 
 
-export class UserMusicCatalog extends Model {
+export class UserCatalog extends Model {
     
     @IsUUID()
     @IsNotEmpty()
