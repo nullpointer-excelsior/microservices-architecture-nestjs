@@ -1,4 +1,4 @@
-import { Uuid } from '../utils/Uuid';
+import * as uuid from 'short-uuid'
 
 export abstract class DomainEvent<T = any> {
 
@@ -9,7 +9,7 @@ export abstract class DomainEvent<T = any> {
         public readonly name: string,
         public readonly payload: T
     ) {
-        this.id = Uuid.generateShort();
+        this.id = uuid.generate();
         this.occurredOn = new Date();
     }
 

@@ -150,6 +150,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/web-bff/tsconfig.app.json"
       }
+    },
+    "integration-events": {
+      "type": "library",
+      "root": "libs/integration-events",
+      "entryFile": "index",
+      "sourceRoot": "libs/integration-events/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/integration-events/tsconfig.lib.json"
+      }
     }
   },
   "monorepo": true,

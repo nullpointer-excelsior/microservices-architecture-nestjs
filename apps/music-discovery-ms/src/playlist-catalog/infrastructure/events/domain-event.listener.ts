@@ -1,7 +1,7 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { PlaylistUseCases } from "../../application/playlist.use-cases";
-import { PlaylistUpdatedEvent } from "../../../user-music-catalog/domain/events/playlist-updated.event";
+import { PlaylistUpdatedEvent } from "../../../shared/domain-events/user-music-catalog/playlist-updated.event";
 
 @Injectable()
 export class DomainEventListener {
@@ -13,9 +13,9 @@ export class DomainEventListener {
         Logger.log(event, 'DomainEventListener')
     }
 
-    @OnEvent('com.clonespotify.discovery.playlist.created')
-    onPlaylistCreated(event: PlaylistUpdatedEvent) {
-        
+    @OnEvent(PlaylistUpdatedEvent.NAME)
+    async onPlaylistCreated(event: PlaylistUpdatedEvent) {
+        await this.playlist.create(event.payload)
     }
 
 }

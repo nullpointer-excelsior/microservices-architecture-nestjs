@@ -1,13 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { EventBus } from "../../shared/events/ports/eventbus";
-import { FavoritesUpdatedEvent } from "../domain/events/favorites-updated.event";
+import { FavoritesUpdatedEvent } from "../../shared/domain-events/user-music-catalog/favorites-updated.event";
 import { UserMusicCatalog } from "../domain/model/user-music-catalog.model";
 import { UserMusicCatalogService } from "../domain/services/user-music-catalog.service";
 import { CreateUserMusicCatalogDto } from "./dto/create-user-music-catalog.dto";
 import { UpdateFavoritesDto } from "./dto/update-favorites.dto";
 import { UpdatePlaylistsDto } from "./dto/update-playlists.dto";
-import { Model } from "../../shared/seedwork/model";
-import { PlaylistUpdatedEvent } from "../domain/events/playlist-updated.event";
+import { Model, EventBus } from "@lib/utils/seedwork";
+import { PlaylistUpdatedEvent } from "../../shared/domain-events/user-music-catalog/playlist-updated.event";
 
 @Injectable()
 export class UserMusicCatalogUseCases {
@@ -20,6 +19,7 @@ export class UserMusicCatalogUseCases {
     async createMusicCatalog(dto: CreateUserMusicCatalogDto) {
         const catalog = new UserMusicCatalog();
         catalog.id = Model.generateUUID();
+        catalog.userId = dto.userId;
         catalog.username = dto.username;
         catalog.playlists = [];
         catalog.favorites = {

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { EventBus } from "../ports/eventbus";
-import { DomainEvent } from "../domain.event";
+import { EventBus } from "../../../../../libs/utils/src/seedwork/domain/events/eventbus";
+import { DomainEvent } from "../../../../../libs/utils/src/seedwork/domain/events/domain.event";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()

@@ -53,6 +53,12 @@
       ],
       "@lib/music-library-grpc/*": [
         "libs/music-library-grpc/src/*"
+      ],
+      "@lib/integration-events": [
+        "libs/integration-events/src"
+      ],
+      "@lib/integration-events/*": [
+        "libs/integration-events/src/*"
       ]
     }
   }

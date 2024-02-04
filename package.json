@@ -15,7 +15,7 @@
     "start:frontend": "cd scripts && ./start-frontend.sh",
     "start:spotify-monolith": "npx nest start -w spotify-monolith",
     "start:music-library": "npx nest start -w music-library-ms",
-    "job:create-music-library":"python jobs/create_music_library.py",
+    "job:create-music-library": "venv/bin/python jobs/create_music_library.py",
     "start:discovery": "npx nest start -w music-discovery-ms",
     "start:accounts": "npx nest start -w accounts-ms",
     "start:mobile-bff": "npx nest start -w mobile-bff",
@@ -42,7 +42,7 @@
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
-    "@nestjs/event-emitter": "^2.0.2",
+    "@nestjs/event-emitter": "^2.0.3",
     "@nestjs/graphql": "^12.0.9",
     "@nestjs/microservices": "^10.2.7",
     "@nestjs/mongoose": "^10.0.2",
@@ -78,6 +78,7 @@
     "pino-pretty": "^10.2.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
+    "short-uuid": "^4.2.2",
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
@@ -130,7 +131,8 @@
       "^@lib/music-library-api(|/.*)$": "<rootDir>/libs/music-library-api/src/$1",
       "^@lib/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
       "^@lib/music-discovery-api(|/.*)$": "<rootDir>/libs/music-discovery-api/src/$1",
-      "^@lib/music-library-grpc(|/.*)$": "<rootDir>/libs/music-library-grpc/src/$1"
+      "^@lib/music-library-grpc(|/.*)$": "<rootDir>/libs/music-library-grpc/src/$1",
+      "^@lib/integration-events(|/.*)$": "<rootDir>/libs/integration-events/src/$1"
     }
   }
 }

@@ -1,7 +1,7 @@
 import { Global, Module } from '@nestjs/common';
-import { EventEmitterEventbus } from './events/adapters/event-emitter.eventbus';
+import { EventEmitterEventbus } from './domain-events/event-emitter.eventbus';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { EventBus } from './events/ports/eventbus';
+import { EventBus } from '../../../../libs/utils/src/seedwork/domain/events/eventbus';
 
 const providers = [
     EventEmitterEventbus,

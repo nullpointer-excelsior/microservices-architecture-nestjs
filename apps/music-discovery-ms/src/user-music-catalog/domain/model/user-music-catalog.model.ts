@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import { IsArray, IsNotEmpty, IsUUID, ValidateNested } from "class-validator";
-import { Model } from "../../../shared/seedwork/model";
+import { Model } from "@lib/utils/seedwork";
 import { Favorites } from "./favorites.model";
 import { Playlist } from "./playlist.model";
 

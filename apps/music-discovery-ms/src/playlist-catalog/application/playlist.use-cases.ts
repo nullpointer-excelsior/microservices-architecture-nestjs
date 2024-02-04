@@ -8,7 +8,7 @@ export class PlaylistUseCases {
 
     constructor(private readonly playlist: PlaylistService) {}
 
-    create(dto: CreatePlaylistDto) {
+    async create(dto: CreatePlaylistDto) {
         const playlist = Playlist.create({ name: dto.name, songs: dto.songs });
         this.playlist
             .create(playlist)

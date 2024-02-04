@@ -1,5 +1,5 @@
 import { Song } from "./song.model";
-import { Model } from '../../../shared/seedwork/model';
+import { Model } from '../../../../../../libs/utils/src/seedwork/domain/model/model';
 import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
