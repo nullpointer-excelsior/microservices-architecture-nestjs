@@ -6,6 +6,7 @@ import { CreateUserMusicCatalogDto } from "../src/user-music-catalog/application
 import { UserMusicCatalogModule } from "../src/user-music-catalog/user-music-catalog.module";
 import { UpdatePlaylistsDto } from "../src/user-music-catalog/application/dto/update-playlists.dto";
 import { PlaylistsModule } from "../src/playlist-catalog/playlists.module";
+import { UpdateFavoritesDto } from "../src/user-music-catalog/application/dto/update-favorites.dto";
 
 describe('UserMusicCatalog', () => {
 
@@ -26,6 +27,27 @@ describe('UserMusicCatalog', () => {
         await app.close()
     })
 
+    it('/user-music-catalog/user/:id (GET): get user music catalog', async () => {
+            
+            const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
+            const user = "dummy"
+            const userMusicCatalog: CreateUserMusicCatalogDto = {
+                userId: uuid,
+                username: user,
+            }
+            const catalog = await request(app.getHttpServer())
+                .post('/user-music-catalog')
+                .send(userMusicCatalog)
+                .expect(HttpStatus.CREATED)
+
+            const res = await request(app.getHttpServer())  
+                .get(`/user-music-catalog/user/${uuid}`)
+                .expect(HttpStatus.OK)
+            
+            expect(res.body).toBeDefined()
+
+        });
+
     it('/user-music-catalog (POST): create a user music catalog', async () => {
 
         const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
@@ -40,7 +62,7 @@ describe('UserMusicCatalog', () => {
             .expect(HttpStatus.CREATED)
 
         const res = await request(app.getHttpServer())
-            .get(`/user-music-catalog/${uuid}`)
+            .get(`/user-music-catalog/user/${uuid}`)
 
         expect(res.body).toBeDefined()
         expect(res.body.username).toBe(user)
@@ -51,7 +73,7 @@ describe('UserMusicCatalog', () => {
     });
 
     it('/user-music-catalog/ (PUT) update playlists', async () => {
-        
+
         const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
         const user = "dummy"
 
@@ -90,4 +112,44 @@ describe('UserMusicCatalog', () => {
     });
 
 
+    it('/user-music-catalog/ (PUT) update favorites', async () => {
+
+        const uuid = "8b15d86f-07ff-427c-bee7-504b2d5b83f5"
+        const user = "dummy"
+        const userMusicCatalog: CreateUserMusicCatalogDto = {
+            userId: uuid,
+            username: user,
+        }
+        await request(app.getHttpServer())
+            .post('/user-music-catalog')
+            .send(userMusicCatalog)
+            .expect(HttpStatus.CREATED)
+
+        const updateFavorites: UpdateFavoritesDto = {
+            userId: uuid,
+            favorites: {
+                songs: [{
+                    id: "8b15d86f-07ff-427c-bee7-504b2d5b83f5",
+                    title: "runaway"
+                }],
+                artists: [],
+                albums: []
+            }
+        }
+
+        const userCatalog = await request(app.getHttpServer())
+            .put('/user-music-catalog/favorites')
+            .send(updateFavorites)
+            .expect(HttpStatus.OK)
+
+        expect(userCatalog.body.favorites).toEqual({
+            songs: [{
+                id: "8b15d86f-07ff-427c-bee7-504b2d5b83f5",
+                title: "runaway"
+            }],
+            artists: [],
+            albums: []
+        })
+
+    });
 })

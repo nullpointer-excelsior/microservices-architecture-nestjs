@@ -52,8 +52,14 @@ export class UserMusicCatalogUseCases {
                 catalog.favorites = dto.favorites;
                 return catalog
             })
-            .then(catalog => this.catalog.save(catalog))
-            .then(() => this.eventbus.publish(new FavoritesUpdatedEvent(dto)));
+            .then(async catalog => {
+                await this.catalog.save(catalog)
+                return catalog
+            })
+            .then(async catalog => {
+                await this.eventbus.publish(new FavoritesUpdatedEvent(dto))
+                return catalog
+            });
     }
 
 }
