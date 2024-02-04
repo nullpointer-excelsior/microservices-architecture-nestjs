@@ -20,4 +20,8 @@ export class InMemoryUserMusicCatalogRepository extends UserMusicCatalogReposito
         return this.data.find((userMusicCatalog) => userMusicCatalog.userId === userId);
     }
 
+    async findById(id: string): Promise<UserMusicCatalog | undefined> {
+        return this.data.find((userMusicCatalog) => userMusicCatalog.id === id);
+    }
+
 }

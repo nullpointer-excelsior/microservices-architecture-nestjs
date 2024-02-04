@@ -14,7 +14,10 @@ const providers = [
 @Global()
 @Module({
     imports:[
-        EventEmitterModule.forRoot()
+        EventEmitterModule.forRoot({
+            wildcard: true,
+            delimiter: '.'
+        })
     ],
     providers: [
         ...providers

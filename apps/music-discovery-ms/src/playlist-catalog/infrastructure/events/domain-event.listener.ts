@@ -8,13 +8,14 @@ export class DomainEventListener {
 
     constructor(private readonly playlist: PlaylistUseCases) {}
     
-    @OnEvent('com.clonespotify.discovery.*')
+    @OnEvent('com.clonespotify.discovery.**')
     onEvents(event: any) {
         Logger.log(event, 'DomainEventListener')
     }
 
     @OnEvent(PlaylistUpdatedEvent.NAME)
     async onPlaylistCreated(event: PlaylistUpdatedEvent) {
+        Logger.log(event, 'PlaylistUpdatedEvent')
         await this.playlist.create(event.payload)
     }
 

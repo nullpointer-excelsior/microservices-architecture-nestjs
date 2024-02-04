@@ -5,7 +5,7 @@ export class UpdatePlaylistsDto {
     
     @IsUUID()
     @IsNotEmpty()
-    userId: string;
+    userCatalogId: string;
 
     @ValidateNested({ each: true })
     playlist: Playlist;

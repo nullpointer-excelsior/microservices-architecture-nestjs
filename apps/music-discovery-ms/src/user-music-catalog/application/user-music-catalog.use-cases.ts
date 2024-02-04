@@ -28,6 +28,7 @@ export class UserMusicCatalogUseCases {
             albums: []
         };
         await this.catalog.create(catalog);
+        return catalog;
     }
 
     findMusicCatalogByUserId(id: string) {
@@ -35,13 +36,14 @@ export class UserMusicCatalogUseCases {
     }
 
     async updatePlaylists(dto: UpdatePlaylistsDto) {
-        const catalog = await this.catalog.findByUserId(dto.userId);
+        const catalog = await this.catalog.findByUserId(dto.userCatalogId);
         catalog.playlists = [
             ...catalog.playlists.filter(p => p.id !== dto.playlist.id),
             dto.playlist
         ]
         await this.catalog.save(catalog)
         this.eventbus.publish(new PlaylistUpdatedEvent(dto.playlist));
+        return catalog;
     }
 
     async updateFavorites(dto: UpdateFavoritesDto) {
