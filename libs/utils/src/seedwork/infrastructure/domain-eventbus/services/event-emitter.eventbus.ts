@@ -8,7 +8,7 @@ export class EventEmitterEventbus implements EventBus {
 
     constructor(private eventEmitter: EventEmitter2) {}
    
-    async publish<T extends DomainEvent<any>>(event: T): Promise<void> {
+    async publish<T extends DomainEvent<any>>(event: T) {
         this.eventEmitter.emit(event.name, event);
     }
 

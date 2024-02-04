@@ -56,8 +56,8 @@ export class UserCatalogUseCases {
                 await this.catalog.save(catalog)
                 return catalog
             })
-            .then(async catalog => {
-                await this.eventbus.publish(new FavoritesUpdatedEvent(dto))
+            .then(catalog => {
+                this.eventbus.publish(new FavoritesUpdatedEvent(dto))
                 return catalog
             });
     }
