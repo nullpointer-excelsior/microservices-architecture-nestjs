@@ -36,9 +36,10 @@ export class UserCatalogUseCases {
     }
 
     async updatePlaylists(dto: UpdatePlaylistsDto) {
+        const playlistNotToUpdate = (playlists) => playlists.filter(p => p.id !== dto.playlist.id);
         const catalog = await this.catalog.findByUserId(dto.userCatalogId);
         catalog.playlists = [
-            ...catalog.playlists.filter(p => p.id !== dto.playlist.id),
+            ...playlistNotToUpdate(catalog.playlists),
             dto.playlist
         ]
         await this.catalog.save(catalog)

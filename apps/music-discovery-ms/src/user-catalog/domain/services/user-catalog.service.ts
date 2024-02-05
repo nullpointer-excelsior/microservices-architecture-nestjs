@@ -9,8 +9,8 @@ export class UserCatalogService {
     constructor(private readonly repository: UserCatalogRepository) {}
 
     @ValidateArgumentModel
-    async create(userMusicCatalog: UserCatalog) {
-        this.repository.save(userMusicCatalog);
+    async create(userCatalog: UserCatalog) {
+        this.repository.save(userCatalog);
     }
 
     @NotFoundExceptionIfUndefined('User catalog not found')
