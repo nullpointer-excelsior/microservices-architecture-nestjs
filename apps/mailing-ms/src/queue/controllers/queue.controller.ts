@@ -1,6 +1,6 @@
-import { Controller } from '@nestjs/common';
+import { UserCreatedEvent } from '@lib/integration-events';
+import { Controller, Logger } from '@nestjs/common';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { NewAlbumMessage } from '@lib/rabbitmq-queue/rabbitmq-queue/model/messages/new-album.message';
 import { EmailService } from '../services/email.service';
 
 @Controller()
@@ -8,9 +8,10 @@ export class QueueController {
   
   constructor(private readonly email: EmailService) {}
 
-  @MessagePattern('new-album')
-  onNewAlbum(@Payload() data: NewAlbumMessage, @Ctx() context: RmqContext) {
-    this.email.notifyNewAlbum(data)
+  @MessagePattern('com.clonespotify.accounts.users.integration.user-updated')
+  onUserCreated(@Payload() data: UserCreatedEvent, @Ctx() context: RmqContext) {
+    Logger.log(`Event received: ${data.name}`, 'QueueController')
+    this.email.notifyUserDetails(data);
   }
 
 }

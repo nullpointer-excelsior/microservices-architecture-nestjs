@@ -1,14 +1,14 @@
+import { getRabbitMQOptions } from '@lib/integration-events';
+import { startOpenTelemetry } from '@lib/shared/instrumentation';
 import { NestFactory } from '@nestjs/core';
-import { MailingMsModule } from './mailing-ms.module';
-import { RabbitmqQueueModule } from '@lib/rabbitmq-queue';
 import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
 import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
-import { startOpenTelemetry } from '@lib/shared/instrumentation';
+import { MailingMsModule } from './mailing-ms.module';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(
     MailingMsModule,
-    RabbitmqQueueModule.getMicroserviceOptions()
+    getRabbitMQOptions()
   );
   await app.listen();
 }

@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { NewAlbumMessage } from '@lib/rabbitmq-queue/rabbitmq-queue/model/messages/new-album.message';
+import { UserCreatedEvent } from '@lib/integration-events';
 
 @Injectable()
 export class EmailService {
   
-  notifyNewAlbum(message: NewAlbumMessage ) {
-    Logger.log(`Sending email ${message.data.title} album recomendation`, 'EmailService')
+  notifyUserDetails(userCreated: UserCreatedEvent) {
+    Logger.log(`Sending email to ${userCreated.payload.email} with user details.`, 'EmailService')
   }
   
 }
