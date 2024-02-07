@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class User {
 
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryColumn("uuid")
   id: string;
 
   @Column()
@@ -14,9 +14,5 @@ export class User {
 
   @Column()
   email: string;
-
-  @Column()
-  premium: boolean;
-
 
 }

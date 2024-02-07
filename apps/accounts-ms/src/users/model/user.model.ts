@@ -1,12 +1,12 @@
-import { IsNotEmpty, IsString, IsEmail, IsBoolean, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class UserModel {
 
   @IsNotEmpty()
-  @IsOptional()
+  @IsUUID()
   @ApiProperty({ description: 'The ID of the user', required: false })
-  id?: string;
+  id: string;
 
   @IsNotEmpty()
   @IsString()
@@ -22,10 +22,5 @@ export class UserModel {
   @IsEmail()
   @ApiProperty({ description: 'The email address of the user' })
   email: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  @ApiProperty({ description: 'Whether the user has a premium account' })
-  premium: boolean;
 
 }
