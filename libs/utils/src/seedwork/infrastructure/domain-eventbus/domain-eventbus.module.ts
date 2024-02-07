@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { EventEmitterEventbus } from './services/event-emitter.eventbus';
-import { EventBus } from '../../domain/events/eventbus';
+import { DomainEventBus } from '../../domain/events/eventbus';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 const providers = [
     EventEmitterEventbus,
     {
-        provide: EventBus,
+        provide: DomainEventBus,
         useClass: EventEmitterEventbus
     }
 ]

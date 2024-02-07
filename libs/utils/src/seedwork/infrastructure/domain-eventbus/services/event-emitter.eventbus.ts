@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { EventBus } from "../../../domain/events/eventbus";
+import { DomainEventBus } from "../../../domain/events/eventbus";
 import { DomainEvent } from "../../../domain/events/domain.event";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
 @Injectable()
-export class EventEmitterEventbus implements EventBus {
+export class EventEmitterEventbus implements DomainEventBus {
 
     constructor(private eventEmitter: EventEmitter2) {}
    

@@ -5,7 +5,7 @@ import { UserCatalogService } from "../domain/services/user-catalog.service";
 import { CreateUserCatalogDto } from "./dto/create-user-catalog.dto";
 import { UpdateFavoritesDto } from "./dto/update-favorites.dto";
 import { UpdatePlaylistsDto } from "./dto/update-playlists.dto";
-import { Model, EventBus } from "@lib/utils/seedwork";
+import { Model, DomainEventBus } from "@lib/utils/seedwork";
 import { PlaylistUpdatedEvent } from "../../shared/domain-events/user-music-catalog/playlist-updated.event";
 
 @Injectable()
@@ -13,7 +13,7 @@ export class UserCatalogUseCases {
 
     constructor(
         private readonly catalog: UserCatalogService,
-        private readonly eventbus: EventBus
+        private readonly domainEventbus: DomainEventBus
     ) { }
 
     async createMusicCatalog(dto: CreateUserCatalogDto) {
@@ -43,7 +43,7 @@ export class UserCatalogUseCases {
             dto.playlist
         ]
         await this.catalog.save(catalog)
-        this.eventbus.publish(new PlaylistUpdatedEvent(dto.playlist));
+        this.domainEventbus.publish(new PlaylistUpdatedEvent(dto.playlist));
         return catalog;
     }
 
@@ -58,7 +58,7 @@ export class UserCatalogUseCases {
                 return catalog
             })
             .then(catalog => {
-                this.eventbus.publish(new FavoritesUpdatedEvent(dto))
+                this.domainEventbus.publish(new FavoritesUpdatedEvent(dto))
                 return catalog
             });
     }
