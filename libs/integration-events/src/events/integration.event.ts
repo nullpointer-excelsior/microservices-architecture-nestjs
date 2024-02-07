@@ -6,6 +6,7 @@ export abstract class IntegrationEvent<T> {
     public readonly occurredOn: Date;
     
     constructor(
+        public readonly service: string,
         public readonly name: string,
         public readonly payload: T
     ) {

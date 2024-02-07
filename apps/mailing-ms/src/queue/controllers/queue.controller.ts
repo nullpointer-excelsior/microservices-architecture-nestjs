@@ -10,7 +10,7 @@ export class QueueController {
 
   @MessagePattern('com.clonespotify.accounts.users.integration.user-updated')
   onUserCreated(@Payload() data: UserCreatedEvent, @Ctx() context: RmqContext) {
-    Logger.log(`Event received: ${data.name}`, 'QueueController')
+    Logger.log(`Event received: ${data.name} from ${data.service}`, 'QueueController')
     this.email.notifyUserDetails(data);
   }
 

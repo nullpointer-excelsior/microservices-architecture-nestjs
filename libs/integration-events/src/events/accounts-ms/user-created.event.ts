@@ -8,6 +8,6 @@ export interface Payload {
 
 export class UserCreatedEvent extends IntegrationEvent<Payload> {
     constructor(payload: Payload) {
-        super('com.clonespotify.accounts.users.integration.user-updated', payload);
+        super('accounts-ms', 'com.clonespotify.accounts.users.integration.user-updated', payload);
     }
 }

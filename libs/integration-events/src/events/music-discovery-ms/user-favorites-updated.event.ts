@@ -28,6 +28,6 @@ export interface FavoritesUpdatedPayload {
 
 export class UserFavoritesUpdatedEvent extends IntegrationEvent<FavoritesUpdatedPayload> {
     constructor(payload: FavoritesUpdatedPayload) {
-        super('com.clonespotify.discovery.user-music-catalog.integration.favorites-updated', payload);
+        super('music-discovery-ms', 'com.clonespotify.discovery.user-music-catalog.integration.favorites-updated', payload);
     }
 }
