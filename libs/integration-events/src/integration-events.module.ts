@@ -1,46 +1,47 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { INTEGRATION_EVENT_QUEUE, RABBITMQ_PRODUCER_CLIENT } from './config/constants';
-import { IntegrationEventBus } from './services/integration.eventbus';
+import { REDIS_PRODUCER_CLIENT } from './config/constants';
+import { IntegrationEventBus } from './events/integration.eventbus';
+import { RedisEventBus } from './services/redis.eventbus';
 
+const IntegrationEventbusProvider = {
+  provide: IntegrationEventBus,
+  useExisting: RedisEventBus
+}
 @Module({
   providers: [
-    IntegrationEventBus
+    RedisEventBus,
+    IntegrationEventbusProvider
   ],
   exports: [
-    IntegrationEventBus
+    IntegrationEventbusProvider
   ],
   imports: [
     ClientsModule.registerAsync([
       {
-        name: RABBITMQ_PRODUCER_CLIENT,
+        name: REDIS_PRODUCER_CLIENT,
         imports: [
           ConfigModule.forRoot()
         ],
         useFactory: (config: ConfigService) => {
-          const user = config.get('RABBITMQ_USER')
-          const password = config.get('RABBITMQ_PASS')
-          const host = config.get('RABBITMQ_HOST')
-          const amqp = `amqp://${user}:${password}@${host}:5672`
+          const host = config.get('REDIS_HOST')
+          const port = config.get('REDIS_PORT')
+          const password = config.get('REDIS_PASS') 
           return {
-            transport: Transport.RMQ,
+            transport: Transport.REDIS,
             options: {
-              urls: [
-                amqp
-              ],
-              queue: INTEGRATION_EVENT_QUEUE,
-              queueOptions: {
-                durable: false,
-              },
-            },
+              host,
+              port,
+              password
+            }
           }
         },
         inject: [
           ConfigService
         ]
-      }
-    ])
+      },
+    ]),
   ]
 
 })
