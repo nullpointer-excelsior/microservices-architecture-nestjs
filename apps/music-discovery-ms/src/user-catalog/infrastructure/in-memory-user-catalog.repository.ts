@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { UserCatalog } from "../domain/model/user-catalog.model";
 import { UserCatalogRepository } from "../domain/repositories/user-catalog.repository";
 
@@ -8,6 +8,7 @@ export class InMemoryUserCatalogRepository extends UserCatalogRepository {
     private readonly data: UserCatalog[] = [];
 
     async save(userMusicCatalog: UserCatalog): Promise<void> {
+        Logger.log(`Saving user music catalog for user: ${userMusicCatalog.username}`, 'InMemoryUserCatalogRepository');
         const index = this.data.findIndex((item) => item.userId === userMusicCatalog.userId);
         if (index !== -1) {
             this.data[index] = userMusicCatalog;
