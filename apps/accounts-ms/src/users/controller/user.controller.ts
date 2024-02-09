@@ -22,7 +22,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'The user', type: UserModel })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findOne(@Param('id') id: string): Promise<UserModel | undefined> {
-    return await this.userService.findOne(id);
+    return await this.userService.findById(id);
   }
 
   @Post()

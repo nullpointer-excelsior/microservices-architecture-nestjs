@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AccountsMsModule } from './../src/accounts-ms.module';
+import { AccountsMsModule } from '../src/accounts-ms.module';
 
-describe('AccountsMsController (e2e)', () => {
+describe('Users (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {

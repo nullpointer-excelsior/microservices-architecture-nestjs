@@ -1,10 +1,10 @@
+import { IntegrationEventBus, UserCreatedEvent } from "@lib/integration-events";
+import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../../shared/database/entities/user.entity";
 import { UserModel } from "../model/user.model";
-import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators"
-import { IntegrationEventBus, UserCreatedEvent } from "@lib/integration-events";
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
   }
 
   @NotFoundExceptionIfUndefined("User not found")
-  async findOne(id: string): Promise<User> {
+  async findById(id: string): Promise<User> {
     return await this.repository.findOneBy({ id });
   }
 
