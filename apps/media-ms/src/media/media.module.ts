@@ -12,15 +12,7 @@ export const MUSIC_CATALOG_BUCKET = 'MUSIC_CATALOG_BUCKET'
 @Module({
     imports: [
         ConfigModule.forRoot(),
-        MusicLibraryApiModule.forAsyncRoot({
-            useFactory(config: ConfigService) {
-                return {
-                    url: config.get('MOBILE_BFF_MUSIC_LIBRARY_API')
-                }
-            },
-            imports: [ConfigModule],
-            inject: [ConfigService]
-        }),
+        MusicLibraryApiModule,
         S3Module
     ],
     providers: [

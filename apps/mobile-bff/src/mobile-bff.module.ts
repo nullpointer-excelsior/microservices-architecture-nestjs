@@ -21,15 +21,7 @@ import { MusicLibraryGrpcModule } from '../../../libs/music-library-grpc/src';
       autoSchemaFile: join(process.cwd(), 'apps/mobile-bff/schema.gql'),
     }),
     MusicLibraryGrpcModule,
-    MusicLibraryApiModule.forAsyncRoot({
-      useFactory(config: ConfigService) {
-        return {
-          url: config.get('MOBILE_BFF_MUSIC_LIBRARY_API')
-        }
-      },
-      imports: [ConfigModule],
-      inject: [ConfigService]
-    }),
+    MusicLibraryApiModule,
     MusicDiscoveryApiModule.forAsyncRoot({
       useFactory(config: ConfigService) {
         return {

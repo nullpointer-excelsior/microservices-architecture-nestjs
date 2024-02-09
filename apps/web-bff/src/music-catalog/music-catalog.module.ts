@@ -7,15 +7,7 @@ import { CatalogService } from "./restful/services/catalog.service";
 @Module({
     imports: [
         ConfigModule.forRoot(),
-        MusicLibraryApiModule.forAsyncRoot({
-            useFactory(config: ConfigService) {
-                return {
-                    url: config.get('MUSIC_LIBRARY_API')
-                }
-            },
-            imports: [ConfigModule],
-            inject: [ConfigService]
-        }),
+        MusicLibraryApiModule
     ],
     providers:[
         CatalogService,
