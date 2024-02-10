@@ -1,17 +1,17 @@
+import { MusicDiscoveryApiModule } from '@lib/music-discovery-api';
+import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
+import { MusicLibraryGrpcModule } from '../../../libs/music-library-grpc/src';
 import { AlbumResolver } from './music-catalog/graphql/resolvers/album.resolver';
 import { ArtistResolver } from './music-catalog/graphql/resolvers/artist.resolver';
 import { GenreResolver } from './music-catalog/graphql/resolvers/genre.resolver';
-import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
-import { MusicLibraryApiModule } from '@lib/music-library-api';
-import { MusicDiscoveryApiModule } from '@lib/music-discovery-api';
 import { RadioResolver } from './music-catalog/graphql/resolvers/radio.resolver';
+import { SongResolver } from './music-catalog/graphql/resolvers/song.resolver';
 import { MusciPlayerModule } from './music-player/music-player.module';
-import { MusicLibraryGrpcModule } from '../../../libs/music-library-grpc/src';
 
 @Module({
   imports: [
@@ -22,15 +22,7 @@ import { MusicLibraryGrpcModule } from '../../../libs/music-library-grpc/src';
     }),
     MusicLibraryGrpcModule,
     MusicLibraryApiModule,
-    MusicDiscoveryApiModule.forAsyncRoot({
-      useFactory(config: ConfigService) {
-        return {
-          url: config.get('MOBILE_BFF_MUSIC_DISCOVERY_API')
-        }
-      },
-      imports: [ConfigModule],
-      inject: [ConfigService]
-    }),
+    MusicDiscoveryApiModule,
     MusciPlayerModule
   ],
   providers: [

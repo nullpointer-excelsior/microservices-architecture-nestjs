@@ -1,43 +1,31 @@
 import { HttpClientModule } from '@lib/utils/http-client';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RadioAPI } from './api/radio.api';
 
-type Options = {
-  url: string
-}
-
-type AsyncOptions = {
-  useFactory(...args: any[]): Options
-  inject?: any[],
-  imports?: any[]
-}
-
-@Module({})
+@Module({
+  imports: [
+    HttpClientModule.registerAsync({
+      useFactory(config: ConfigService) {
+        return {
+          baseURL: config.get('MUSIC_DISCOVERY_API')
+        }
+      },
+      inject: [
+        ConfigService
+      ],
+      imports: [
+        ConfigModule.forRoot()
+      ]
+    })
+  ],
+  providers: [
+    RadioAPI
+  ],
+  exports: [
+    RadioAPI
+  ],
+})
 export class MusicDiscoveryApiModule {
 
-  static forAsyncRoot(options: AsyncOptions) {
-    return {
-      module: MusicDiscoveryApiModule,
-      imports: [
-        ConfigModule,
-        HttpClientModule.registerAsync({
-          useFactory(...args: any[]) {
-            const config = options.useFactory(...args)
-            return {
-              baseURL: config.url
-            }
-          },
-          inject: options.inject || [],
-          imports: options.imports || []
-        })
-      ],
-      providers: [
-        RadioAPI
-      ],
-      exports: [
-        RadioAPI
-      ],
-    }
-  }
 }
