@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MusicLibraryApiModule } from '../../../../libs/music-library-api/src';
+import { MusicLibraryApiModule } from '@lib/music-library-api';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AudioService } from './services/audio.service';
 import { AudioController } from './controllers/audio.controller';
