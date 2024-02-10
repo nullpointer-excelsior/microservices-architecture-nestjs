@@ -16,7 +16,10 @@ export class DomainEventListener {
     @OnEvent(PlaylistUpdatedEvent.NAME)
     async onPlaylistCreated(event: PlaylistUpdatedEvent) {
         Logger.log(event, 'PlaylistUpdatedEvent')
-        await this.playlist.create(event.payload)
+        const playlist = event.payload
+        if (playlist.isPublic) {
+            await this.playlist.create(playlist)
+        }
     }
 
 }

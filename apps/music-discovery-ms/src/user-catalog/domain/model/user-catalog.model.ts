@@ -1,18 +1,15 @@
-import { Type } from "class-transformer";
-import { IsArray, IsNotEmpty, IsUUID, ValidateNested } from "class-validator";
 import { Model } from "@lib/utils/seedwork";
+import { Type } from "class-transformer";
+import { IsArray, ValidateNested } from "class-validator";
 import { Favorites } from "./favorites.model";
 import { Playlist } from "./playlist.model";
+import { User } from "./user.model";
 
 
 export class UserCatalog extends Model {
     
-    @IsUUID()
-    @IsNotEmpty()
-    userId: string;
-    
-    @IsNotEmpty()
-    username: string;
+    @ValidateNested()
+    user: User
     
     @IsArray()
     @ValidateNested({ each: true })

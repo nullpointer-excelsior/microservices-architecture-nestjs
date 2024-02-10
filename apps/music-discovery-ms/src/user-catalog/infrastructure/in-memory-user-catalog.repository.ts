@@ -8,8 +8,8 @@ export class InMemoryUserCatalogRepository extends UserCatalogRepository {
     private readonly data: UserCatalog[] = [];
 
     async save(userMusicCatalog: UserCatalog): Promise<void> {
-        Logger.log(`Saving user music catalog for user: ${userMusicCatalog.username}`, 'InMemoryUserCatalogRepository');
-        const index = this.data.findIndex((item) => item.userId === userMusicCatalog.userId);
+        Logger.log(`Saving user music catalog for user: ${userMusicCatalog.user.username}`, 'InMemoryUserCatalogRepository');
+        const index = this.data.findIndex((item) => item.id === userMusicCatalog.id);
         if (index !== -1) {
             this.data[index] = userMusicCatalog;
         } else {
@@ -18,7 +18,7 @@ export class InMemoryUserCatalogRepository extends UserCatalogRepository {
     }
 
     async findByUserId(userId: string): Promise<UserCatalog | undefined> {
-        return this.data.find((userMusicCatalog) => userMusicCatalog.userId === userId);
+        return this.data.find((userMusicCatalog) => userMusicCatalog.user.id === userId);
     }
 
     async findById(id: string): Promise<UserCatalog | undefined> {

@@ -18,6 +18,11 @@ export class UserCatalogService {
         return this.repository.findByUserId(id);
     }
 
+    @NotFoundExceptionIfUndefined('User catalog not found')
+    async findById(id: string) {
+        return this.repository.findById(id);
+    }
+
     @ValidateArgumentModel
     async save(userCatalog: UserCatalog) {
         this.repository.save(userCatalog);

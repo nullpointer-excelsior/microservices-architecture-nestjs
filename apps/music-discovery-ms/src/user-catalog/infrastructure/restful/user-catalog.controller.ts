@@ -24,8 +24,13 @@ export class UserCatalogController {
         return this.catalog.updateFavorites(request);
     }
 
+    @Get(':id')
+    getById(@Param('id') id: string) {
+        return this.catalog.findById(id);
+    }
+
     @Get('/user/:id')
-    getUserMusicCatalogbyId(@Param('id') id: string) {
+    getUserMusicCatalogById(@Param('id') id: string) {
         return this.catalog.findMusicCatalogByUserId(id);
     }
 
