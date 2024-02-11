@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { from, mergeMap } from "rxjs";
 import { AlbumRepository } from "../domain/repositories/album.repository";
 import { ArtistRepository } from "../domain/repositories/artist.repository";
 import { GenreRepository } from "../domain/repositories/genre.repository";
@@ -17,73 +16,55 @@ export class CatalogUseCases {
     ) {}
 
     findAllArtists() {
-        return from(this.artistRepository.findAll()).pipe(
-           mergeMap(identity => identity)
-        )
+        return this.artistRepository.findAll()
     }
     
     findArtistById(id: string) {
-        return from(this.artistRepository.findById(id))
+        return this.artistRepository.findById(id)
     }
 
     findAllSongs() {
-        return from(this.songRepository.findAll()).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.songRepository.findAll()
     }
     
     findSongById(id: string) {
-        return from(this.songRepository.findById(id))
+        return this.songRepository.findById(id)
     }
 
     findSongsByIdIn(ids: string[]) {
-        return from(this.songRepository.findByIdIn(ids)).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.songRepository.findByIdIn(ids)
     }
 
     findSongsByAlbumId(albumId: string) {     
-        return from(this.songRepository.findByAlbumId(albumId)).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.songRepository.findByAlbumId(albumId)
     }
 
     findSongsByArtistId(artistId: string) {     
-        return from(this.songRepository.findByArtistId(artistId)).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.songRepository.findByArtistId(artistId)
     }
 
     findSongsByGenreId(genreId: string) {     
-        return from(this.songRepository.findByGenreId(genreId)).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.songRepository.findByGenreId(genreId)
     }
 
     findAllGenres() {
-        return from(this.genreRepository.findAll()).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.genreRepository.findAll()
     }
 
     findGenreById(id: string) {
-        return from(this.genreRepository.findById(id))
+        return this.genreRepository.findById(id)
     }
 
     findAlbumById(id: string) {
-        return from(this.albumRepository.findById(id))
+        return this.albumRepository.findById(id)
     }
 
     findAllAlbums() {     
-        return from(this.albumRepository.findAll()).pipe(
-            mergeMap(identity => identity)
-        )
+        return this.albumRepository.findAll()
     }
 
     findAlbumsByArtistId(artistId: string) {     
-        return from(this.albumRepository.findByArtistId(artistId)).pipe(
-            mergeMap(identity => identity),
-        )
+        return this.albumRepository.findByArtistId(artistId)
     }
     
 }
