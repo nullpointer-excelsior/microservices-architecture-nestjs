@@ -4,7 +4,7 @@ import { PlaylistRepository } from './domain/repositories/playlist.repository';
 import { PlaylistUseCases } from './application/playlist.use-cases';
 import { PlaylistController } from './infrastructure/restful/playlist.controller';
 import { PlaylistService } from './domain/services/playlist.service';
-import { DomainEventListener } from './infrastructure/events/domain-event.listener';
+import { DomainEventListener } from './infrastructure/domain-events/domain-event.listener';
 
 @Module({
     controllers: [
