@@ -7,7 +7,7 @@ import { Artist } from "../../domain/models/artist.model"
 import { Genre } from "../../domain/models/genre.model"
 import { Song } from "../../domain/models/song.model"
 import { ID } from "@lib/music-library-grpc"
-import { Album } from "../../../../../../libs/music-library-api/src"
+import { Album } from "@lib/music-library-api"
 import { promiseListToObservable } from "./utils/promise-list-to-observable"
 
 @Controller()

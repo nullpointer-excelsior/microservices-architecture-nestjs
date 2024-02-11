@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MusicLibraryGrpcModule } from '../../../../libs/music-library-grpc/src';
+import { MusicLibraryGrpcModule } from '@lib/music-library-grpc';
 import { CatalogUseCases } from './application/catalog.use-cases';
 import { AlbumRepository } from './domain/repositories/album.repository';
 import { ArtistRepository } from './domain/repositories/artist.repository';
