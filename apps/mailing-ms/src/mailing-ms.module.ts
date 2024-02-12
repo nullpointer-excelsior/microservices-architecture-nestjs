@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { QueueController } from './queue/controllers/queue.controller';
-import { EmailService } from './queue/services/email.service';
+import { IntegrationController } from './integration-events/controllers/integration.controller';
+import { EmailService } from './integration-events/services/email.service';
 
 @Module({
   imports: [],
-  controllers: [QueueController],
+  controllers: [IntegrationController],
   providers: [EmailService],
 })
 export class MailingMsModule {}

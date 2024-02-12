@@ -4,7 +4,7 @@ import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices'
 import { EmailService } from '../services/email.service';
 
 @Controller()
-export class QueueController {
+export class IntegrationController {
   
   constructor(private readonly email: EmailService) {}
 
