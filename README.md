@@ -10,7 +10,7 @@ El propósito principal de este proyecto es:
 * Presentar ejemplos prácticos que representen características clave de una plataforma de música, como la gestión de usuarios, autenticación, gestión de música y listas de reproducción.
 * Facilitar un entorno de aprendizaje donde puedas comprender no solo los fundamentos de NestJS, sino también su aplicación práctica en un entorno de microservicios.
 
-## Módulos de aprendizaje:
+## Módulos de aprendizaje:x
 
 * 1 - Diseño de aplicaciones
     * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
