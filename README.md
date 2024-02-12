@@ -22,6 +22,8 @@ El propósito principal de este proyecto es:
     * [Comunicación entre microservicios](docs/microservices-communication.md)
     * [Comunicación síncrona avanzada](docs/advanced-sync-communication.md)
     * Comunicación asíncrona avanzada
+        * [Eventos de dominio vs Eventos de integración](docs/domain-events-vs-integration-events.md)
+        * Transacciones distribuidas con Sagas
 * 4 - Exponiendo microservicios al cliente
 * 5 - Seguridad en microservicios
 * 6 - Patrones de resilencia
@@ -55,6 +57,7 @@ Todos los microservicios y componentes se describen acá:
 * `Postgres`: Sistema de gestión de bases de datos relacional.
 * `MongoDB`: Base de datos NoSQL orientada a documentos. 
 * `RabbitMQ`: Broker de mensajes para la comunicación entre microservicios.
+* `Redis`: Broker de mensajes para eventos de integración en memoria basados en un modelo de pub/sub
 * `Minio Storage`: Servicio de administración para el almacenamiento de objetos compatible con S3.
 * `OpenTelemetry`: Librería destinada a recolectar datos de telemetría y enviarlos al servidor OTLP configurado.
 * `Jeager UI`: Servicio OTLP destinado a recolectar datos de telemetría de los microservicios y disponibilizar información de las trazas.
