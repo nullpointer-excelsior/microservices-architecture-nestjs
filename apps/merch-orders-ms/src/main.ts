@@ -1,11 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { MerchOrdersMsModule } from './merch-orders-ms.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(MerchOrdersMsModule);
-
+  app.useGlobalPipes(new ValidationPipe());
+  
   const config = new DocumentBuilder()
     .setTitle('Merch Orders API')
     .setDescription('The Merch Orders description')
