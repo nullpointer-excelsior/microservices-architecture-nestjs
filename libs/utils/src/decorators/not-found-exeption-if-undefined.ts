@@ -7,7 +7,8 @@ export function NotFoundExceptionIfUndefined(customMessage?: string) {
       const result = await originalMethod.apply(this, args);
       if (!result) {
         const message = customMessage || 'Recurso no encontrado';
-        Logger.error(`${message}. args: ${args.join(',')}`, 'NotFoundExceptionIfUndefined');
+        const className = target.constructor.name;
+        Logger.error(`${message}. args: ${args.join(',')}`, className);
         throw new NotFoundException(message);
       }
       return result;
