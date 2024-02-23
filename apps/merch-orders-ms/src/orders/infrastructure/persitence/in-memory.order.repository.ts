@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { OrderRepository } from "../../domain/repositories/order.repository";
-import { Order } from "../restful/model/order.model";
+import { Order } from "../../domain/model/order.model";
 
 @Injectable()
 export class InMemoryOrderRepository extends OrderRepository {

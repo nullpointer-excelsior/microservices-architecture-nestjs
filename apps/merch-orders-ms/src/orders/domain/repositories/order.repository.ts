@@ -1,4 +1,4 @@
-import { Order } from "../../infrastructure/restful/model/order.model";
+import { Order } from "../model/order.model";
 
 export abstract class OrderRepository {
     abstract create(order: Order): Promise<Order>;

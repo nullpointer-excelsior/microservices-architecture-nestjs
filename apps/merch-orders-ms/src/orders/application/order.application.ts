@@ -1,6 +1,6 @@
-import { CreateOrderDto } from "../dto/create-order.dto";
-import { Order } from "../model/order.model";
-import { UpdateOrderStatusDto } from "../dto/update-order.dto";
+import { CreateOrderDto } from "./dto/create-order.dto";
+import { Order } from "../domain/model/order.model";
+import { UpdateOrderStatusDto } from "./dto/update-order.dto";
 
 export abstract class OrderApplication {
     

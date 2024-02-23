@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { InMemoryOrderRepository } from './infrastructure/persitence/in-memory.order.repository';
 import { OrderRepository } from './domain/repositories/order.repository';
 import { OrderController } from './infrastructure/restful/controllers/order.controller';
-import { OrderApplication } from './infrastructure/restful/services/order.application';
-import { OrderUseCases } from './application/order.use-cases';
+import { OrderApplication } from './application/order.application';
+import { OrderUseCases } from './application/usecases/order.use-cases';
 
 @Module({
     controllers: [

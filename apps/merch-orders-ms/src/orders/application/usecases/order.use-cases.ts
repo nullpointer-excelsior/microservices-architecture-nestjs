@@ -1,11 +1,11 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { CreateOrderDto } from "../infrastructure/restful/dto/create-order.dto";
-import { UpdateOrderStatusDto } from "../infrastructure/restful/dto/update-order.dto";
-import { Order } from "../infrastructure/restful/model/order.model";
-import { OrderApplication } from "../infrastructure/restful/services/order.application";
-import { OrderRepository } from "../domain/repositories/order.repository";
+import { CreateOrderDto } from "../dto/create-order.dto";
+import { UpdateOrderStatusDto } from "../dto/update-order.dto";
+import { Order } from "../../domain/model/order.model";
+import { OrderApplication } from "../order.application";
+import { OrderRepository } from "../../domain/repositories/order.repository";
 import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
-import { OrderStatus } from "../infrastructure/restful/model/order-status.enum";
+import { OrderStatus } from "../../domain/model/order-status.enum";
 
 @Injectable()
 export class OrderUseCases extends OrderApplication {

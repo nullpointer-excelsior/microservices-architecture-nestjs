@@ -1,9 +1,9 @@
 import { Body, Controller, Patch, Post } from "@nestjs/common";
-import { CreateOrderDto } from "../dto/create-order.dto";
-import { UpdateOrderStatusDto } from "../dto/update-order.dto";
-import { OrderApplication } from "../services/order.application";
+import { CreateOrderDto } from "../../../application/dto/create-order.dto";
+import { UpdateOrderStatusDto } from "../../../application/dto/update-order.dto";
+import { OrderApplication } from "../../../application/order.application";
 import { ApiTags, ApiOperation, ApiResponse, ApiNotFoundResponse } from "@nestjs/swagger";
-import { Order } from "../model/order.model";
+import { Order } from "../../../domain/model/order.model";
 import { HttpExceptionBody } from "../dto/http-exception-body.dto";
 
 @Controller('orders')
