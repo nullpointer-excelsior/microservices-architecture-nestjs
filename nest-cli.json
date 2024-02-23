@@ -159,6 +159,24 @@
       "compilerOptions": {
         "tsConfigPath": "libs/integration-events/tsconfig.lib.json"
       }
+    },
+    "merch-products-ms": {
+      "type": "application",
+      "root": "apps/merch-products-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/merch-products-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/merch-products-ms/tsconfig.app.json"
+      }
+    },
+    "merch-orders-ms": {
+      "type": "application",
+      "root": "apps/merch-orders-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/merch-orders-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/merch-orders-ms/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,

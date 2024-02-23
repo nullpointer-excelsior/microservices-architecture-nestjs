@@ -1,4 +1,4 @@
-import { NotFoundException } from "@nestjs/common";
+import { Logger, NotFoundException } from "@nestjs/common";
 
 export function NotFoundExceptionIfUndefined(customMessage?: string) {
   return function (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) {
@@ -6,7 +6,9 @@ export function NotFoundExceptionIfUndefined(customMessage?: string) {
     descriptor.value = async function (...args: any[]) {
       const result = await originalMethod.apply(this, args);
       if (!result) {
-        throw new NotFoundException(customMessage || 'Recurso no encontrado');
+        const message = customMessage || 'Recurso no encontrado';
+        Logger.error(`${message}. args: ${args.join(',')}`, 'NotFoundExceptionIfUndefined');
+        throw new NotFoundException(message);
       }
       return result;
     };

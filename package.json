@@ -22,6 +22,8 @@
     "start:mailing": "npx nest start -w mailing-ms",
     "start:media": "npx nest start -w media-ms",
     "start:web-bff": "npx nest start -w web-bff",
+    "start:merch-products": "npx nest start -w merch-products-ms",
+    "start:merch-orders": "npx nest start -w merch-orders-ms",
     "e2e:all": "npm run e2e:music-library && npm run e2e:mobile-bff && npm run e2e:music-discovery",
     "e2e:music-library": "env MUSIC_LIBRARY_MS_DATABASE_HOST=localhost MUSIC_LIBRARY_MS_DATABASE_PORT=5555 MUSIC_LIBRARY_MS_DATABASE_NAME=test MUSIC_LIBRARY_MS_DATABASE_USER=test MUSIC_LIBRARY_MS_DATABASE_PASS=test jest --config ./apps/music-library-ms/test/jest-e2e.json --maxWorkers 1",
     "e2e:mobile-bff": "env jest --config ./apps/mobile-bff/test/jest-e2e.json --maxWorkers 1",
@@ -30,7 +32,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "create:clean-module": "./scripts/create-hexagonal-module.sh"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",

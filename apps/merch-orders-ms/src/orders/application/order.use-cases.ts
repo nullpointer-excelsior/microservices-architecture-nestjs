@@ -1,0 +1,42 @@
+import { Injectable, Logger } from "@nestjs/common";
+import { CreateOrderDto } from "../infrastructure/restful/dto/create-order.dto";
+import { UpdateOrderStatusDto } from "../infrastructure/restful/dto/update-order.dto";
+import { Order } from "../infrastructure/restful/model/order.model";
+import { OrderApplication } from "../infrastructure/restful/services/order.application";
+import { OrderRepository } from "../domain/repositories/order.repository";
+import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
+
+@Injectable()
+export class OrderUseCases extends OrderApplication {
+
+    private readonly logger = new Logger(OrderUseCases.name);
+
+    constructor(private readonly repository: OrderRepository) {
+        super();
+    }
+    
+    async createOrder(dto: CreateOrderDto): Promise<Order> {
+        const order = new Order();
+        order.id = dto.id;
+        order.status = 'created';
+        order.createdAt = new Date();
+        order.lines = dto.lines;
+        await this.repository.create(order);
+        this.logger.log(`Order created: ${order.id}`);
+        return order;
+    }
+
+    async updateOrderStatus(dto: UpdateOrderStatusDto): Promise<Order> {
+        const order = await this.findOrderById(dto.id);
+        order.status = dto.status;
+        await this.repository.update(order);
+        this.logger.log(`Order updated: ${order.id}`);
+        return order;
+    }
+
+    @NotFoundExceptionIfUndefined('Order not found in database')
+    private findOrderById(id: string): Promise<Order> {
+        return this.repository.findById(id);
+    }
+
+}
