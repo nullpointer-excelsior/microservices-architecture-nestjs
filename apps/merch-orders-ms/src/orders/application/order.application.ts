@@ -1,11 +1,11 @@
-import { CreateOrderDto } from "./dto/create-order.dto";
+import { CreateOrderRequest } from "./dto/create-order-request.dto";
 import { Order } from "../domain/model/order.model";
-import { UpdateOrderStatusDto } from "./dto/update-order.dto";
+import { UpdateOrderStatusRequest } from "./dto/update-order-request.dto";
 
 export abstract class OrderApplication {
     
-    abstract createOrder(dto: CreateOrderDto): Promise<Order>
+    abstract createOrder(dto: CreateOrderRequest): Promise<Order>
 
-    abstract updateOrderStatus(dto: UpdateOrderStatusDto): Promise<Order>
+    abstract updateOrderStatus(dto: UpdateOrderStatusRequest): Promise<Order>
 
 }

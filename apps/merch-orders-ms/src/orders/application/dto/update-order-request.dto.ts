@@ -1,6 +1,6 @@
 import { OmitType } from "@nestjs/swagger";
 import { Order } from "../../domain/model/order.model";
 
-export class CreateOrderDto extends OmitType(Order, [ 'status', 'createdAt']) {
+export class UpdateOrderStatusRequest extends OmitType(Order, ['createdAt', 'lines', 'customer']) {
 
 }

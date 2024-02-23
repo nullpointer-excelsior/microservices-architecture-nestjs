@@ -1,6 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { CreateOrderDto } from "../dto/create-order.dto";
-import { UpdateOrderStatusDto } from "../dto/update-order.dto";
+import { CreateOrderRequest } from "../dto/create-order-request.dto";
+import { UpdateOrderStatusRequest } from "../dto/update-order-request.dto";
 import { Order } from "../../domain/model/order.model";
 import { OrderApplication } from "../order.application";
 import { OrderRepository } from "../../domain/repositories/order.repository";
@@ -16,7 +16,7 @@ export class OrderUseCases extends OrderApplication {
         super();
     }
     
-    async createOrder(dto: CreateOrderDto): Promise<Order> {
+    async createOrder(dto: CreateOrderRequest): Promise<Order> {
         const order = new Order();
         order.id = dto.id;
         order.status = OrderStatus.CREATED;
@@ -27,7 +27,7 @@ export class OrderUseCases extends OrderApplication {
         return order;
     }
 
-    async updateOrderStatus(dto: UpdateOrderStatusDto): Promise<Order> {
+    async updateOrderStatus(dto: UpdateOrderStatusRequest): Promise<Order> {
         const order = await this.findOrderById(dto.id);
         order.status = dto.status;
         await this.repository.update(order);
