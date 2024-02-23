@@ -2,6 +2,7 @@ import { IsArray, IsDate, IsIn, IsString, IsUUID, ValidateNested } from "class-v
 import { OrderLine } from "./order-line.model";
 import { Type } from "class-transformer";
 import { ApiProperty } from "@nestjs/swagger";
+import { OrderStatus } from "./order-status.enum";
 export class Order {
 
     @IsUUID()
@@ -10,8 +11,8 @@ export class Order {
 
     @IsString()
     @IsIn(['created', 'pending', 'completed'])
-    @ApiProperty({ example: "created", description: "The status of the order" })
-    status: string
+    @ApiProperty({ example: "created", description: "The status of the order", enum: OrderStatus })
+    status: OrderStatus
 
     @IsDate()
     @ApiProperty({ example: "2022-01-01T12:00:00Z", description: "The timestamp of when the order was created" })

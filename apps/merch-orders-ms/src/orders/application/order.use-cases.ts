@@ -5,6 +5,7 @@ import { Order } from "../infrastructure/restful/model/order.model";
 import { OrderApplication } from "../infrastructure/restful/services/order.application";
 import { OrderRepository } from "../domain/repositories/order.repository";
 import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
+import { OrderStatus } from "../infrastructure/restful/model/order-status.enum";
 
 @Injectable()
 export class OrderUseCases extends OrderApplication {
@@ -18,7 +19,7 @@ export class OrderUseCases extends OrderApplication {
     async createOrder(dto: CreateOrderDto): Promise<Order> {
         const order = new Order();
         order.id = dto.id;
-        order.status = 'created';
+        order.status = OrderStatus.CREATED;
         order.createdAt = new Date();
         order.lines = dto.lines;
         await this.repository.create(order);
@@ -30,7 +31,7 @@ export class OrderUseCases extends OrderApplication {
         const order = await this.findOrderById(dto.id);
         order.status = dto.status;
         await this.repository.update(order);
-        this.logger.log(`Order updated: ${order.id}`);
+        this.logger.log(`Order updated: ${order.id} to state: ${order.status}`);
         return order;
     }
 
