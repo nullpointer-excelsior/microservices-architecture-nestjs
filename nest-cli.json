@@ -177,6 +177,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/merch-orders-ms/tsconfig.app.json"
       }
+    },
+    "merch-payment-ms": {
+      "type": "application",
+      "root": "apps/merch-payment-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/merch-payment-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/merch-payment-ms/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
