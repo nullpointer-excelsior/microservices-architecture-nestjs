@@ -9,7 +9,7 @@ import { MeterProvider, PeriodicExportingMetricReader } from "@opentelemetry/sdk
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 
-type CreateSdkOptions = {
+export type CreateSdkOptions = {
   serviceName: string
   serviceVersion: string,
   traceExporterOptions?: { url: string, headers?: any },
