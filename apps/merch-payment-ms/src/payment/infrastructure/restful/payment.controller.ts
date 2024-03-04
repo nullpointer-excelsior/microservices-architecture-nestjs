@@ -1,9 +1,9 @@
 import { Body, Controller, Patch, Post } from "@nestjs/common";
-import { PaymentApplication } from "../../application/payment.application";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { CreatePaymentRequest } from "../../application/dto/create-payment-request.dto";
-import { Payment } from "../../domain/model/payment.model";
-import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { UpdatePaymentStatusRequest } from "../../application/dto/update-payment-status-request.dto";
+import { PaymentApplication } from "../../application/payment.application";
+import { Payment } from "../../domain/model/payment.model";
 
 @ApiTags('payments')
 @Controller('payments')

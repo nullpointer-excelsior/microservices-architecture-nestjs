@@ -186,6 +186,24 @@
       "compilerOptions": {
         "tsConfigPath": "apps/merch-payment-ms/tsconfig.app.json"
       }
+    },
+    "user-purchases-ms": {
+      "type": "application",
+      "root": "apps/user-purchases-ms",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-purchases-ms/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-purchases-ms/tsconfig.app.json"
+      }
+    },
+    "distributed-transactions": {
+      "type": "library",
+      "root": "libs/distributed-transactions",
+      "entryFile": "index",
+      "sourceRoot": "libs/distributed-transactions/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/distributed-transactions/tsconfig.lib.json"
+      }
     }
   },
   "monorepo": true,

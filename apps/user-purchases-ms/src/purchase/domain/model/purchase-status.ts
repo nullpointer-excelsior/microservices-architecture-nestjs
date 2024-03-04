@@ -1,6 +1,4 @@
-import { CANCELLED } from "dns";
-
-export enum OrderStatus {
+export enum PurchaseStatus {
     CREATED = 'created',
     PENDING = 'pending',
     COMPLETED = 'completed',

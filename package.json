@@ -35,7 +35,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "create:clean-module": "./scripts/create-hexagonal-module.sh",
     "create:app": "node ./scripts/javascript/create-app.mjs",
-    "start:merch-payment": "npx nest start -w merch-payment-ms"
+    "start:merch-payment": "npx nest start -w merch-payment-ms",
+    "start:user-purchases": "npx nest start -w user-purchases-ms"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
@@ -134,7 +135,8 @@
       "^@lib/utils(|/.*)$": "<rootDir>/libs/utils/src/$1",
       "^@lib/music-discovery-api(|/.*)$": "<rootDir>/libs/music-discovery-api/src/$1",
       "^@lib/music-library-grpc(|/.*)$": "<rootDir>/libs/music-library-grpc/src/$1",
-      "^@lib/integration-events(|/.*)$": "<rootDir>/libs/integration-events/src/$1"
+      "^@lib/integration-events(|/.*)$": "<rootDir>/libs/integration-events/src/$1",
+      "^@lib/distributed-transactions(|/.*)$": "<rootDir>/libs/distributed-transactions/src/$1"
     }
   }
 }

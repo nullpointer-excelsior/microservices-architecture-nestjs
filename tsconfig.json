@@ -59,6 +59,18 @@
       ],
       "@lib/integration-events/*": [
         "libs/integration-events/src/*"
+      ],
+      "@lib/saga-patterns": [
+        "libs/saga-patterns/src"
+      ],
+      "@lib/saga-patterns/*": [
+        "libs/saga-patterns/src/*"
+      ],
+      "@lib/distributed-transactions": [
+        "libs/distributed-transactions/src"
+      ],
+      "@lib/distributed-transactions/*": [
+        "libs/distributed-transactions/src/*"
       ]
     }
   }
