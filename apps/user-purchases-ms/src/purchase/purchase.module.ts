@@ -7,6 +7,7 @@ import { PurchaseRepository } from './domain/repositories/purchase.repository';
 import { InMemoryPurchaseRepostiory } from './infrastructure/persistence/in-memory.purchase.repository';
 import { PurchaseController } from './infrastructure/restful/controllers/purchase.controller';
 import { SagaCoordinatorController } from './infrastructure/sagas/controllers/saga-coordinator.controller';
+import { PurchaseService } from './domain/services/purchase.service';
 
 const orderSagas = Saga.builder()
     .start({
@@ -48,6 +49,7 @@ const orderSagas = Saga.builder()
         SagaCoordinatorController,
     ],
     providers: [
+        PurchaseService,
         {
             provide: PurchaseApplication,
             useClass: PurchaseUseCases
