@@ -1,25 +1,23 @@
-import { IsDate, IsEnum, IsUUID } from "class-validator";
-import { OrderStatus } from "../model/orders";
+import { ValidateNested } from "class-validator";
 import { SagaEvent } from "../../../sagas";
+import { Order } from "../model/orders";
 import { CreateOrderSaga } from "../sagas/CreateOrderSaga";
+import { EventProps } from "./event.props";
 
-export class Payload {
+class Payload {
     
-    @IsUUID()
-    orderId: string;
-
-    @IsDate()
-    createdAt: Date;
-
-    @IsEnum(OrderStatus)
-    status: OrderStatus;
+    @ValidateNested()
+    order: Order;
     
 }
 
 export class CreateOrderOkEvent extends SagaEvent<Payload>{
 
-    constructor(payload: Payload) {
-        super(CreateOrderSaga.OK, payload)
+    constructor(props: EventProps<Payload>) {
+        super({
+            ...props,
+            pattern: CreateOrderSaga.OK
+        })
     }
 
 }

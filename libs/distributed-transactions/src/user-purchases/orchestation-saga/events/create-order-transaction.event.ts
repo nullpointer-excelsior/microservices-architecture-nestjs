@@ -1,11 +1,16 @@
 import { SagaEvent } from '../../../sagas/saga.event';
 import { Order } from '../model/orders';
 import { CreateOrderSaga } from '../sagas/CreateOrderSaga';
+import { EventProps } from './event.props';
 
-export class CreateOrderTransactionEvent extends SagaEvent<Order>{
+type Payload = Omit<Order, 'id'>;
+export class CreateOrderTransactionEvent extends SagaEvent<Payload>{
 
-    constructor(payload: Order) {
-        super(CreateOrderSaga.TRANSACTION, payload)
+    constructor(props: EventProps<Payload>) {
+        super({
+            ...props,
+            pattern: CreateOrderSaga.TRANSACTION
+        })
     }
 
 }

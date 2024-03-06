@@ -2,6 +2,7 @@ import { IsUUID, ValidateNested } from 'class-validator';
 import { SagaEvent } from '../../../sagas/saga.event';
 import { CreatePaymentSaga } from '../sagas/CreatePaymentSaga';
 import { Customer } from '../model/customer';
+import { EventProps } from './event.props';
 
 class Payload {
     @IsUUID()
@@ -14,8 +15,11 @@ class Payload {
 
 export class CreatePaymentTransactionEvent extends SagaEvent<Payload>{
 
-    constructor(payload: Payload) {
-        super(CreatePaymentSaga.TRANSACTION, payload)
+    constructor(props: EventProps<Payload>) {
+        super({
+            ...props,
+            pattern: CreatePaymentSaga.TRANSACTION
+        })
     }
 
 }

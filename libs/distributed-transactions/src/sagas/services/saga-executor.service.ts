@@ -12,7 +12,7 @@ export class SagaExecutorService {
     constructor(@Inject(USER_PURCHASES_CLIENT) private client: ClientProxy) { }
 
     execute<T = any>(event: SagaEvent<T>) {
-        this.logger.debug(`Sending saga-event-id: ${event.id} to pattern: ${event.pattern} `)
+        this.logger.debug(`Sending Event(pattern=${event.pattern}, transaction=${event.transactionId})`)
         this.client.emit(event.pattern, event)
     }
 

@@ -3,7 +3,7 @@ import { SagaEvent } from "../../../sagas";
 import { CreateOrderSaga } from "../sagas/CreateOrderSaga";
 
 class Payload {
-    
+
     @IsUUID()
     @IsNotEmpty()
     orderId: string;
@@ -11,8 +11,12 @@ class Payload {
 }
 
 export class CreateOrderCompensationEvent extends SagaEvent<Payload>{
-        
-        constructor(payload: Payload) {
-            super(CreateOrderSaga.COMPENSATION, payload)
-        }
+
+    constructor(props: { transactionId: string, payload: Payload }) {
+        super({
+            ...props,
+            pattern: CreateOrderSaga.COMPENSATION,
+        })
+    }
+
 }

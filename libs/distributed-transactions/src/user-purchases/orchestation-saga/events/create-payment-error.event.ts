@@ -1,6 +1,7 @@
 import { IsNotEmpty, IsUUID } from "class-validator";
 import { SagaEvent } from "../../../sagas";
 import { CreatePaymentSaga } from "../sagas/CreatePaymentSaga";
+import { EventProps } from "./event.props";
 
 class Payload {
     
@@ -18,7 +19,10 @@ class Payload {
 
 export class CreatePaymentErrorEvent extends SagaEvent<Payload>{
         
-        constructor(payload: Payload) {
-            super(CreatePaymentSaga.ERROR, payload)
+        constructor(props: EventProps<Payload>) {
+            super({
+                ...props,
+                pattern: CreatePaymentSaga.ERROR
+            })
         }
 }

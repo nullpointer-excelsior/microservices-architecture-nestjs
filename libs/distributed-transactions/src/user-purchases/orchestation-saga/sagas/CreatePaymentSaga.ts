@@ -1,6 +1,6 @@
 export enum CreatePaymentSaga {
     TRANSACTION = 'create-payment-transaction',
-    COMPENSATION = 'payment-compensation',
-    OK = 'payment-proccessing-ok',
+    COMPENSATION = 'create-payment-compensation',
+    OK = 'create-payment-ok',
     ERROR = 'payment-error'
 }
