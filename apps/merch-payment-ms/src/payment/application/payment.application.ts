@@ -4,5 +4,6 @@ import { UpdatePaymentStatusRequest } from "./dto/update-payment-status-request.
 
 export abstract class PaymentApplication {
     abstract createPayment(dto: CreatePaymentRequest): Promise<Payment>
+    abstract processPayment(payment: Payment): Promise<Payment>
     abstract updatePaymentStatus(dto: UpdatePaymentStatusRequest): Promise<Payment>
 }

@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CreatePurchaseRequest } from "../../../application/dto/create-purchase.dto";
-import { OrderCreatedResponse } from "../../../application/dto/order-created.dto";
+import { PurchaseTransactionCreatedResponse } from "../../../application/dto/purchase-transaction-created.dto";
 import { PurchaseApplication } from "../../../application/purchase.application";
 
 @Controller('purchases')
@@ -12,7 +12,7 @@ export class PurchaseController {
     
     @Post()
     @ApiOperation({ description: 'Create a new purchase' })
-    @ApiCreatedResponse({ description: 'The purchase has been created successfully', type: OrderCreatedResponse })
+    @ApiCreatedResponse({ description: 'The purchase process has been created successfully', type: PurchaseTransactionCreatedResponse })
     createPurchaseProccess(@Body() request: CreatePurchaseRequest) {
         return this.application.startPurchaseProccess(request)
     }

@@ -1,13 +1,16 @@
-import { NestFactory } from '@nestjs/core';
-import { MerchProductsMsModule } from './merch-products-ms.module';
+import { getUserPurchaseMicroserviceOptions } from '@lib/distributed-transactions/user-purchases';
 import { startOpenTelemetry } from '@lib/shared/instrumentation';
-import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
-import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
 import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ExpressInstrumentation, ExpressLayerType } from '@opentelemetry/instrumentation-express';
+import { HttpInstrumentation } from '@opentelemetry/instrumentation-http';
+import { MerchProductsMsModule } from './merch-products-ms.module';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(MerchProductsMsModule);
+  app.connectMicroservice(getUserPurchaseMicroserviceOptions())
 
   const config = new DocumentBuilder()
     .setTitle('Merch Products API')
@@ -19,6 +22,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   
   const port = process.env.MERCH_PRODUCTS_MS_APP_PORT
+  app.startAllMicroservices()
   await app.listen(port, () => {
     Logger.log(`Merch products microservice listen on port: ${port}`, "Main")
   });

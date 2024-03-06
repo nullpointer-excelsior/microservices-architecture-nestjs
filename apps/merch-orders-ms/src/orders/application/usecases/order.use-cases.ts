@@ -1,11 +1,12 @@
+import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
+import { generateUUID } from "@lib/utils/seedwork";
 import { Injectable, Logger } from "@nestjs/common";
+import { OrderStatus } from "../../domain/model/order-status.enum";
+import { Order } from "../../domain/model/order.model";
+import { OrderRepository } from "../../domain/repositories/order.repository";
 import { CreateOrderRequest } from "../dto/create-order-request.dto";
 import { UpdateOrderStatusRequest } from "../dto/update-order-request.dto";
-import { Order } from "../../domain/model/order.model";
 import { OrderApplication } from "../order.application";
-import { OrderRepository } from "../../domain/repositories/order.repository";
-import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
-import { OrderStatus } from "../../domain/model/order-status.enum";
 
 @Injectable()
 export class OrderUseCases extends OrderApplication {
@@ -18,10 +19,11 @@ export class OrderUseCases extends OrderApplication {
     
     async createOrder(dto: CreateOrderRequest): Promise<Order> {
         const order = new Order();
-        order.id = dto.id;
+        order.id = generateUUID()
         order.status = OrderStatus.CREATED;
         order.createdAt = new Date();
         order.lines = dto.lines;
+        order.customer = dto.customer;
         await this.repository.create(order);
         this.logger.log(`Order created: ${order.id}`);
         return order;

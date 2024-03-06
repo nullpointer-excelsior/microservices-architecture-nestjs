@@ -2,17 +2,17 @@ import { SagaExecutorService } from "@lib/distributed-transactions/user-purchase
 import { NotFoundExceptionIfUndefined } from "@lib/utils/decorators";
 import { EventEmitterEventbus, Model } from "@lib/utils/seedwork";
 import { Injectable } from "@nestjs/common";
+import { PaymentStatusUpdatedEvent } from "../../domain/events/payment-status-updated.event";
 import { PaymentStatus } from "../../domain/model/payment-status.enum";
 import { Payment } from "../../domain/model/payment.model";
 import { PaymentRepository } from "../../domain/repositories/payment.repository";
 import { CreatePaymentRequest } from "../dto/create-payment-request.dto";
 import { UpdatePaymentStatusRequest } from "../dto/update-payment-status-request.dto";
 import { PaymentApplication } from "../payment.application";
-import { PaymentStatusUpdatedEvent } from "../../domain/events/payment-status-updated.event";
-import { UpdatePaymentStatusByOrderIdRequest } from "../dto/update-payment-status-by-order-Id.request.dto";
 
 @Injectable()
 export class PaymentUseCases extends PaymentApplication {
+    
     
     constructor(
         private readonly paymentRepository: PaymentRepository,
@@ -31,6 +31,11 @@ export class PaymentUseCases extends PaymentApplication {
         payment.orderId = dto.orderId;
         payment.createdAt = new Date();
         return await this.paymentRepository.create(payment);
+    }
+
+    async processPayment(payment: Payment): Promise<Payment> {
+        payment.status = PaymentStatus.APPROVED;
+        return await this.paymentRepository.update(payment);
     }
 
     async updatePaymentStatus(dto: UpdatePaymentStatusRequest): Promise<Payment> {

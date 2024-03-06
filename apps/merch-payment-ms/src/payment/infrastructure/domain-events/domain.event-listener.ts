@@ -15,10 +15,10 @@ export class DomainEventListener {
     async onPaymentStatusUpdated(event: PaymentStatusUpdatedEvent) {
         this.logger.debug(`Domain event: ${PaymentStatusUpdatedEvent.NAME} for orderId: ${event.payload.orderId}`)
         if (event.payload.status === PaymentStatus.APPROVED) {
-            this.sagaExecutor.execute(new CreatePaymentOkEvent({
-                orderId: event.payload.orderId,
-                status: event.payload.status
-            }))
+            // this.sagaExecutor.execute(new CreatePaymentOkEvent({
+            //     orderId: event.payload.orderId,
+            //     status: event.payload.status
+            // }))
         }
     }
 

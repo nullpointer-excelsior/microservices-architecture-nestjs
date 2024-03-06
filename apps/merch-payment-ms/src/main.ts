@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MerchPaymentMsModule } from './merch-payment-ms.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { getUserPurchaseMicroserviceOptions } from '../../../libs/distributed-transactions/src/user-purchases';
+import { getUserPurchaseMicroserviceOptions } from '@lib/distributed-transactions/user-purchases';
 
 async function bootstrap() {
   const app = await NestFactory.create(MerchPaymentMsModule);

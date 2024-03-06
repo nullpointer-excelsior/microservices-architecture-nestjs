@@ -18,35 +18,40 @@ export class CreateOrderSagaController extends SagaControllerPort<CreateOrderTra
     }
 
     @EventPattern(CreateOrderSaga.TRANSACTION)
-    async onTransaction(@Payload() payload: CreateOrderTransactionEvent, @Ctx() context: RedisContext) {
-        this.logger.log(`CreatingOrderTransaction received with order-id: ${payload.payload.id}`);
-        await this.orderApplication.createOrder(payload.payload)
+    async onTransaction(@Payload() event: CreateOrderTransactionEvent, @Ctx() context: RedisContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.log(`CreatingOrderTransaction for transaction-id: ${event.transactionId}`);
+        await this.orderApplication.createOrder(event.payload)
             .then(async order => {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 return order;
             })
             .then(order => {
                 this.sagas.execute(new CreateOrderOkEvent({
-                    orderId: order.id,
-                    createdAt: order.createdAt,
-                    status: order.status
+                    transactionId: event.transactionId,
+                    payload: {
+                        order
+                    }
                 }));
             })
             .catch(err => {
                 this.sagas.execute(new CreateOrderErrorEvent({
-                    orderId: payload.payload.id,
-                    error: err.name,
-                    reason: err.message
+                    transactionId: event.transactionId,
+                    payload: {
+                        error: err.message,
+                        reason: 'Error creating order'
+                    }
                 }))
             })
 
     }
 
     @EventPattern(CreateOrderSaga.COMPENSATION)
-    async onCompesation(payload: CreateOrderCompensationEvent, context: RedisContext) {
-        this.logger.log(`Order compensation received for order-id: ${payload.payload.orderId}`);
+    async onCompesation(event: CreateOrderCompensationEvent, context: RedisContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.log(`Order compensation received for order-id: ${event.payload.orderId}`);
         await this.orderApplication.updateOrderStatus({
-            id: payload.payload.orderId,
+            id: event.payload.orderId,
             status: OrderStatus.CANCELLED
         })
     }

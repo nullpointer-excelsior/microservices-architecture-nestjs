@@ -1,8 +1,9 @@
-import { CreatePaymentCompensationEvent, CreatePaymentSaga, CreatePaymentTransactionEvent, SagaExecutorService } from "@lib/distributed-transactions/user-purchases";
+import { CreatePaymentCompensationEvent, CreatePaymentOkEvent, CreatePaymentSaga, CreatePaymentTransactionEvent, SagaExecutorService } from "@lib/distributed-transactions/user-purchases";
 import { SagaControllerPort } from "@lib/distributed-transactions/sagas";
 import { EventPattern, RedisContext } from "@nestjs/microservices";
 import { Controller, Logger } from "@nestjs/common";
 import { PaymentApplication } from "../../application/payment.application";
+import { PaymentStatus } from "../../domain/model/payment-status.enum";
 
 @Controller()
 export class CreatePaymentSagaController extends SagaControllerPort<CreatePaymentTransactionEvent, CreatePaymentCompensationEvent>{
@@ -15,20 +16,37 @@ export class CreatePaymentSagaController extends SagaControllerPort<CreatePaymen
     ) { super() }
 
     @EventPattern(CreatePaymentSaga.TRANSACTION)
-    async onTransaction(payload: CreatePaymentTransactionEvent, context: RedisContext) {
-        this.logger.log(`CreatingPaymentTransaction received with order-id: ${payload.payload.orderId}`);
+    async onTransaction(event: CreatePaymentTransactionEvent, context: RedisContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.log(`CreatingPaymentTransaction received with order-id: ${event.payload.orderId}`);
         // TODO: Implement the logic to create the payment
         const payment = await this.paymentApplication.createPayment({
-            orderId: payload.payload.orderId,
-            customer: payload.payload.customer,
+            orderId: event.payload.orderId,
+            customer: event.payload.customer,
             totalAmount: 0
         })
-        this.logger.log(`Payment created: ${payment.id}`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const paymentProcessed = await this.paymentApplication.processPayment(payment);
+        this.sagas.execute(new CreatePaymentOkEvent({
+            transactionId: event.transactionId,
+            payload: {
+                orderId: paymentProcessed.orderId,
+                paymentId: paymentProcessed.id,
+                status: paymentProcessed.status
+            }
+        }))
+
     }
 
     @EventPattern(CreatePaymentSaga.COMPENSATION)
-    onCompesation(payload: CreatePaymentCompensationEvent, context: RedisContext) {
-        throw new Error("Method not implemented.");
+    async onCompesation(event: CreatePaymentCompensationEvent, context: RedisContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.log(`CreatingPaymentCompensation received with order-id: ${event.payload.orderId}`);
+        this.paymentApplication.updatePaymentStatus({
+            id: event.payload.paymentId,
+            status: PaymentStatus.CANCELED
+        })
+
     }
 
 }

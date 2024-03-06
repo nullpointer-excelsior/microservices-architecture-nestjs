@@ -1,14 +1,12 @@
-import { Saga, SagasModule } from '@lib/utils/sagas';
+import { Saga } from '@lib/utils/sagas';
 import { Module } from '@nestjs/common';
+import { OrchestationSagaModule } from '../../../../libs/distributed-transactions/src/user-purchases/orchestation-saga/orchestation-saga.module';
 import { PurchaseApplication } from './application/purchase.application';
-import { SagaCoordinatorApplication } from './application/saga-coordinator.application';
-import { SagaCoordinatorService } from './application/services/saga-coordinator.service';
 import { PurchaseUseCases } from './application/usecases/purchase.usecases';
-import { PurchaseController } from './infrastructure/restful/controllers/purchase.controller';
-import { OrchestationSagaModule  } from '../../../../libs/distributed-transactions/src/user-purchases/orchestation-saga/orchestation-saga.module'
-import { OrderSagaController } from './infrastructure/sagas/controllers/order-saga.controller';
 import { PurchaseRepository } from './domain/repositories/purchase.repository';
 import { InMemoryPurchaseRepostiory } from './infrastructure/persistence/in-memory.purchase.repository';
+import { PurchaseController } from './infrastructure/restful/controllers/purchase.controller';
+import { SagaCoordinatorController } from './infrastructure/sagas/controllers/saga-coordinator.controller';
 
 const orderSagas = Saga.builder()
     .start({
@@ -47,16 +45,12 @@ const orderSagas = Saga.builder()
 @Module({
     controllers: [
         PurchaseController,
-        OrderSagaController,
+        SagaCoordinatorController,
     ],
     providers: [
         {
             provide: PurchaseApplication,
             useClass: PurchaseUseCases
-        },
-        {
-            provide: SagaCoordinatorApplication,
-            useClass: SagaCoordinatorService
         },
         {
             provide: PurchaseRepository,

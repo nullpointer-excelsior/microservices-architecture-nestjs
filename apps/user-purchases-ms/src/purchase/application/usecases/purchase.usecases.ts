@@ -1,14 +1,13 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { PurchaseApplication } from "../purchase.application";
-import { CreatePurchaseRequest } from "../dto/create-purchase.dto";
-import { OrderCreatedResponse } from "../dto/order-created.dto";
+import { CreateOrderTransactionEvent, SagaExecutorService } from "@lib/distributed-transactions/user-purchases";
 import { generateUUID } from "@lib/utils/seedwork";
+import { Injectable, Logger } from "@nestjs/common";
 import { Order } from "../../domain/model/order.model";
-import { SagaCoordinatorApplication } from "../saga-coordinator.application";
-import { CreateOrderTransactionEvent } from "@lib/distributed-transactions/user-purchases";
-import { Purchase } from "../../domain/model/purchase.model";
 import { PurchaseStatus } from "../../domain/model/purchase-status";
+import { SagaPurchase } from "../../domain/model/saga-purchase.model";
 import { PurchaseRepository } from "../../domain/repositories/purchase.repository";
+import { CreatePurchaseRequest } from "../dto/create-purchase.dto";
+import { PurchaseTransactionCreatedResponse } from "../dto/purchase-transaction-created.dto";
+import { PurchaseApplication } from "../purchase.application";
 
 @Injectable()
 export class PurchaseUseCases extends PurchaseApplication {
@@ -16,35 +15,35 @@ export class PurchaseUseCases extends PurchaseApplication {
     private readonly logger = new Logger(PurchaseUseCases.name)
 
     constructor(
-        private readonly sagaCoordinator: SagaCoordinatorApplication,
+        private readonly sagaExecutor: SagaExecutorService,
         private readonly purchaseRepository: PurchaseRepository
     ) {
         super();
     }
 
-    async startPurchaseProccess(dto: CreatePurchaseRequest): Promise<OrderCreatedResponse> {
+    async startPurchaseProccess(dto: CreatePurchaseRequest): Promise<PurchaseTransactionCreatedResponse> {
         
-        const order = new Order()
-        order.id = generateUUID()
-        order.customer = dto.customer
-        order.lines = dto.lines
+        // const order = new Order()
+        // order.customer = dto.customer
+        // order.lines = dto.lines
         
-        const purchase = new Purchase()
-        purchase.id = generateUUID()
-        purchase.customer = dto.customer
-        purchase.products = dto.lines.map(l => ({ sku: l.sku, quantity: l.quantity, unitPrice: l.unitPrice }))
-        purchase.status = PurchaseStatus.CREATED
-        purchase.orderId = order.id
+        const sagaPurchase = new SagaPurchase()
+        sagaPurchase.transactionId = generateUUID()
+        sagaPurchase.status = PurchaseStatus.CREATED
+        // sagaPurchase.order = order
         
-        this.logger.log(`Starting a new purchase with order-id: ${order.id}`)
-        
-        await this.purchaseRepository.save(purchase)
+        await this.purchaseRepository.save(sagaPurchase)
 
-        this.sagaCoordinator.startOrderTransaction(new CreateOrderTransactionEvent(order))
+        this.sagaExecutor.execute(new CreateOrderTransactionEvent({
+            transactionId: sagaPurchase.transactionId,
+            payload: {
+                customer: dto.customer,
+                lines: dto.lines
+            }
+        }))
         
         return Promise.resolve({ 
-            orderId: order.id, 
-            purchaseCreatedAt: new Date() 
+            transactionId: sagaPurchase.transactionId 
         })
 
     }
