@@ -8,21 +8,18 @@ import { PaymentRepository } from './domain/repositories/payment.repository';
 import { InMemoryPaymentRepository } from './infrastructure/persistence/in-memory.payment.repository';
 import { PaymentController } from './infrastructure/restful/payment.controller';
 import { CreatePaymentSagaController } from './infrastructure/sagas/create-payment-saga.controller';
-import { DomainEventListener } from './infrastructure/domain-events/domain.event-listener';
 import { BlacklistService } from './application/services/blacklist.service';
 
 @Module({
     imports:[
         ConfigModule.forRoot(),
         OrchestationSagaModule,
-        DomainEventbusModule
     ],
     controllers:[
         PaymentController,
         CreatePaymentSagaController
     ],
     providers: [
-        DomainEventListener,
         BlacklistService,
         {
             provide: PaymentRepository,
