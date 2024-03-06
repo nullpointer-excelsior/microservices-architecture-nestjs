@@ -9,6 +9,7 @@ import { InMemoryPaymentRepository } from './infrastructure/persistence/in-memor
 import { PaymentController } from './infrastructure/restful/payment.controller';
 import { CreatePaymentSagaController } from './infrastructure/sagas/create-payment-saga.controller';
 import { DomainEventListener } from './infrastructure/domain-events/domain.event-listener';
+import { BlacklistService } from './application/services/blacklist.service';
 
 @Module({
     imports:[
@@ -22,6 +23,7 @@ import { DomainEventListener } from './infrastructure/domain-events/domain.event
     ],
     providers: [
         DomainEventListener,
+        BlacklistService,
         {
             provide: PaymentRepository,
             useClass: InMemoryPaymentRepository

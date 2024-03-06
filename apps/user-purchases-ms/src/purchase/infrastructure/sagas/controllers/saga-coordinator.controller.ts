@@ -2,6 +2,7 @@ import { Controller, Logger } from "@nestjs/common";
 import { Ctx, EventPattern, Payload, RedisContext, RmqContext } from "@nestjs/microservices";
 import { CreatePaymentTransactionEvent, CreateOrderOkEvent, CreateOrderErrorEvent, CreateOrderSaga, CreatePaymentSaga, CreatePaymentOkEvent, CreatePaymentErrorEvent, UpdateStockTransactionEvent, CreateOrderCompensationEvent, SagaExecutorService, UpdateStockSaga, UpdateStockOkEvent, CreateNotificationTransactionEvent } from "@lib/distributed-transactions/user-purchases";
 import { PurchaseRepository } from "../../../domain/repositories/purchase.repository";
+import { PurchaseStatus } from "../../../domain/model/purchase-status";
 
 @Controller()
 export class SagaCoordinatorController {
@@ -52,7 +53,7 @@ export class SagaCoordinatorController {
     }
 
     @EventPattern(CreatePaymentSaga.ERROR)
-    onPaymentError(event: CreatePaymentErrorEvent, context: RmqContext): void {
+    async onPaymentError(event: CreatePaymentErrorEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.error(`Transaccion: ${event.transactionId} No pudo crear el pago order-id: ${event.payload.orderId} reason: ${event.payload.reason}`);
         this.sagaExecutor.execute(new CreateOrderCompensationEvent({
@@ -61,6 +62,9 @@ export class SagaCoordinatorController {
                 orderId: event.payload.orderId
             }
         }))
+        const purchase = await this.findPurchaseByTransactionId(event.transactionId);
+        purchase.status = PurchaseStatus.CANCELLED
+        await this.purchaseRepository.save(purchase);
     }
 
     @EventPattern(UpdateStockSaga.OK)

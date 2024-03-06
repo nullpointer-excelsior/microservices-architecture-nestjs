@@ -9,6 +9,7 @@ import { PaymentRepository } from "../../domain/repositories/payment.repository"
 import { CreatePaymentRequest } from "../dto/create-payment-request.dto";
 import { UpdatePaymentStatusRequest } from "../dto/update-payment-status-request.dto";
 import { PaymentApplication } from "../payment.application";
+import { BlacklistService } from "../services/blacklist.service";
 
 @Injectable()
 export class PaymentUseCases extends PaymentApplication {
@@ -16,8 +17,8 @@ export class PaymentUseCases extends PaymentApplication {
     
     constructor(
         private readonly paymentRepository: PaymentRepository,
-        private readonly sagaExecutor: SagaExecutorService,
-        private readonly domainEventbus: EventEmitterEventbus
+        private readonly domainEventbus: EventEmitterEventbus,
+        private readonly blacklist: BlacklistService,
     ) {
         super();
     }
@@ -34,7 +35,11 @@ export class PaymentUseCases extends PaymentApplication {
     }
 
     async processPayment(payment: Payment): Promise<Payment> {
-        payment.status = PaymentStatus.APPROVED;
+        if (this.blacklist.isBlacklisted(payment.customer.email)) {
+            payment.status = PaymentStatus.DECLINED;
+        } else {
+            payment.status = PaymentStatus.APPROVED;
+        }
         return await this.paymentRepository.update(payment);
     }
 

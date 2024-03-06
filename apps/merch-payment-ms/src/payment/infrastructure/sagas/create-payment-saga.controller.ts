@@ -1,4 +1,4 @@
-import { CreatePaymentCompensationEvent, CreatePaymentOkEvent, CreatePaymentSaga, CreatePaymentTransactionEvent, SagaExecutorService } from "@lib/distributed-transactions/user-purchases";
+import { CreatePaymentCompensationEvent, CreatePaymentErrorEvent, CreatePaymentOkEvent, CreatePaymentSaga, CreatePaymentTransactionEvent, SagaExecutorService } from "@lib/distributed-transactions/user-purchases";
 import { SagaControllerPort } from "@lib/distributed-transactions/sagas";
 import { EventPattern, RedisContext } from "@nestjs/microservices";
 import { Controller, Logger } from "@nestjs/common";
@@ -27,14 +27,26 @@ export class CreatePaymentSagaController extends SagaControllerPort<CreatePaymen
         })
         await new Promise(resolve => setTimeout(resolve, 1000));
         const paymentProcessed = await this.paymentApplication.processPayment(payment);
-        this.sagas.execute(new CreatePaymentOkEvent({
-            transactionId: event.transactionId,
-            payload: {
-                orderId: paymentProcessed.orderId,
-                paymentId: paymentProcessed.id,
-                status: paymentProcessed.status
-            }
-        }))
+        if (paymentProcessed.status === PaymentStatus.APPROVED) {
+            this.sagas.execute(new CreatePaymentOkEvent({
+                transactionId: event.transactionId,
+                payload: {
+                    orderId: paymentProcessed.orderId,
+                    paymentId: paymentProcessed.id,
+                    status: paymentProcessed.status
+                }
+            }))
+        } else {
+            this.sagas.execute(new CreatePaymentErrorEvent({
+                transactionId: event.transactionId,
+                payload: {
+                    orderId: paymentProcessed.orderId,
+                    error: 'Payment declined',
+                    reason: `Payment with status ${paymentProcessed.status}`
+                }
+            }))
+        }
+        
 
     }
 
