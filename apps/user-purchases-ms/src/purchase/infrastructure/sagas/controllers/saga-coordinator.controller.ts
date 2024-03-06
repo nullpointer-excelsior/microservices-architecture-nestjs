@@ -1,6 +1,6 @@
 import { Controller, Logger } from "@nestjs/common";
 import { Ctx, EventPattern, Payload, RedisContext, RmqContext } from "@nestjs/microservices";
-import { CreatePaymentTransactionEvent, CreateOrderOkEvent, CreateOrderErrorEvent, CreateOrderSaga, CreatePaymentSaga, CreatePaymentOkEvent, CreatePaymentErrorEvent, UpdateStockTransactionEvent, CreateOrderCompensationEvent, SagaExecutorService, UpdateStockSaga, UpdateStockOkEvent, CreateNotificationTransactionEvent } from "@lib/distributed-transactions/user-purchases";
+import { CreatePaymentTransactionEvent, CreateOrderOkEvent, CreateOrderErrorEvent, CreateOrderSaga, CreatePaymentSaga, CreatePaymentOkEvent, CreatePaymentErrorEvent, UpdateStockTransactionEvent, CreateOrderCompensationEvent, SagaExecutorService, UpdateStockSaga, UpdateStockOkEvent, CreateNotificationTransactionEvent, UpdateStockErrorEvent, CreatePaymentCompensationEvent } from "@lib/distributed-transactions/user-purchases";
 import { PurchaseRepository } from "../../../domain/repositories/purchase.repository";
 import { PurchaseStatus } from "../../../domain/model/purchase-status";
 
@@ -26,6 +26,7 @@ export class SagaCoordinatorController {
             payload: {
                 customer: event.payload.order.customer,
                 orderId: event.payload.order.id,
+                total: event.payload.order.lines.map(line => line.quantity * line.unitPrice).reduce((a, b) => a + b, 0)
             }
         }));
     }
@@ -41,6 +42,9 @@ export class SagaCoordinatorController {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.log(`Payment ok: ${event.payload.orderId} status: ${event.payload.status}`);
         const purchase = await this.findPurchaseByTransactionId(event.transactionId);
+        purchase.paymentId = event.payload.paymentId;
+        await this.purchaseRepository.save(purchase);
+
         purchase.order.lines.forEach(line => {
             this.sagaExecutor.execute(new UpdateStockTransactionEvent({
                 transactionId: event.transactionId,
@@ -77,6 +81,26 @@ export class SagaCoordinatorController {
             payload: {
                 customer: purchase.order.customer,
                 summary: `Order ${purchase.order.id} has been created your purchase is ready`
+            }
+        }))
+    }
+
+    @EventPattern(UpdateStockSaga.ERROR)
+    async onStockError(event: UpdateStockErrorEvent, context: RmqContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.error(`Stock update error: ${event.payload.sku} reason: ${event.payload.reason}`);
+        const purchase = await this.findPurchaseByTransactionId(event.transactionId);
+        this.sagaExecutor.execute(new CreateOrderCompensationEvent({
+            transactionId: event.transactionId,
+            payload: {
+                orderId: purchase.order.id
+            }
+        }))
+        this.sagaExecutor.execute(new CreatePaymentCompensationEvent({
+            transactionId: event.transactionId,
+            payload: {
+               orderId: purchase.order.id,
+               paymentId: purchase.paymentId
             }
         }))
     }

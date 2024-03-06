@@ -12,12 +12,14 @@ export class CreateNotificationSagaController extends SagaControllerPort<CreateN
     @EventPattern(CreateNotificationSaga.TRANSACTION)
     onTransaction(@Payload() event: CreateNotificationTransactionEvent, context: RedisContext): void {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         this.logger.log(`Sending email notification to: ${event.payload.customer.email}`);
     }
 
     @EventPattern(CreateNotificationSaga.ERROR)
     onCompesation(@Payload() event: CreateNotificationErrorEvent, context: RedisContext): void {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         throw new Error("Method not implemented.");
     }
  

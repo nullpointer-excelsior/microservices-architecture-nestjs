@@ -18,8 +18,8 @@ export class CreatePaymentSagaController extends SagaControllerPort<CreatePaymen
     @EventPattern(CreatePaymentSaga.TRANSACTION)
     async onTransaction(event: CreatePaymentTransactionEvent, context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         this.logger.log(`CreatingPaymentTransaction received with order-id: ${event.payload.orderId}`);
-        // TODO: Implement the logic to create the payment
         const payment = await this.paymentApplication.createPayment({
             orderId: event.payload.orderId,
             customer: event.payload.customer,
@@ -53,6 +53,7 @@ export class CreatePaymentSagaController extends SagaControllerPort<CreatePaymen
     @EventPattern(CreatePaymentSaga.COMPENSATION)
     async onCompesation(event: CreatePaymentCompensationEvent, context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         this.logger.log(`CreatingPaymentCompensation received with order-id: ${event.payload.orderId}`);
         this.paymentApplication.updatePaymentStatus({
             id: event.payload.paymentId,

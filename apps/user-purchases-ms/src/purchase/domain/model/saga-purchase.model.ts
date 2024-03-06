@@ -12,6 +12,9 @@ export class SagaPurchase {
     @ValidateNested()
     order: Order;
 
+    @IsUUID()
+    paymentId: string;
+
     @IsEnum(PurchaseStatus)
     status: PurchaseStatus
 

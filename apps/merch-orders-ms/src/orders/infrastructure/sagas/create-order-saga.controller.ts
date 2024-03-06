@@ -20,6 +20,7 @@ export class CreateOrderSagaController extends SagaControllerPort<CreateOrderTra
     @EventPattern(CreateOrderSaga.TRANSACTION)
     async onTransaction(@Payload() event: CreateOrderTransactionEvent, @Ctx() context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         this.logger.log(`CreatingOrderTransaction for transaction-id: ${event.transactionId}`);
         await this.orderApplication.createOrder(event.payload)
             .then(async order => {
@@ -49,6 +50,7 @@ export class CreateOrderSagaController extends SagaControllerPort<CreateOrderTra
     @EventPattern(CreateOrderSaga.COMPENSATION)
     async onCompesation(event: CreateOrderCompensationEvent, context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
         this.logger.log(`Order compensation received for order-id: ${event.payload.orderId}`);
         await this.orderApplication.updateOrderStatus({
             id: event.payload.orderId,
