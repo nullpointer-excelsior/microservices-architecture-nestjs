@@ -17,7 +17,7 @@ export class SagaCoordinatorController {
     @EventPattern(CreateOrderSaga.OK)
     async onOrderOk(@Payload() event: CreateOrderOkEvent, @Ctx() context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.log(`Order created: ${event.payload.order.id}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         purchase.order = event.payload.order;
@@ -35,7 +35,7 @@ export class SagaCoordinatorController {
     @EventPattern(CreateOrderSaga.ERROR)
     onOrderError(@Payload() event: CreateOrderErrorEvent, context: RmqContext): void {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.error(`Transaccion: ${event.transactionId} No pudo crear la orden reason: ${event.payload.reason}`);
         this.purchaseService.updateStatus(event.transactionId, PurchaseStatus.CANCELLED);
     }
@@ -43,7 +43,7 @@ export class SagaCoordinatorController {
     @EventPattern(CreatePaymentSaga.OK)
     async onPaymentOk(event: CreatePaymentOkEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.log(`Payment ok: ${event.payload.orderId} status: ${event.payload.status}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         purchase.paymentId = event.payload.paymentId;
@@ -63,7 +63,7 @@ export class SagaCoordinatorController {
     @EventPattern(CreatePaymentSaga.ERROR)
     async onPaymentError(event: CreatePaymentErrorEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.error(`Transaccion: ${event.transactionId} No pudo crear el pago order-id: ${event.payload.orderId} reason: ${event.payload.reason}`);
         this.sagaExecutor.execute(new CreateOrderCompensationEvent({
             transactionId: event.transactionId,
@@ -77,7 +77,7 @@ export class SagaCoordinatorController {
     @EventPattern(UpdateStockSaga.OK)
     async onStockOk(event: UpdateStockOkEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.log(`Stock updated: ${event.payload.sku} quantity: ${event.payload.quantity}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         this.sagaExecutor.execute(new DeliveryTransactionEvent({
@@ -92,7 +92,7 @@ export class SagaCoordinatorController {
     @EventPattern(UpdateStockSaga.ERROR)
     async onStockError(event: UpdateStockErrorEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.error(`Stock update error: ${event.payload.sku} reason: ${event.payload.reason}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         this.sagaExecutor.execute(new CreateOrderCompensationEvent({
@@ -114,7 +114,7 @@ export class SagaCoordinatorController {
     @EventPattern(DeliverySaga.OK)
     async onDeliveryOk(event: DeliveryOkEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.log(`Delivery: ${event.payload.delivery.id} ${event.payload.delivery.estimatedDate}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         this.sagaExecutor.execute(new CreateNotificationTransactionEvent({
@@ -130,7 +130,7 @@ export class SagaCoordinatorController {
     @EventPattern(DeliverySaga.ERROR)
     async onDeliveryError(event: DeliveryErrorEvent, context: RmqContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
+        this.logger.verbose('Event-payload', event.payload)
         this.logger.error(`Delivery error: ${event.payload.error} reason: ${event.payload.reason}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
         this.sagaExecutor.execute(new CreateOrderCompensationEvent({
