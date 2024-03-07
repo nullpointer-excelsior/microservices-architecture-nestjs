@@ -1,6 +1,6 @@
 import { Controller, Logger } from "@nestjs/common";
 import { Ctx, EventPattern, Payload, RedisContext, RmqContext } from "@nestjs/microservices";
-import { CreatePaymentTransactionEvent, CreateOrderOkEvent, CreateOrderErrorEvent, CreateOrderSaga, CreatePaymentSaga, CreatePaymentOkEvent, CreatePaymentErrorEvent, UpdateStockTransactionEvent, CreateOrderCompensationEvent, SagaExecutorService, UpdateStockSaga, UpdateStockOkEvent, CreateNotificationTransactionEvent, UpdateStockErrorEvent, CreatePaymentCompensationEvent } from "@lib/distributed-transactions/user-purchases";
+import { CreatePaymentTransactionEvent, CreateOrderOkEvent, CreateOrderErrorEvent, CreateOrderSaga, CreatePaymentSaga, CreatePaymentOkEvent, CreatePaymentErrorEvent, UpdateStockTransactionEvent, CreateOrderCompensationEvent, SagaExecutorService, UpdateStockSaga, UpdateStockOkEvent, CreateNotificationTransactionEvent, UpdateStockErrorEvent, CreatePaymentCompensationEvent, DeliverySaga, DeliveryOkEvent, DeliveryTransactionEvent, DeliveryErrorEvent, UpdateStockCompensationEvent } from "@lib/distributed-transactions/user-purchases";
 import { PurchaseStatus } from "../../../domain/model/purchase-status";
 import { PurchaseService } from "../../../domain/services/purchase.service";
 
@@ -37,6 +37,7 @@ export class SagaCoordinatorController {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.debug('Event-payload', event.payload)
         this.logger.error(`Transaccion: ${event.transactionId} No pudo crear la orden reason: ${event.payload.reason}`);
+        this.purchaseService.updateStatus(event.transactionId, PurchaseStatus.CANCELLED);
     }
 
     @EventPattern(CreatePaymentSaga.OK)
@@ -79,12 +80,12 @@ export class SagaCoordinatorController {
         this.logger.debug('Event-payload', event.payload)
         this.logger.log(`Stock updated: ${event.payload.sku} quantity: ${event.payload.quantity}`);
         const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
-        this.sagaExecutor.execute(new CreateNotificationTransactionEvent({
+        this.sagaExecutor.execute(new DeliveryTransactionEvent({
             transactionId: event.transactionId,
             payload: {
-                customer: purchase.order.customer,
-                summary: `Order ${purchase.order.id} has been created your purchase is ready`
+                order: purchase.order
             }
+        
         }))
     }
 
@@ -105,6 +106,51 @@ export class SagaCoordinatorController {
             payload: {
                orderId: purchase.order.id,
                paymentId: purchase.paymentId
+            }
+        }))
+        await this.purchaseService.updateStatus(event.transactionId, PurchaseStatus.CANCELLED);
+    }
+
+    @EventPattern(DeliverySaga.OK)
+    async onDeliveryOk(event: DeliveryOkEvent, context: RmqContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
+        this.logger.log(`Delivery: ${event.payload.delivery.id} ${event.payload.delivery.estimatedDate}`);
+        const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
+        this.sagaExecutor.execute(new CreateNotificationTransactionEvent({
+            transactionId: event.transactionId,
+            payload: {
+                customer: purchase.order.customer,
+                summary: `Order ${purchase.order.id} has been created your purchase is ready`
+            }
+        }))
+        this.purchaseService.updateStatus(event.transactionId, PurchaseStatus.COMPLETED);
+    }
+
+    @EventPattern(DeliverySaga.ERROR)
+    async onDeliveryError(event: DeliveryErrorEvent, context: RmqContext) {
+        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
+        this.logger.debug('Event-payload', event.payload)
+        this.logger.error(`Delivery error: ${event.payload.error} reason: ${event.payload.reason}`);
+        const purchase = await this.purchaseService.findByTransactionId(event.transactionId);
+        this.sagaExecutor.execute(new CreateOrderCompensationEvent({
+            transactionId: event.transactionId,
+            payload: {
+                orderId: purchase.order.id
+            }
+        }))
+        this.sagaExecutor.execute(new CreatePaymentCompensationEvent({
+            transactionId: event.transactionId,
+            payload: {
+                orderId: purchase.order.id,
+                paymentId: purchase.paymentId
+            }
+        }))
+        this.sagaExecutor.execute(new UpdateStockCompensationEvent({
+            transactionId: event.transactionId,
+            payload: {
+                quantity: purchase.order.lines.map(line => line.quantity).reduce((a, b) => a + b, 0),
+                sku: purchase.order.lines[0].sku
             }
         }))
         await this.purchaseService.updateStatus(event.transactionId, PurchaseStatus.CANCELLED);

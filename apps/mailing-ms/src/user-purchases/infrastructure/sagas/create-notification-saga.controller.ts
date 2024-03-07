@@ -1,11 +1,10 @@
-import { Controller, Logger } from "@nestjs/common";
-import { SagaControllerPort } from "@lib/distributed-transactions/sagas";
-import { CreateNotificationErrorEvent, CreateNotificationTransactionEvent } from "@lib/distributed-transactions/user-purchases";
-import { EventPattern, Payload, RedisContext } from "@nestjs/microservices";
+import { CreateNotificationTransactionEvent } from "@lib/distributed-transactions/user-purchases";
 import { CreateNotificationSaga } from "@lib/distributed-transactions/user-purchases/";
+import { Controller, Logger } from "@nestjs/common";
+import { EventPattern, Payload, RedisContext } from "@nestjs/microservices";
 
 @Controller()
-export class CreateNotificationSagaController extends SagaControllerPort<CreateNotificationTransactionEvent, CreateNotificationErrorEvent> {
+export class CreateNotificationSagaController {
 
     private readonly logger = new Logger(CreateNotificationSagaController.name)
     
@@ -14,13 +13,6 @@ export class CreateNotificationSagaController extends SagaControllerPort<CreateN
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.debug('Event-payload', event.payload)
         this.logger.log(`Sending email notification to: ${event.payload.customer.email}`);
-    }
-
-    @EventPattern(CreateNotificationSaga.ERROR)
-    onCompesation(@Payload() event: CreateNotificationErrorEvent, context: RedisContext): void {
-        this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
-        this.logger.debug('Event-payload', event.payload)
-        throw new Error("Method not implemented.");
     }
  
 }

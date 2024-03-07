@@ -22,7 +22,7 @@ export class StockSagaController extends SagaControllerPort<UpdateStockTransacti
         this.logger.debug('Event-payload', event.payload)
         this.logger.log(`Update stock for sku: ${event.payload.sku} quantity: ${event.payload.quantity}`);
         try {
-            await this.stock.updateStock(event.payload.sku, event.payload.quantity);
+            await this.stock.reduceStock(event.payload.sku, event.payload.quantity);
             this.sagas.execute(new UpdateStockOkEvent({
                 transactionId: event.transactionId,
                 payload: {
@@ -45,10 +45,10 @@ export class StockSagaController extends SagaControllerPort<UpdateStockTransacti
     }
 
     @EventPattern(UpdateStockSaga.COMPENSATION)
-    onCompesation(event: UpdateStockCompensationEvent, context: RedisContext): void {
+    async onCompesation(event: UpdateStockCompensationEvent, context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.debug('Event-payload', event.payload)
-        throw new Error("Method not implemented.");
+        await this.stock.incrementStock(event.payload.sku, event.payload.quantity);
     }
 
 }
