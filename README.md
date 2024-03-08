@@ -23,7 +23,7 @@ El propósito principal de este proyecto es:
     * [Comunicación síncrona avanzada](docs/advanced-sync-communication.md)
     * Comunicación asíncrona avanzada
         * [Eventos de dominio vs Eventos de integración](docs/domain-events-vs-integration-events.md)
-        * Transacciones distribuidas con Sagas
+        * [Transacciones distribuidas en microservicios con Patrones Saga](docs/distributed-transaction-with-saga-patterns.md)
 * 4 - Exponiendo microservicios al cliente
 * 5 - Seguridad en microservicios
 * 6 - Patrones de resilencia
