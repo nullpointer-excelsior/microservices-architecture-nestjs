@@ -1,4 +1,4 @@
-# 1 - Transacciones Distribuidas Con Patrones Saga
+# Sagas I - Transacciones Distribuidas Con Patrones Saga
 
 ## Transacciones centralizadas vs distribuidas
 
@@ -59,34 +59,35 @@ Definiendo este contrato podremos coordinar nuestro proceso de manera uniforme a
 Para implementar de forma sencilla esto podemos hacer uso de un enum de typescript.
 
 ```typescript
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/CreateNotificationSaga.ts
 export enum CreateNotificationSaga {
     TRANSACTION = 'send-notification-transaction',
     COMPENSATION = 'notification-compensation',
     OK = 'notification-sent-ok',
     ERROR = 'notification-error'
 }
-
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/CreateOrderSaga.ts
 export enum CreateOrderSaga {
     TRANSACTION = 'create-order-transaction',
     COMPENSATION = 'create-order-compensation',
     OK = 'create-order-ok',
     ERROR = 'create-order-error'
 }
-
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/CreatePaymentSaga.ts
 export enum CreatePaymentSaga {
     TRANSACTION = 'create-payment-transaction',
     COMPENSATION = 'create-payment-compensation',
     OK = 'create-payment-ok',
     ERROR = 'payment-error'
 }
-
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/DeliverySaga.ts
 export enum DeliverySaga {
     TRANSACTION = 'delivery-transaction',
     COMPENSATION = 'delivery-compensation',
     OK = 'delivery-ok',
     ERROR = 'delivery-error'
 }
-
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/UpdateStockSaga.ts
 export enum UpdateStockSaga {
     TRANSACTION = 'update-stock-transaction',
     COMPENSATION = 'update-stock-compensation',
@@ -115,6 +116,7 @@ Nestjs al emplear microservicios tenemos
 Cada paso ya ha definido sus operaciones, es hora de diseñar la comunicación. Cada paso puede comunicarse con otros mediante mensajes, eventos o request-response. En esta saga de ejemplo diseñaremos una comunicación basada en eventos y nos ayudaremos de la siguiente clase abstracta que será la base.
 
 ```typescript
+// libs/distributed-transactions/src/sagas/saga.event.ts
 import { IsDate, IsNotEmpty, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 type Props<T> = {
@@ -159,40 +161,63 @@ Esta clase será la base para nuestros eventos donde destacamos las siguientes p
 - **Payload:** Nos indica el contenido de los mensajes, es la info que el servicio necesita para realizar su operación. 
 - **timestamp:** Nos indicará la creación del evento.
 
+    // libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-transaction.event.ts
 Ya con nuestra evento base explicado, definimos los eventos de las operaciones:
 
 Ejemplo de create-order-saga: 
 ```typescript
-
-class Payload {
-
-    @IsString()
-    summary: string;
-
-    @ValidateNested()
-    customer: Customer;
-
-}
-
-export class CreateNotificationCompensationEvent extends SagaEvent<Payload> {
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-transaction.event.ts
+type Payload = Omit<Order, 'id'>;
+export class CreateOrderTransactionEvent extends SagaEvent<Payload>{
     
     constructor(props: EventProps<Payload>) {
         super({
             ...props,
-            pattern: CreateNotificationSaga.COMPENSATION
+            pattern: CreateOrderSaga.TRANSACTION
         })
     }
+
+}
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-compensation.event.ts
+class Payload {
+    
+    @IsUUID()
+    @IsNotEmpty()
+    orderId: string;
+
 }
 
+export class CreateOrderCompensationEvent extends SagaEvent<Payload>{
+    
+    constructor(props: { transactionId: string, payload: Payload }) {
+        super({
+            ...props,
+            pattern: CreateOrderSaga.COMPENSATION,
+        })
+    }
 
+}
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-ok.event.ts
 class Payload {
-
-    @IsString()
-    summary: string;
-
+    
     @ValidateNested()
-    customer: Customer;
+    order: Order;
+    
+}
 
+export class CreateOrderOkEvent extends SagaEvent<Payload>{
+    
+    constructor(props: EventProps<Payload>) {
+        super({
+            ...props,
+            pattern: CreateOrderSaga.OK
+        })
+    }
+
+}
+// libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-error.event.ts
+class Payload {
+    
     @IsNotEmpty()
     error: string;
     
@@ -201,46 +226,14 @@ class Payload {
 
 }
 
-export class CreateNotificationErrorEvent extends SagaEvent<Payload> {
+export class CreateOrderErrorEvent extends SagaEvent<Payload>{
     
-    constructor(props: EventProps<Payload>) {
-        super({
-            ...props,
-            pattern: CreateNotificationSaga.ERROR
-        })
-    }
-}
-
-
-
-class Payload {
-
-    @IsString()
-    summary: string;
-
-    @ValidateNested()
-    customer: Customer;
-
-}
-
-export class CreateNotificationOkEvent extends SagaEvent<Payload> {
-    
-    constructor(props: EventProps<Payload>) {
-        super({
-            ...props,
-            pattern: CreateNotificationSaga.OK
-        })
-    }
-}
-
-class Payload {
-
-    @IsString()
-    summary: string;
-
-    @ValidateNested()
-    customer: Customer;
-
+        constructor(props: EventProps<Payload>) {
+            super({
+                ...props,
+                pattern: CreateOrderSaga.ERROR
+            })
+        }
 }
 
 ```
@@ -252,6 +245,7 @@ Los demás eventos seguirán el mismo patrón. Dependiendo de la operación, var
 NestJS nos permite utilizar una variedad de proveedores de microservicios, dependiendo del caso. Así que creamos un servicio llamado `SagaExecutorService`, el cual despachará los eventos.
 
 ```typescript
+// libs/distributed-transactions/src/sagas/services/saga-executor.service.ts
 @Injectable()
 export class SagaExecutorService {
 
@@ -270,26 +264,7 @@ export class SagaExecutorService {
 Y podemos hacer uso de este de la siguiente manera:
 
 ```typescript
-// event definition
-class Payload {
-    
-    @IsObject()
-    @IsNotEmpty()
-    order: Order
-
-}
-export class DeliveryTransactionEvent extends SagaEvent<Payload>{
-
-    constructor(props: EventProps<Payload>) {
-        super({
-            ...props,
-            pattern: DeliverySaga.TRANSACTION
-        })
-    }
-
-}
-
-// sendin event
+// sending events
 this.sagaExecutor.execute(new DeliveryTransactionEvent({
     transactionId: event.transactionId,
     payload: {
@@ -301,6 +276,7 @@ this.sagaExecutor.execute(new DeliveryTransactionEvent({
 Independientemente de la estrategia coreográfica u orquestación, cada microservicio involucrado debe cumplir el siguiente contrato:
 
 ```typescript
+// libs/distributed-transactions/src/sagas//ports/saga.controller.port.ts
 import { RedisContext } from "@nestjs/microservices";
 
 export abstract class SagaControllerPort<T, C> {
@@ -312,6 +288,7 @@ export abstract class SagaControllerPort<T, C> {
 Donde nuestro microservicio deberá definir la operación de transacción y la operación de compensación, donde el servicio creará el rollback del proceso.
 
 ```typescript
+// apps/merch-products-ms/src/delivery/infrastructure/sagas/create-delivery-saga.controller.ts
 @Controller()
 export class CreateDeliverySagaController extends SagaControllerPort<DeliveryTransactionEvent, DeliveryCompensationEvent> {
 
@@ -343,24 +320,17 @@ export class CreateDeliverySagaController extends SagaControllerPort<DeliveryTra
 ```
 Nuestro controlador automáticamente será asociado a nuestro servicio de mensajería definido en `main.ts` del microservicio.
 
-> Si quieres aprender más sobre microservicios en Nest PSA, por favor. [acá](https://nullpointer-excelsior.github.io/posts/arquitecturas-eda-eventos-de-dominio-vs-eventos-de-integracion/) 
+> Si quieres aprender más sobre microservicios en NestJs [acá](https://nullpointer-excelsior.github.io/posts/arquitecturas-eda-eventos-de-dominio-vs-eventos-de-integracion/) 
 
 
-Dependiendo de la estrategia escogida, orquestación o coreografía, la lógica del flujo será delegada al servicio en caso de elegir coreografía, o a un componente principal encargado de coordinar las operaciones del flujo.
+Dependiendo de la estrategia escogida, orquestación o coreografía, la lógica del flujo será delegada a un componente central o a los servicios involucrados. En la siguiente imagen vemos la diferencia entre coreografía y orquestación.
 
-### Coreografía:
+![saga](images/sagas-architecture.webp)
+- **Coreografía:** Cada servicio sabe cuál es su tarea y a qué parte del flujo pertenece. Realiza las transacciones y, en caso de error, invoca las compensaciones en los servicios correspondientes, es decir, en aquellos que ya hayan tenido las operaciones correctas.
 
-El siguiente diagrama define el flujo exitoso y el flujo con errores, donde cada servicio sabe qué otros servicios debe invocar para realizar la compensación. 
+- **Orquestación:** Tendremos un componente central encargado de realizar las operaciones y coordinar las compensaciones dependiendo del paso que haya fallado.
 
-![saga2](images/orchestration.webp)
-
-
-
-### Orquestación
-
-Tendremos un componente central encargado de realizar las operaciones y coordinar las compensaciones dependiendo del paso que haya fallado.
-
-![saga1](images/coreography.webp)
+En el caso de la Coreografía, la mejor forma de comunicación será mediante eventos para poder crear un sistema distribuido escalable y desacoplado. Mientras tanto, en una Saga orquestada, podemos usar tanto la comunicación por eventos como de forma síncrona. Dependerá de la operación y su coste. Debemos considerar que este componente central deberá estar al tanto de la coherencia de las operaciones. Este enfoque tendrá la ventaja de ser más mantenible que una saga coreográfica.
 
 
 ## Conclusión
