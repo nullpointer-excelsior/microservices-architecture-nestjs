@@ -26,7 +26,7 @@ El patrón SAGA utiliza dos estrategias principales para mantener la consistenci
 
 Orquestado o coreográfico, independientemente de cuál sea, debemos definir lo siguiente:
 
-- Rransacciones o pasos
+- Transacciones o pasos
 - Operaciones del servicio que realiza la transacción
 - Comunicación entre servicios
 
@@ -103,12 +103,6 @@ Donde cada valor corresponderá a un endpoint o el nombre de una cola o patrón 
 Debemos definir cómo comunicar los servicios. Dependiendo del enfoque, podremos hacer uso de comunicación síncrona (modelo request-response) o comunicación asíncrona (por eventos).
 
 En una comunicación por coreografía, la mejor opción es elegir la comunicación por mensajes o eventos. Mientras tanto, en la comunicación por orquestación, podemos hacer uso tanto de comunicación síncrona como asíncrona, es decir, podremos comunicarnos con los microservicios mediante una API REST para una manera síncrona, y por medio de una cola de mensajes para comunicación asíncrona.
-
-
-Nestjs al emplear microservicios tenemos 
-
-- **mensajes:** Son un tipo de evento donde podemos recibir una respuesta. El controlador que lo implemente debe devolver algo, se implementa con @MessagePattern.
-- **eventos:** Emitimos el evento y el controlador solo procesará la respuesta si quiere devolver algo al emisor. Deberá enviar un evento de respuesta, esto se implementa con @EventPattern.
 
 
 ### Diseñando la comunicación basada en eventos
