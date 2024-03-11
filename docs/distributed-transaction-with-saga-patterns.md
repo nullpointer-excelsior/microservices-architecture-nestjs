@@ -154,8 +154,7 @@ Esta clase será la base para nuestros eventos donde destacamos las siguientes p
 
 - **Payload:** Nos indica el contenido de los mensajes, es la info que el servicio necesita para realizar su operación. 
 - **timestamp:** Nos indicará la creación del evento.
-
-    // libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-transaction.event.ts
+ 
 Ya con nuestra evento base explicado, definimos los eventos de las operaciones:
 
 Ejemplo de create-order-saga: 
@@ -270,7 +269,7 @@ this.sagaExecutor.execute(new DeliveryTransactionEvent({
 Independientemente de la estrategia coreográfica u orquestación, cada microservicio involucrado debe cumplir el siguiente contrato:
 
 ```typescript
-// libs/distributed-transactions/src/sagas//ports/saga.controller.port.ts
+// libs/distributed-transactions/src/sagas/ports/saga.controller.port.ts
 import { RedisContext } from "@nestjs/microservices";
 
 export abstract class SagaControllerPort<T, C> {
@@ -320,6 +319,7 @@ Nuestro controlador automáticamente será asociado a nuestro servicio de mensaj
 Dependiendo de la estrategia escogida, orquestación o coreografía, la lógica del flujo será delegada a un componente central o a los servicios involucrados. En la siguiente imagen vemos la diferencia entre coreografía y orquestación.
 
 ![saga](images/sagas-architecture.webp)
+
 - **Coreografía:** Cada servicio sabe cuál es su tarea y a qué parte del flujo pertenece. Realiza las transacciones y, en caso de error, invoca las compensaciones en los servicios correspondientes, es decir, en aquellos que ya hayan tenido las operaciones correctas.
 
 - **Orquestación:** Tendremos un componente central encargado de realizar las operaciones y coordinar las compensaciones dependiendo del paso que haya fallado.
