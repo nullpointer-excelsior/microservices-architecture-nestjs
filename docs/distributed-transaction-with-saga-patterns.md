@@ -330,3 +330,46 @@ En el caso de la Coreografía, la mejor forma de comunicación será mediante ev
 ## Conclusión
 
 El patrón SAGA es esencial para preservar la atomicidad de las transacciones en el entorno distribuido de los microservicios. No obstante, su implementación requiere una gestión meticulosa de fallos, durabilidad de mensajes y consistencia eventual para asegurar la integridad de los datos. Dependiendo de si utilizamos una estrategia basada en coreografía u orquestación, estas dependerán del caso. Si bien hay situaciones que no contemplamos en este artículo, las bases están declaradas y te ayudarán a entender los desafíos de los sistemas distribuidos.
+
+## Testing sagas
+
+Para ejecutar los procesos sagas levanta los siguientes servicios:
+
+```bash
+#!/bin/bash
+
+# start docker-compose infra 
+npm run start:infra
+
+# start saga orchestator: user-purchases-ms
+npm run start:user-purchases
+
+# start merch-orders-ms
+npm run start:merch-orders
+
+# start merch-products-ms
+npm run start:merch-products
+
+# start merch-payment-ms
+npm run start:merch-payment
+
+```
+
+Ahora ejecuta cualquiera de estos scripts los cuales simulan los posibles flujos
+
+```bash
+#!/bin/bash
+
+# payment successful
+./scripts/sagas-successful-purchase.sh
+
+# payment error
+./scripts/sagas-payment-error-purchase.sh
+
+# inventory update error
+./scripts/sagas-stock-error-purchase.sh
+
+# delivery error
+./scripts/sagas-delivery-error-purchase.sh
+
+```
