@@ -10,7 +10,7 @@ El propósito principal de este proyecto es:
 * Presentar ejemplos prácticos que representen características clave de una plataforma de música, como la gestión de usuarios, autenticación, gestión de música y listas de reproducción.
 * Facilitar un entorno de aprendizaje donde puedas comprender no solo los fundamentos de NestJS, sino también su aplicación práctica en un entorno de microservicios.
 
-## Módulos de aprendizaje:x
+## Módulos de aprendizaje:
 
 * 1 - Diseño de aplicaciones
     * [Diseño de aplicaciones escalables y mantenibles](docs/how-to-build-scalable-and-maintainable-apps.md)
@@ -25,6 +25,7 @@ El propósito principal de este proyecto es:
         * [Eventos de dominio vs Eventos de integración](docs/domain-events-vs-integration-events.md)
         * [Transacciones distribuidas en microservicios con Patrones Saga](docs/distributed-transaction-with-saga-patterns.md)
 * 4 - Exponiendo microservicios al cliente
+    * [Patrón BFF (Backend For Frontend)](docs/bff-pattern.md)
 * 5 - Seguridad en microservicios
 * 6 - Patrones de resilencia
 * 7 - Patrones de alto rendimiento
