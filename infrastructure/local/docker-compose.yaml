@@ -2,44 +2,21 @@ version: '3'
 
 services:
 
-  music-library-db:
-    container_name: music-library-db
+  postgres:
+    container_name: postgres-db
     image: postgres:13
     environment:
-      POSTGRES_DB: ${MUSIC_LIBRARY_MS_DATABASE_NAME}
-      POSTGRES_USER: ${MUSIC_LIBRARY_MS_DATABASE_USER}
-      POSTGRES_PASSWORD: ${MUSIC_LIBRARY_MS_DATABASE_PASS}
+      POSTGRES_USER: ${ROOT_POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${ROOT_POSTGRES_DB_PASS}
     ports:
-      - ${MUSIC_LIBRARY_MS_DATABASE_PORT}:5432
+      - 5432:5432
+    volumes:
+      - ./init-postgres:/docker-entrypoint-initdb.d
     networks:
       - microservices-architecture
 
-  accounts-db:
-    container_name: accounts-db
-    image: postgres:13
-    environment:
-      POSTGRES_DB: ${ACCOUNTS_MS_DATABASE_NAME}
-      POSTGRES_USER: ${ACCOUNTS_MS_DATABASE_USER}
-      POSTGRES_PASSWORD: ${ACCOUNTS_MS_DATABASE_PASS}
-    ports:
-      - ${ACCOUNTS_MS_DATABASE_PORT}:5432
-    networks:
-      - microservices-architecture
-
-  spotify-monolith-db:
-    container_name: spotify-monolith-db
-    image: postgres:13
-    environment:
-      POSTGRES_DB: ${SPOTIFY_MONOLITH_DATABASE_NAME}
-      POSTGRES_USER: ${SPOTIFY_MONOLITH_DATABASE_USER}
-      POSTGRES_PASSWORD: ${SPOTIFY_MONOLITH_DATABASE_PASS}
-    ports:
-      - ${SPOTIFY_MONOLITH_DATABASE_PORT}:5432
-    networks:
-      - microservices-architecture
-
-  music-discovery-mongodb:
-    container_name: music-discovery-mongodb
+  mongodb:
+    container_name: mongo-db
     image: mongo:latest
     environment:
       MONGO_INITDB_DATABASE: ${MUSIC_DISCOVERY_MS_DATABASE_NAME}
@@ -102,7 +79,6 @@ services:
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-
 
 networks:
   microservices-architecture:
