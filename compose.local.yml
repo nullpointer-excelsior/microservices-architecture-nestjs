@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    container_name: postgres-db
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${ROOT_POSTGRES_DB_USER}
+      POSTGRES_PASSWORD: ${ROOT_POSTGRES_DB_PASS}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./infrastructure/local/init-postgres:/docker-entrypoint-initdb.d
+    networks:
+      - microservices-architecture
+
+  mongodb:
+    container_name: mongo-db
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: ${MUSIC_DISCOVERY_MS_DATABASE_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${MUSIC_DISCOVERY_MS_DATABASE_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MUSIC_DISCOVERY_MS_DATABASE_PASS}
+    ports:
+      - ${MUSIC_DISCOVERY_MS_DATABASE_PORT}:27017
+    networks:
+      - microservices-architecture
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management-alpine
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    networks:
+      - microservices-architecture
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - ${REDIS_PORT}:6379
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASS}
+    networks:
+      - microservices-architecture
+
+  jaeger-service:
+    image: jaegertracing/all-in-one:1.50
+    container_name: jaeger-service
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+      - "14250:14250"
+      - "14268:14268"
+      - "14269:14269"
+      - "9411:9411"
+    networks:
+      - microservices-architecture
+  
+  minio-storage:
+    container_name: minio-storage
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9090"
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    networks:
+      - microservices-architecture
+
+networks:
+  microservices-architecture:
+    name: microservices-architecture
+    driver: bridge

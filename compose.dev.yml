@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  music-library-ms:
+    container_name: music-library-ms
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/music-library-ms:/app/music-library-ms
+    ports:
+      - "${MUSIC_LIBRARY_MS_APP_PORT}:${MUSIC_LIBRARY_MS_APP_PORT}"
+    environment:
+      - MUSIC_LIBRARY_MS_DATABASE_HOST=postgres-db
+      - MUSIC_LIBRARY_MS_DATABASE_NAME=${MUSIC_LIBRARY_MS_DATABASE_NAME}
+      - MUSIC_LIBRARY_MS_DATABASE_USER=${MUSIC_LIBRARY_MS_DATABASE_USER}
+      - MUSIC_LIBRARY_MS_DATABASE_PASS=${MUSIC_LIBRARY_MS_DATABASE_PASS}
+      - MUSIC_LIBRARY_MS_APP_PORT=${MUSIC_LIBRARY_MS_APP_PORT}
+    command: node /app/music-library-ms/main.js
+    networks:
+      - app-network
+
+  music-discovery-ms:
+    container_name: music-discovery-ms
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/music-discovery-ms:/app/music-discovery-ms
+    ports:
+      - "${MUSIC_DISCOVERY_MS_APP_PORT}:${MUSIC_DISCOVERY_MS_APP_PORT}"
+    environment:
+      - MUSIC_DISCOVERY_MS_DATABASE_HOST=mongo-db
+      - MUSIC_DISCOVERY_MS_DATABASE_NAME=${MUSIC_DISCOVERY_MS_DATABASE_NAME}
+      - MUSIC_DISCOVERY_MS_DATABASE_USER=${MUSIC_DISCOVERY_MS_DATABASE_USER}
+      - MUSIC_DISCOVERY_MS_DATABASE_PASS=${MUSIC_DISCOVERY_MS_DATABASE_PASS}
+      - MUSIC_DISCOVERY_MS_DATABASE_PORT=${MUSIC_DISCOVERY_MS_DATABASE_PORT}
+      - MUSIC_DISCOVERY_MS_APP_PORT=${MUSIC_DISCOVERY_MS_APP_PORT}
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASS=${REDIS_PASS}
+    command: node /app/music-discovery-ms/main.js
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: microservices-architecture
+    driver: bridge
+    external: true
+    
