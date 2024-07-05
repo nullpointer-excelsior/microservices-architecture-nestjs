@@ -28,6 +28,7 @@ async function bootstrap() {
     transport: Transport.GRPC,
     options: {
       package: 'catalog',
+      url: process.env.GRPC_MUSIC_LIBRARY_URL,
       protoPath: join(__dirname, 'music-catalog.proto'),
     },
   })

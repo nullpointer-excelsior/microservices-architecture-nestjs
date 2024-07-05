@@ -10,6 +10,8 @@ import { MusicCatalogClient } from './music-catalog.client';
         name: 'MUSIC_CATALOG_PACKAGE',
         transport: Transport.GRPC,
         options: {
+          // url: "music-library-ms:5000",
+          url: process.env.GRPC_MUSIC_LIBRARY_URL,
           package: 'catalog',
           protoPath: join(__dirname, 'music-catalog.proto'),
         },

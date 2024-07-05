@@ -1,6 +1,46 @@
 version: '3.8'
 
 services:
+
+  mobile-bff:
+    container_name: mobile-bff
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/mobile-bff:/app/mobile-bff
+    ports:
+      - "${MOBILE_BFF_APP_PORT}:${MOBILE_BFF_APP_PORT}"
+    environment:
+      - MOBILE_BFF_MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
+      - MOBILE_BFF_MUSIC_DISCOVERY_API="music-discovery-ms:${MUSIC_DISCOVERY_MS_APP_PORT}"
+      - MOBILE_BFF_PLAYER_API="media-ms:${MEDIA_MS_APP_PORT}"
+      - MOBILE_BFF_APP_PORT=${MOBILE_BFF_APP_PORT}
+      - MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
+      - MUSIC_DISCOVERY_API="music-discovery-ms:${MUSIC_DISCOVERY_API}"
+      - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
+      - NEST_DEBUG=true
+    command: node /app/mobile-bff/main.js
+    networks:
+      - app-network
+
+  web-bff:
+    container_name: web-bff
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/web-bff:/app/web-bff
+    ports:
+      - "${WEB_BFF_APP_PORT}:${WEB_BFF_APP_PORT}"
+    environment:
+      - WEB_BFF_APP_PORT=${WEB_BFF_APP_PORT}
+      - WEB_BFF_MEDIA_SERVER=${WEB_BFF_MEDIA_SERVER}
+      - MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
+    command: node /app/web-bff/main.js
+    networks:
+      - app-network
+
   music-library-ms:
     container_name: music-library-ms
     image: node:18
@@ -10,12 +50,15 @@ services:
       - ./dist/apps/music-library-ms:/app/music-library-ms
     ports:
       - "${MUSIC_LIBRARY_MS_APP_PORT}:${MUSIC_LIBRARY_MS_APP_PORT}"
+      - 5000:5000
     environment:
       - MUSIC_LIBRARY_MS_DATABASE_HOST=postgres-db
       - MUSIC_LIBRARY_MS_DATABASE_NAME=${MUSIC_LIBRARY_MS_DATABASE_NAME}
       - MUSIC_LIBRARY_MS_DATABASE_USER=${MUSIC_LIBRARY_MS_DATABASE_USER}
       - MUSIC_LIBRARY_MS_DATABASE_PASS=${MUSIC_LIBRARY_MS_DATABASE_PASS}
       - MUSIC_LIBRARY_MS_APP_PORT=${MUSIC_LIBRARY_MS_APP_PORT}
+      - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
+      - NEST_DEBUG=true
     command: node /app/music-library-ms/main.js
     networks:
       - app-network
@@ -40,6 +83,25 @@ services:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASS=${REDIS_PASS}
     command: node /app/music-discovery-ms/main.js
+    networks:
+      - app-network
+
+  media-ms:
+    container_name: media-ms
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/media-ms:/app/media-ms
+    ports:
+      - "${MEDIA_MS_APP_PORT}:${MEDIA_MS_APP_PORT}"
+    environment:
+      - MEDIA_MS_APP_PORT=3016
+      - MINIO_ENDPOINT="minio-storage:9000"
+      - MINIO_ROOT_USER="${MINIO_ROOT_USER}" # this value is valid as MINIO_ACCESS_KEY
+      - MINIO_ROOT_PASSWORD="${MINIO_ROOT_PASSWORD}"
+
+    command: node /app/media-ms/main.js
     networks:
       - app-network
 

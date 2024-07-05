@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/microservices-architecture-nestjs/src",
+  "sourceRoot": "apps/music-library-ms/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/microservices-architecture-nestjs/tsconfig.app.json"
+    "tsConfigPath": "apps/music-library-ms/tsconfig.app.json"
   },
   "projects": {
     "shared": {
@@ -207,5 +207,5 @@
     }
   },
   "monorepo": true,
-  "root": "apps/microservices-architecture-nestjs"
+  "root": "apps/music-library-ms"
 }
