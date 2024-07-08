@@ -19,7 +19,6 @@ services:
       - MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
       - MUSIC_DISCOVERY_API="music-discovery-ms:${MUSIC_DISCOVERY_API}"
       - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
-      - NEST_DEBUG=true
     command: node /app/mobile-bff/main.js
     networks:
       - app-network
@@ -58,7 +57,6 @@ services:
       - MUSIC_LIBRARY_MS_DATABASE_PASS=${MUSIC_LIBRARY_MS_DATABASE_PASS}
       - MUSIC_LIBRARY_MS_APP_PORT=${MUSIC_LIBRARY_MS_APP_PORT}
       - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
-      - NEST_DEBUG=true
     command: node /app/music-library-ms/main.js
     networks:
       - app-network
@@ -102,6 +100,26 @@ services:
       - MINIO_ROOT_PASSWORD="${MINIO_ROOT_PASSWORD}"
 
     command: node /app/media-ms/main.js
+    networks:
+      - app-network
+
+  spotify-monolith:
+    container_name: spotify-monolith
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./node_modules:/app/node_modules
+      - ./dist/apps/spotify-monolith:/app/spotify-monolith
+    ports:
+      - "${SPOTIFY_MONOLITH_APP_PORT}:${SPOTIFY_MONOLITH_APP_PORT}"
+    environment:
+      - SPOTIFY_MONOLITH_DATABASE_HOST=postgres-db
+      - SPOTIFY_MONOLITH_DATABASE_NAME=${SPOTIFY_MONOLITH_DATABASE_NAME}
+      - SPOTIFY_MONOLITH_DATABASE_PORT=5432
+      - SPOTIFY_MONOLITH_DATABASE_USER=${SPOTIFY_MONOLITH_DATABASE_USER}
+      - SPOTIFY_MONOLITH_DATABASE_PASS=${SPOTIFY_MONOLITH_DATABASE_PASS}
+      - SPOTIFY_MONOLITH_APP_PORT=${SPOTIFY_MONOLITH_APP_PORT}
+    command: node /app/spotify-monolith/main.js
     networks:
       - app-network
 
