@@ -26,6 +26,7 @@ async function bootstrap() {
   await app.startAllMicroservices()
   await app.listen(port, () => {
     Logger.log(`Music discovery microservice listen on port: ${port}`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
   
   // Logger.log(`RabbitMQ Manager on http://localhost:15672/`, "RabbitmqQueueModule")

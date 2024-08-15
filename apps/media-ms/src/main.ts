@@ -11,6 +11,7 @@ async function bootstrap() {
   const port = +process.env.MEDIA_MS_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Media microservice ready on http://localhost:${port}`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
 }
 

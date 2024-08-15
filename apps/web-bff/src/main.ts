@@ -13,6 +13,7 @@ async function bootstrap() {
   const port = +process.env.WEB_BFF_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Web BFF ready on http://localhost:${port}`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
   
 }

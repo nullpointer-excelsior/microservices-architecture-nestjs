@@ -13,6 +13,7 @@ async function bootstrap() {
   const port = +process.env.MOBILE_BFF_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Mobile BFF ready on http://localhost:${port}/graphql`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
   
 }

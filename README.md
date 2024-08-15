@@ -267,6 +267,38 @@ npm run lint
 
 ```
 
+## App configurations
+
+### music-library-ms
+
+```shell
+MUSIC_LIBRARY_MS_DATABASE_HOST="localhost"
+MUSIC_LIBRARY_MS_DATABASE_NAME="music_library"
+MUSIC_LIBRARY_MS_DATABASE_PORT=5432
+MUSIC_LIBRARY_MS_DATABASE_USER="music_library"
+MUSIC_LIBRARY_MS_DATABASE_PASS="abc1234"
+MUSIC_LIBRARY_MS_APP_PORT=3011
+GRPC_MUSIC_LIBRARY_URL="localhost:5000"
+OTLP_TRACE_EXPORTER_URL="http://localhost:4318"
+```
+
+### Build apps
+
+comando para hacer build en las apps
+
+```shell
+# secuencial
+for a in $(ls apps); do npx nest build $a; done;
+# paralle
+for a in $(ls apps); do npx nest build $a & done && wait;
+```
+
+### Dev infra
+
+```shell
+docker compose -f compose.infra.yml -f compose.apps.yml --env-file .env -p spotiflyclone
+```
+
 ## Recursos adicionales
 
 * [Documentación oficial de NestJS](https://docs.nestjs.com/)

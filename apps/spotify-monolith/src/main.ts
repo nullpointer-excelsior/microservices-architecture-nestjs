@@ -19,6 +19,7 @@ async function bootstrap() {
   const port = process.env.SPOTIFY_MONOLITH_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Spotify monolith listen on port: ${port}`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
 
 }

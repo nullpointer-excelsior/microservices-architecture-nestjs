@@ -37,6 +37,7 @@ async function bootstrap() {
   const port = process.env.MUSIC_LIBRARY_MS_APP_PORT
   await app.listen(port, () => {
     Logger.log(`Music library microservice listen on port: ${port}`, "Main")
+    Logger.log(JSON.stringify(process.env), "Main")
   });
 
 }

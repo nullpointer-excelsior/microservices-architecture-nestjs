@@ -12,13 +12,13 @@ services:
     ports:
       - "${MOBILE_BFF_APP_PORT}:${MOBILE_BFF_APP_PORT}"
     environment:
-      - MOBILE_BFF_MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
-      - MOBILE_BFF_MUSIC_DISCOVERY_API="music-discovery-ms:${MUSIC_DISCOVERY_MS_APP_PORT}"
-      - MOBILE_BFF_PLAYER_API="media-ms:${MEDIA_MS_APP_PORT}"
+      - MOBILE_BFF_MUSIC_LIBRARY_API=music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}
+      - MOBILE_BFF_MUSIC_DISCOVERY_API=music-discovery-ms:${MUSIC_DISCOVERY_MS_APP_PORT}
+      - MOBILE_BFF_PLAYER_API=media-ms:${MEDIA_MS_APP_PORT}
       - MOBILE_BFF_APP_PORT=${MOBILE_BFF_APP_PORT}
-      - MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
-      - MUSIC_DISCOVERY_API="music-discovery-ms:${MUSIC_DISCOVERY_API}"
-      - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
+      - MUSIC_LIBRARY_API=music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}
+      - MUSIC_DISCOVERY_API=music-discovery-ms:${MUSIC_DISCOVERY_API}
+      - GRPC_MUSIC_LIBRARY_URL=music-library-ms:5000
     command: node /app/mobile-bff/main.js
     networks:
       - app-network
@@ -34,8 +34,8 @@ services:
       - "${WEB_BFF_APP_PORT}:${WEB_BFF_APP_PORT}"
     environment:
       - WEB_BFF_APP_PORT=${WEB_BFF_APP_PORT}
-      - WEB_BFF_MEDIA_SERVER=${WEB_BFF_MEDIA_SERVER}
-      - MUSIC_LIBRARY_API="music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}"
+      - WEB_BFF_MEDIA_SERVER=http://localhost:${MEDIA_MS_APP_PORT}
+      - MUSIC_LIBRARY_API=http://music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}
     command: node /app/web-bff/main.js
     networks:
       - app-network
@@ -56,7 +56,7 @@ services:
       - MUSIC_LIBRARY_MS_DATABASE_USER=${MUSIC_LIBRARY_MS_DATABASE_USER}
       - MUSIC_LIBRARY_MS_DATABASE_PASS=${MUSIC_LIBRARY_MS_DATABASE_PASS}
       - MUSIC_LIBRARY_MS_APP_PORT=${MUSIC_LIBRARY_MS_APP_PORT}
-      - GRPC_MUSIC_LIBRARY_URL="music-library-ms:5000"
+      - GRPC_MUSIC_LIBRARY_URL=music-library-ms:5000
     command: node /app/music-library-ms/main.js
     networks:
       - app-network
@@ -95,9 +95,11 @@ services:
       - "${MEDIA_MS_APP_PORT}:${MEDIA_MS_APP_PORT}"
     environment:
       - MEDIA_MS_APP_PORT=3016
-      - MINIO_ENDPOINT="minio-storage:9000"
-      - MINIO_ROOT_USER="${MINIO_ROOT_USER}" # this value is valid as MINIO_ACCESS_KEY
-      - MINIO_ROOT_PASSWORD="${MINIO_ROOT_PASSWORD}"
+      - MINIO_ENDPOINT=minio-storage:9000
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER} # this value is valid as MINIO_ACCESS_KEY
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MUSIC_LIBRARY_BUCKET_NAME=${MUSIC_LIBRARY_BUCKET_NAME}
+      - MUSIC_LIBRARY_API=http://music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}
 
     command: node /app/media-ms/main.js
     networks:
@@ -122,6 +124,36 @@ services:
     command: node /app/spotify-monolith/main.js
     networks:
       - app-network
+
+  # load-songs-job:
+  #   container_name: library-etl
+  #   image: python:3.10.14-slim-bullseye
+  #   working_dir: /job
+  #   volumes:
+  #     - ./jobs:/job
+  #   depends_on:
+  #     - music-library-ms
+  #   environment:
+  #     - MINIO_HOSTNAME=http://minio-storage
+  #     - ACCESS_KEY_ID=${MINIO_ROOT_USER}
+  #     - SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD}
+  #     - BUCKET_NAME=${MUSIC_LIBRARY_BUCKET_NAME}
+  #     - MUSIC_LIBRARY_MS=http://music-library-ms:${MUSIC_LIBRARY_MS_APP_PORT}
+  #   command: /job/venv/bin/python /job/create_music_library.py
+
+
+  # spotify-frontend:
+  #   container_name: spotify-frontend
+  #   build:
+  #     context: .
+  #     dockerfile: ./infrastructure/frontend.dockerfile
+  #     args: 
+  #       PUBLIC_SPOTIFY_CLONE_BACKEND_URL: http://localhost:${WEB_BFF_APP_PORT}
+  #   ports:
+  #     - 4321:4321
+  #   networks:
+  #     - app-network
+
 
 networks:
   app-network:
