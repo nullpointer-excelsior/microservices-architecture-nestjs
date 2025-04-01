@@ -26,10 +26,7 @@ El propósito principal de este proyecto es:
         * [Transacciones distribuidas en microservicios con Patrones Saga](docs/distributed-transaction-with-saga-patterns.md)
 * 4 - Exponiendo microservicios al cliente
     * [Patrón BFF (Backend For Frontend)](docs/bff-pattern.md)
-* 5 - Seguridad en microservicios
-* 6 - Patrones de resilencia
-* 7 - Patrones de alto rendimiento
-* **Work in progress...**
+
 
 ## Arquitectura de microservicios
 
