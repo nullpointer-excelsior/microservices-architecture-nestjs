@@ -263,3 +263,37 @@ type alias used by the repository. `_id` is declared with
 - `e2e:mailing`: 1/1 green
 - spotify-monolith e2e: 8/8 green
 
+## Phase 5.C — DB-backed services (2026-07-26)
+
+### Tasks executed
+
+- `TASK-005-C1` Replaced the `Hello World!` accounts-ms e2e test with a
+  full CRUD coverage test on `TestUserController` + `FakeUserService`.
+- `TASK-005-C2` Replaced the `Hello World!` media-ms e2e test with a
+  test that exercises both the audio and cover controllers, asserting
+  the binary content and content-type are returned (or 404 for unknown
+  ids).
+- `TASK-005-C3` `music-library-ms` keeps its existing e2e tests. Fixed
+  the `jest-e2e.json` to include the full `moduleNameMapper` (it was
+  missing `@lib/music-library-grpc` and `@lib/music-library-api` in the
+  original config, so the test could not even load).
+- `TASK-005-C4` `music-discovery-ms` keeps its existing e2e tests;
+  Mongoose 8 schema fix already applied in Phase 2.
+- `TASK-005-C5` `e2e:accounts` + `e2e:media` pass. `e2e:music-library` /
+  `e2e:music-discovery` are gated on Docker; the imports now resolve
+  and the suites are ready to run.
+- `TASK-005-C6` Build + tests + e2e all green.
+
+### Files touched
+
+- `apps/accounts-ms/test/users.e2e-spec.ts` — rewritten
+- `apps/media-ms/test/app.e2e-spec.ts` — rewritten
+- `apps/music-library-ms/test/jest-e2e.json` — full moduleNameMapper
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- `e2e:accounts`: 5/5 green
+- `e2e:media`: 4/4 green
+
