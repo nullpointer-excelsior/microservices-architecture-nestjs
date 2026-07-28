@@ -160,3 +160,33 @@ type alias used by the repository. `_id` is declared with
 - Mobile-bff e2e (no infra needed): 11/11 green.
 - Other e2e: deferred (no Docker).
 
+## Phase 4 — Microservices transport (2026-07-26)
+
+### Tasks executed
+
+- `TASK-004-1` Bumped `@grpc/grpc-js@^1.14.0`, `@grpc/proto-loader@^0.7.13`.
+- `TASK-004-2` Audited `apps/music-library-ms/src/main.ts:27-33`. The
+  gRPC microservice is connected via `app.connectMicroservice(...)` and
+  started with `app.startAllMicroservices()`. NestJS 11 stops auto-starting
+  the gRPC client in some scenarios (issue #13468), but the server-side
+  `OnModuleInit` flow is unchanged. No source change required.
+- `TASK-004-3` Audited `libs/music-library-grpc/src/music-library-grpc.module.ts`.
+  The static `ClientsModule.register([...])` call does not need to move to
+  `registerAsync` because the proto path is relative to `__dirname`, not
+  driven by `ConfigService`. Kept as-is.
+- `TASK-004-4` Audited `libs/rabbitmq-queue/rabbitmq-queue.module.ts`. The
+  NestJS 11 fix #14129 affects the auto-generated queue/binding
+  lifecycle, but the current code passes `durable: false` which is the
+  default behaviour expected by the existing consumers. No source change
+  required.
+- `TASK-004-5` Audited the Redis transporters and bumped `ioredis@^5.4.2`
+  (DEP-020).
+- `TASK-004-6` `npm run build` + `npm test` + `e2e:mobile-bff` — green.
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- Mobile-bff e2e (no infra needed): 11/11 green.
+- Other e2e: deferred (no Docker).
+
