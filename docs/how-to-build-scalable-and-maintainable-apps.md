@@ -1,17 +1,17 @@
 
-# Construyendo aplicaciones escalables y mantenibles
+# 🏗️ Building Scalable and Maintainable Applications
 
-En este capítulo tomaremos nota de pequeños tips para generar aplicaciones escalables y mantenibles, las cuales podrán ayudarte de manera más sencilla en una posible transición de monolito a microservicios. No todos los sistemas en sus primeros pasos necesitan una arquitectura de microservicios, pero si puedes aplicar un poco de buenas prácticas te ahorrarás dolores de cabeza.
+In this chapter, we will take note of small tips for building scalable and maintainable applications, which can help you more easily in a possible transition from monolith to microservices. Not all systems in their early stages need a microservices architecture, but if you can apply some good practices, you will save yourself headaches.
 
-## Spotify clone con NestJs como prueba de concepto
+## 🎧 Spotify Clone with NestJS as a Proof of Concept
 
-Crearemos un clon de Spotify para ejemplificar. Con el siguiente diagrama de clases robado de internet modelaremos una API Restful con NestJs. Esta aplicación será una API backend.
+We will build a Spotify clone as an example. Using the following class diagram (borrowed from the internet), we will model a RESTful API with NestJS. This application will be a backend API.
 
-![diagrama-clases-spotify.jpg](https://i.ibb.co/3rc8bS3/diagrama-clases-spotify.jpg)
+![class-diagram-spotify.jpg](https://i.ibb.co/3rc8bS3/diagrama-clases-spotify.jpg)
 
-En base a esto crearemos nuestro backend, el cual será un simple CRUD en comienzo.
+Based on this, we will create our backend, which will start as a simple CRUD.
 
-El diseño de clases lo convertimos en un diseño de entidades de ORM.
+We convert the class design into an ORM entity design.
 
 ```typescript
 @Entity()
@@ -173,114 +173,114 @@ export class User {
 
 ```
 
-A partir de esta base construiremos un pequeño proyecto con buenas prácticas y tips.
+From this foundation, we will build a small project with good practices and tips.
 
-## 1 - Define tu aplicación de forma modular
+## 📦 1 — Define Your Application in a Modular Way
 
-Crear tu aplicación de forma modular, separa los casos de uso relacionados en un contexto específico y define qué componentes serán compartidos por estos módulos para poder reutilizar código en común o funciones utilitarias. Sin embargo, estos deberían ser piezas de software pequeñas y extensibles. Si utilizamos funciones, tratemos de que sean lo más puras posibles y con sus test unitarios.
+Build your application in a modular fashion, separating related use cases within a specific context and defining which components will be shared across modules to reuse common code or utility functions. However, these should be small and extensible pieces of software. If you use functions, try to keep them as pure as possible with their unit tests.
 
-**Ejemplo:** Módulos de Spotify clone:
+**Example:** Spotify Clone Modules:
 
 ```bash
- src
-├──  accounts
-├──  music-library
-├──  player
-└──  shared
-    ├──  database
-    └──  decorators
+ src
+├──  accounts
+├──  music-library
+├──  player
+└──  shared
+    ├──  database
+    └──  decorators
 
 ```
 
-Definimos los módulos principales `player`, `music-library` y `accounts`. Estos tendrán agrupados sus casos de uso, servicios, repositorios, controladores y modelos de datos, mientras que el módulo `shared` contendrá los componentes compartidos por la aplicación. En este caso, el módulo `database` contiene las entidades ORM del modelo de datos de la aplicación.
+We define the main modules `player`, `music-library`, and `accounts`. These will group their use cases, services, repositories, controllers, and data models, while the `shared` module will contain components shared across the application. In this case, the `database` module contains the ORM entities for the application's data model.
 
 ```bash
- database
-├──  database.module.ts
-└──  entities
-    ├──  album.entity.ts
-    ├──  artist.entity.ts
-    ├──  entity.base.ts
-    ├──  genre.entity.ts
-    ├──  playlist.entity.ts
-    ├──  radio.entity.ts
-    ├──  song.entity.ts
-    └──  user.entity.ts
+ database
+├──  database.module.ts
+└──  entities
+    ├──  album.entity.ts
+    ├──  artist.entity.ts
+    ├──  entity.base.ts
+    ├──  genre.entity.ts
+    ├──  playlist.entity.ts
+    ├──  radio.entity.ts
+    ├──  song.entity.ts
+    └──  user.entity.ts
 
 ```
 
-Ahora, con este enfoque, cada módulo puede implementar su propia arquitectura y diseño. En este ejemplo, el módulo `library` es solo un API CRUD para acceder a artistas, álbumes y canciones, por lo que las guías de diseño de NestJs nos bastan y sobran. En cambio, el módulo `player` puede tener mayor complejidad en ciertos casos de uso, por lo que podemos implementar una arquitectura hexagonal aislada en su propio módulo sin que otras partes de la aplicación se vean obligadas a implementarla.
+With this approach, each module can implement its own architecture and design. In this example, the `library` module is just a CRUD API for accessing artists, albums, and songs, so the NestJS design guidelines are more than enough. On the other hand, the `player` module may have more complexity in certain use cases, so we can implement a hexagonal architecture isolated within its own module without forcing other parts of the application to adopt it.
 
-**Ejemplo de CRUD:**
+**CRUD Example:**
 
 ```bash
- music-library
-├──  controller
-│   ├──  album.controller.ts
-│   ├──  artists.controller.ts
-│   ├──  genre.controller.ts
-│   └──  song.controller.ts
-├──  model
-│   ├──  album.model.ts
-│   ├──  artist.model.ts
-│   ├──  genre.model.ts
-│   └──  song.model.ts
-├──  music-library.module.ts
-└──  service
-    ├──  album.service.ts
-    ├──  artist.service.ts
-    ├──  genre.service.ts
-    └──  song.service.ts
+ music-library
+├──  controller
+│   ├──  album.controller.ts
+│   ├──  artists.controller.ts
+│   ├──  genre.controller.ts
+│   └──  song.controller.ts
+├──  model
+│   ├──  album.model.ts
+│   ├──  artist.model.ts
+│   ├──  genre.model.ts
+│   └──  song.model.ts
+├──  music-library.module.ts
+└──  service
+    ├──  album.service.ts
+    ├──  artist.service.ts
+    ├──  genre.service.ts
+    └──  song.service.ts
 
 ```
 
-**Ejemplo Arquitectura Hexagonal:**
+**Hexagonal Architecture Example:**
 
 ```bash
- player
-├──  application
-│   ├──  playlists.use-cases.ts
-│   └──  radio.use-cases.ts
-├──  domain
-│   ├──  factory
-│   │   ├──  create-playlist-entity.ts
-│   │   └──  create-playlist-model.ts
-│   ├──  model
-│   │   ├──  genre.model.ts
-│   │   ├──  playlist.model.ts
-│   │   ├──  radio.model.ts
-│   │   ├──  song.model.ts
-│   │   └──  user.model.ts
-│   └──  service
-│       ├──  playlist.service.ts
-│       ├──  radio.service.ts
-│       ├──  song.service.ts
-│       └──  user.service.ts
-├──  infrastructure
-│   └──  restful-api
-│       ├──  controller
-│       │   ├──  playlist.controller.ts
-│       │   └──  radio.controller.ts
-│       └──  dto
-│           ├──  create-playlist.request.ts
-│           ├──  create-radio.request.ts
-│           └──  entity-created.response.ts
-└──  player.module.ts
+ player
+├──  application
+│   ├──  playlists.use-cases.ts
+│   └──  radio.use-cases.ts
+├──  domain
+│   ├──  factory
+│   │   ├──  create-playlist-entity.ts
+│   │   └──  create-playlist-model.ts
+│   ├──  model
+│   │   ├──  genre.model.ts
+│   │   ├──  playlist.model.ts
+│   │   ├──  radio.model.ts
+│   │   ├──  song.model.ts
+│   │   └──  user.model.ts
+│   └──  service
+│       ├──  playlist.service.ts
+│       ├──  radio.service.ts
+│       ├──  song.service.ts
+│       └──  user.service.ts
+├──  infrastructure
+│   └──  restful-api
+│       ├──  controller
+│       │   ├──  playlist.controller.ts
+│       │   └──  radio.controller.ts
+│       └──  dto
+│           ├──  create-playlist.request.ts
+│           ├──  create-radio.request.ts
+│           └──  entity-created.response.ts
+└──  player.module.ts
 ```
 
-## 2 - Definir una comunicación entre módulos desacoplada 
+## 📡 2 — Define Decoupled Communication Between Modules
 
-Al definir una arquitectura modular, es muy probable que ciertos casos de uso nos obliguen a requerir algún servicio de otro módulo que no sea `shared`. Esto es propenso a crear código espagueti para establecer una comunicación desacoplada entre módulos. Podemos hacer uso de un event bus en memoria y aplicar una arquitectura orientada a eventos.
+When defining a modular architecture, it is very likely that certain use cases will require a service from another module that is not `shared`. This is prone to creating spaghetti code to establish decoupled communication between modules. We can use an in-memory event bus and apply an event-driven architecture.
 
-NestJs nos provee un módulo de [eventos](https://docs.nestjs.com/techniques/events) el cual podemos hacer uso:
+NestJS provides an [events](https://docs.nestjs.com/techniques/events) module that we can use:
 
 ```shell
 npm i --save @nestjs/event-emitter
 ```
 
-Crearemos un pequeño ejemplo basado en la creación de una nueva Radio cuando un nuevo álbum es creado.
+We will create a small example based on creating a new Radio when a new album is created.
 
-Definimos una clase que representa el evento y lo agregamos a nuestro módulo `shared`.
+We define a class representing the event and add it to our `shared` module.
 
 ```typescript
 export class AlbumCreatedEvent {
@@ -288,7 +288,7 @@ export class AlbumCreatedEvent {
 }
 ```
 
-Ahora, cuando en el módulo `music-library` se hace un llamado al `create()` del servicio `AlbumService`, emitiremos el evento.
+Now, when `create()` is called in the `AlbumService` within the `music-library` module, we will emit the event.
 
 ```typescript
 @Injectable()
@@ -322,7 +322,7 @@ export class AlbumService {
 }
 ```
 
-Y ahora, en nuestro módulo `player`, escuchamos el evento.
+And now, in our `player` module, we listen for the event.
 
 ```typescript
 @Injectable()
@@ -337,13 +337,13 @@ export class NewAlbumListener {
 }
 ```
 
-Ahora, nuestros módulos quedan más aislados en responsabilidades, incluyendo la posibilidad de tener múltiples suscriptores a eventos.
+Now our modules are more isolated in responsibilities, including the possibility of having multiple event subscribers.
 
-## 3 - Utilizar esquemas separados por cada módulo para bases de datos relacionales
+## 🗄️ 3 — Use Separate Schemas for Each Module in Relational Databases
 
-Este enfoque nos permite una separación lógica y física de los datos más comprensible y nos permitiría una migración más limpia si un módulo lo queremos pasar a una aplicación independiente. En estos casos, diferentes esquemas para los datos también nos dan la flexibilidad.
+This approach allows for a more comprehensible logical and physical separation of data and would enable a cleaner migration if we want to move a module to an independent application. In these cases, different schemas for data also give us flexibility.
 
-TypeORM nos permite hacer esto mediante anotaciones.
+TypeORM allows us to do this through annotations.
 
 ```typescript
 @Entity({ schema: "music_library" })
@@ -352,15 +352,15 @@ export class Song {
 }
 ```
 
-Ahora, cada esquema representará un módulo de nuestra aplicación. Los datos tendrán sus contextos definidos y aún así nos da la posibilidad de consultar los datos entre esquemas.
+Now each schema will represent a module of our application. The data will have their contexts defined, and we still have the ability to query data across schemas.
 
-## 4 - Conoce los principios SOLID
+## 📐 4 — Know the SOLID Principles
 
-Estos 5 principios de diseño de software son aplicados a la programación orientada a objetos y es una excelente manera de crear código mantenible y escalable. Afortunadamente, muchos de estos principios son aplicados por frameworks como NestJs, Spring y muchos similares. Por lo que, si piensas que nunca los has aplicado, lo más probable es que te hayas topado sin darte cuenta. De todas formas, aquí un breve ejemplo de cada principio.
+These 5 software design principles applied to object-oriented programming are an excellent way to create maintainable and scalable code. Fortunately, many of these principles are implemented by frameworks like NestJS, Spring, and many similar ones. So if you think you have never applied them, most likely you have stumbled upon them without realizing it. Anyway, here is a brief example of each principle.
 
-### Principio de responsabilidad única (SRP)
+### 🎯 Single Responsibility Principle (SRP)
 
-Cada clase o módulo debe tener una sola responsabilidad. Por ejemplo, `UserService` solo tiene operaciones para manipular el modelo de `User` mediante `Repository` y el componente.
+Each class or module should have a single responsibility. For example, `UserService` only has operations to manipulate the `User` model through `Repository` and the component.
 
 ```typescript
 @Injectable()
@@ -369,9 +369,9 @@ export class UserService {
 }
 ```
 
-### Principio de abierto/cerrado (OCP)
+### 🔓 Open/Closed Principle (OCP)
 
-Este principio establece que las clases deben ser abiertas para la extensión, pero cerradas para la modificación. Por ejemplo, si no estás seguro de qué base de datos es la indicada en tu aplicación, puedes aplicar el patrón `Entity Repository` para desacoplar tu dominio del almacenamiento de datos definido. Este patrón también ayuda a un mejor testing unitario.
+This principle states that classes should be open for extension but closed for modification. For example, if you are not sure which database is right for your application, you can apply the `Entity Repository` pattern to decouple your domain from the defined data storage. This pattern also helps with better unit testing.
 
 ```typescript
 // Repository contract
@@ -381,10 +381,10 @@ export interface SongRepository {
 // repository implementation
 export class SongPostgresRepository implements SongRepository {
   findAll(): Promise<Song> {
-    // code to implement a orm crud
+    // code to implement an orm crud
   }
 }
-// NesJs provider declaration
+// NestJS provider declaration
 @Module({
     providers: [
       {
@@ -402,11 +402,11 @@ export class SongUseCases {
 }
 ```
 
-NestJs no permite providers personalizados, así que en la definición, nuestra entidad es la representación de nuestros datos y su lógica asociada, y repository es el componente que realiza operaciones de escritura y lectura. Este componente es solo un contrato, una interfaz, la cual debemos implementar con la lógica asociada al motor de base de datos que estemos usando.
+NestJS allows custom providers, so in the definition, our entity is the representation of our data and its associated logic, and the repository is the component that performs read and write operations. This component is just a contract, an interface, which we must implement with the logic associated with the database engine we are using.
 
-### Principio de segregación de interfaz (ISP)
+### ✂️ Interface Segregation Principle (ISP)
 
-Este principio establece que las interfaces deben ser lo más pequeñas y específicas posible. Esto quiere decir que una interfaz implementa su mínima funcionalidad. En el siguiente ejemplo, definimos un EventDispatcher para enviar mensajes, EventListener para escuchar eventos y EventBus, el cual hereda ambas interfaces para crear una implementación completa de un event bus.
+This principle states that interfaces should be as small and specific as possible. This means that an interface implements only its minimum functionality. In the following example, we define an EventDispatcher to send messages, EventListener to listen for events, and EventBus, which inherits both interfaces to create a complete event bus implementation.
 
 ```typescript
 import { Observable, Subject, filter, iif } from 'rxjs';
@@ -474,9 +474,9 @@ export class RxjsEventBus<E extends string> implements EventBus<E> {
 }
 ```
 
-### Principio de inversión de dependencias (DIP)
+### 🔄 Dependency Inversion Principle (DIP)
 
-Las clases de alto nivel no deben depender de clases de bajo nivel, sino de abstracciones. NestJs implementa este principio en sus providers.
+High-level classes should not depend on low-level classes, but on abstractions. NestJS implements this principle in its providers.
 
 ```typescript
 @Injectable()
@@ -491,7 +491,6 @@ export class PlayListUseCases {
 }
 ```
 
-## Conclusión 
+## 🏁 Conclusion
 
-Abordamos estas simples recomendaciones, las cuales pueden ayudar a crear aplicaciones escalables y mantenibles. Todo dependerá del caso, pero cuando un sistema puede crecer, es mejor considerar todas las buenas prácticas posibles. Cada proyecto es un mundo, al igual que el tiempo que nos dan para poder realizar un proyecto.
-
+We addressed these simple recommendations, which can help create scalable and maintainable applications. It will all depend on the case, but when a system can grow, it is better to consider all possible good practices. Every project is different, as is the time given to complete it.

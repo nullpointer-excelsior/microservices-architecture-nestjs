@@ -1,59 +1,59 @@
-# Microservicios: Observabilidad en microservicios, un ejemplo práctico de trazas distribuidas
+# 🔍 Microservices: Observability in Microservices, a Practical Example of Distributed Traces
 
-## Introducción
+## 💡 Introduction
 
-En el mundo de los microservicios, la observabilidad es un aspecto crucial para entender el comportamiento y el rendimiento de nuestras aplicaciones. La observabilidad nos permite recopilar y analizar datos de diferentes fuentes para obtener una visión completa de nuestras aplicaciones. Este enfoque holístico no solo nos proporciona una visión exhaustiva de cada componente de nuestras aplicaciones, sino que también nos permite identificar patrones, anomalías y optimizaciones potenciales, contribuyendo así a fortalecer la robustez y eficiencia de nuestras soluciones tecnológicas.
+In the world of microservices, observability is a crucial aspect for understanding the behavior and performance of our applications. Observability allows us to collect and analyze data from different sources to gain a complete view of our applications. This holistic approach not only provides us with a thorough view of each component of our applications but also allows us to identify patterns, anomalies, and potential optimizations, thus contributing to strengthening the robustness and efficiency of our technology solutions.
 
-En este artículo abordaremos cómo implementar trazas distribuidas sobre el flujo de 2 aplicaciones en un entorno de microservicios utilizando OpenTelemetry y JagerUI sobre un sistema de microservicios que emula la plataforma de Spotify. Todo con NestJs 😉.
+In this article, we will address how to implement distributed traces on the flow of 2 applications in a microservices environment using OpenTelemetry and JaegerUI on a microservices system that emulates the Spotify platform. All with NestJS.
 
-## Las bases de la observabilidad
+## 🏛️ The Foundations of Observability
 
-Cuando nos adentramos en el mundo de la observabilidad, escucharemos muy a menudo el concepto de MELT, el cual es un acrónimo que se refiere a los cuatro pilares de la observabilidad: Métricas, Eventos, Logs y Trazas.
+When we delve into the world of observability, we will often hear the concept of MELT, which is an acronym referring to the four pillars of observability: Metrics, Events, Logs, and Traces.
 
-- **Métricas**: son datos numéricos que representan el estado de nuestra aplicación en un momento dado.
-- **Eventos**: son registros de acciones o cambios significativos en nuestra aplicación.
-- **Logs**: son registros detallados de las actividades de nuestra aplicación.
-- **Trazas**: son representaciones visuales de cómo las solicitudes fluyen a través de nuestra aplicación.
+- **Metrics**: numerical data representing the state of our application at a given moment.
+- **Events**: records of significant actions or changes in our application.
+- **Logs**: detailed records of our application's activities.
+- **Traces**: visual representations of how requests flow through our application.
 
-Visualmente nos puede quedar más claro con la siguiente imagen:
+It may be clearer visually with the following image:
 
 ![meltex](https://i.ibb.co/FXYNHVf/melt.png)
 
-## La importancia de las trazas en sistemas distribuidos
+## 🔗 The Importance of Traces in Distributed Systems
 
-Las trazas en una aplicación distribuida son fundamentales porque ofrecen una ventana detallada hacia el flujo de datos y acciones entre sus distintos componentes. Estas trazas permiten seguir el camino de una solicitud o proceso a través de los diversos servicios, facilitando la detección de problemas, la depuración de errores, la optimización del rendimiento y la comprensión holística de la interacción entre los elementos distribuidos.
+Traces in a distributed application are fundamental because they offer a detailed window into the flow of data and actions between its various components. These traces allow us to follow the path of a request or process through the various services, facilitating problem detection, error debugging, performance optimization, and holistic understanding of the interaction between distributed elements.
 
-## ¿Qué es OpenTelemetry?
+## ❓ What is OpenTelemetry?
 
-[OpenTelemetry](https://opentelemetry.io/docs/) es un conjunto de APIs, bibliotecas y agentes que permiten la recopilación y gestión de telemetría (métricas, logs, trazas) de nuestras aplicaciones. OpenTelemetry es un proyecto de la Cloud Native Computing Foundation (CNCF) y es compatible con una amplia gama de marcos y lenguajes de programación.
+[OpenTelemetry](https://opentelemetry.io/docs/) is a set of APIs, libraries, and agents that enable the collection and management of telemetry (metrics, logs, traces) from our applications. OpenTelemetry is a Cloud Native Computing Foundation (CNCF) project and is compatible with a wide range of frameworks and programming languages.
 
-Para el envío de trazas, logs o métricas, las aplicaciones deben instrumentarse. Este trabajo es realizado por las librerías de OpenTelemetry.
+For sending traces, logs, or metrics, applications must be instrumented. This work is done by OpenTelemetry libraries.
 
-OpenTelemetry no solo soporta la instrumentación de aplicaciones, sino que también podremos instrumentar infraestructura para entender un poco más en detalle cómo funciona la instrumentación. Veamos la siguiente imagen:
+OpenTelemetry not only supports application instrumentation but also allows us to instrument infrastructure to understand in more detail how instrumentation works. Let's look at the following image:
 
 ![otel](https://opentelemetry.io/img/otel-diagram.svg)
 
-OTel Collector es la pieza de software que recopila datos de telemetría de las aplicaciones y servicios instrumentados. Los datos de telemetría se recopilan en un formato estándar llamado OpenTelemetry Protocol (OTLP). El collector luego puede procesar los datos de telemetría y exportarlos a una variedad de destinos, como bases de datos, sistemas de análisis y paneles de control.
+The OTel Collector is the piece of software that collects telemetry data from instrumented applications and services. Telemetry data is collected in a standard format called OpenTelemetry Protocol (OTLP). The collector can then process the telemetry data and export it to a variety of destinations, such as databases, analytics systems, and dashboards.
 
-## ¿Qué es Jeager UI?
+## ❓ What is Jaeger UI?
 
-![jeager](https://i.ibb.co/1mFnsJ1/JaegerUI.png)
+![jaeger](https://i.ibb.co/1mFnsJ1/JaegerUI.png)
 
-Jaeger es una herramienta de trazado distribuido que permite visualizar y analizar las trazas de nuestras aplicaciones. Con Jaeger, podemos ver cómo las solicitudes fluyen a través de nuestros microservicios y dónde se producen los cuellos de botella o los errores. Algunas de sus características incluyen:
+Jaeger is a distributed tracing tool that allows you to visualize and analyze the traces of our applications. With Jaeger, we can see how requests flow through our microservices and where bottlenecks or errors occur. Some of its features include:
 
-- Propagación de contexto distribuida
-- Monitoreo de transacciones distribuidas
-- Análisis de raíz de la causa
-- Análisis de dependencia del servicio
-- Optimización de rendimiento/latencia
+- Distributed context propagation
+- Distributed transaction monitoring
+- Root cause analysis
+- Service dependency analysis
+- Performance/latency optimization
 
-Utilizaremos el componente Jeager UI, el cual nos permitirá visualizar las trazas enviadas por aplicaciones que instrumentemos con OpenTelemetry.
+We will use the Jaeger UI component, which will allow us to visualize traces sent by applications instrumented with OpenTelemetry.
 
-## Instrumentando aplicaciones con OpenTelemetry
+## 🔧 Instrumenting Applications with OpenTelemetry
 
-Para instrumentar nuestros microservicios con OpenTelemetry, necesitamos inicializar el SDK de OpenTelemetry y configurarlo para recopilar métricas, logs y trazas. A continuación, se muestra un ejemplo de cómo podemos hacer esto en TypeScript.
+To instrument our microservices with OpenTelemetry, we need to initialize the OpenTelemetry SDK and configure it to collect metrics, logs, and traces. Below is an example of how we can do this in TypeScript.
 
-Instalación. OpenTelemetry tiene un montón de dependencias que deberemos incluir dependiendo de nuestro caso, pero básicamente instalamos los componentes base de telemetría y sdk-node e instrumentaciones específicas de tecnologías que queremos hacer tracing.
+Installation. OpenTelemetry has a lot of dependencies that we will need to include depending on our case, but basically we install the base telemetry components and sdk-node and specific technology instrumentations we want to trace.
 
 ```shell
 npm install @opentelemetry/context-async-hooks \
@@ -70,7 +70,7 @@ npm install @opentelemetry/context-async-hooks \
     @opentelemetry/semantic-conventions
 ```
 
-La siguiente función implementa la instrumentación básica de una aplicación Node.js. Esta función recolectará toda la información de métricas y trazas y las enviará a un servidor OTLP con el cual podremos visualizar los datos de forma gráfica.
+The following function implements the basic instrumentation of a Node.js application. This function will collect all metrics and trace information and send it to an OTLP server where we can visualize the data graphically.
 
 ```typescript
 import { Logger } from "@nestjs/common";
@@ -84,29 +84,29 @@ import { MeterProvider, PeriodicExportingMetricReader } from "@opentelemetry/sdk
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 
-// Tipo de opciones para crear el SDK
+// Options type for creating the SDK
 type CreateSdkOptions = {
-  serviceName: string // nombre del servicio el cual poderemos identificar
+  serviceName: string // service name for identification in the telemetry service
   serviceVersion: string,
   traceExporterOptions?: { url: string, headers?: any },
   metricExporterOptions?: { url: string, headers?: any },
-  instrumentations?: InstrumentationOption[] // implementaciones por defecto que realizan la isntrumentacion de ciertas librerias sin necesidad de hacerlo por nosotros.
+  instrumentations?: InstrumentationOption[] // default implementations that perform instrumentation of certain libraries without needing to do it ourselves
 }
 
-// Función para crear el SDK de OpenTelemetry
+// Function to create the OpenTelemetry SDK
 export function createSdk(options: CreateSdkOptions) {
-  // Crea un recurso con información del servicio el cual puede ser identificado en el servico de telemetria que escojamos
+  // Creates a resource with service information that can be identified in the telemetry service of our choice
   const resource = new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: options.serviceName,
     [SemanticResourceAttributes.SERVICE_VERSION]: options.serviceVersion,
     [SemanticResourceAttributes.SERVICE_NAMESPACE]: 'local-machine.spotify-clone'
   })
 
-  // Crea exportadores para trazas y métricas
+  // Creates exporters for traces and metrics
   const traceExporter = new OTLPTraceExporter(options.traceExporterOptions);
   const metricExporter = new OTLPMetricExporter(options.metricExporterOptions)
 
-  // Inicializa el SDK de OpenTelemetry para Node.js
+  // Initializes the OpenTelemetry SDK for Node.js
   const sdk = new NodeSDK({
     resource,
     traceExporter,
@@ -114,36 +114,36 @@ export function createSdk(options: CreateSdkOptions) {
     instrumentations: options.instrumentations as any
   });
 
-  // Configura un lector de métricas para exportación periódica
+  // Sets up a metric reader for periodic export
   const metricReader = new PeriodicExportingMetricReader({
     exporter: metricExporter,
     exportIntervalMillis: 30000, // Default is 60000ms (60 seconds). Set to 3 seconds for demonstrative purposes only.
   });
 
-  // Crea un proveedor de medidores para la aplicación
+  // Creates a meter provider for the application
   const applicationMeterProvider = new MeterProvider({
     resource: resource,
   });
-  // Asigna el lector de métricas al proveedor de medidores de la aplicación
+  // Assigns the metric reader to the application meter provider
   applicationMeterProvider.addMetricReader(metricReader);
 
-  // Establece este proveedor como el proveedor global de medidores para la aplicación
+  // Sets this provider as the global meter provider for the application
   metrics.setGlobalMeterProvider(applicationMeterProvider);
 
-  return sdk // Retorna el SDK configurado
+  return sdk // Returns the configured SDK
 }
 
-// Función para iniciar OpenTelemetry
+// Function to start OpenTelemetry
 export function startOpenTelemetry(options: CreateSdkOptions) {
-  // Crea el SDK de OpenTelemetry llamando a la función createSdk con opciones adicionales
+  // Creates the OpenTelemetry SDK by calling createSdk with additional options
   const sdk = createSdk({
     ...options,
     metricExporterOptions: {
-      url: process.env.OTLP_TRACE_EXPORTER_URL,// URL para la exportación de métricas
+      url: process.env.OTLP_TRACE_EXPORTER_URL,// URL for metric export
     },
   })
 
-  // Función para detener adecuadamente el SDK de OpenTelemetry
+  // Function to properly shut down the OpenTelemetry SDK
   const shutdownOtelSdk = () => {
     sdk
       .shutdown()
@@ -157,37 +157,37 @@ export function startOpenTelemetry(options: CreateSdkOptions) {
       })
   }
 
-  // Manejadores para las señales SIGTERM y SIGINT que llaman a la función de cierre
+  // Handlers for SIGTERM and SIGINT signals that call the shutdown function
   process.on("SIGTERM", () => shutdownOtelSdk())
   process.on("SIGINT", () => shutdownOtelSdk())
-  // Inicia el SDK de OpenTelemetry
+  // Starts the OpenTelemetry SDK
   sdk.start()
   Logger.log("OTEL SDK started successfully", "startTelemetry")
 
 }
 ```
 
-## Ejemplo de trazas con una comunicación entre microservicios
+## 📦 Example of Traces with Inter-Microservice Communication
 
-Para ilustrar cómo podemos utilizar OpenTelemetry para mejorar la observabilidad de nuestros microservicios, vamos a utilizar un ejemplo de un clon de Spotify. Tenemos las siguientes aplicaciones:
+To illustrate how we can use OpenTelemetry to improve the observability of our microservices, we will use a Spotify clone example. We have the following applications:
 
-- `mobile-bff`: Backend for frontend para aplicaciones móviles, expone los datos mediante GraphQL.
-- `music-library-ms`: API Rest con la data de artistas, álbumes y canciones.
+- `mobile-bff`: Backend for frontend for mobile applications, exposes data via GraphQL.
+- `music-library-ms`: REST API with artist, album, and song data.
 
-![arquitectura](https://i.ibb.co/6By7yYt/microservice-2-photo1.png)
+![architecture](https://i.ibb.co/6By7yYt/microservice-2-photo1.png)
 
-Es un proceso básico que ilustrará una petición de un servicio a otro.
+It is a basic process that will illustrate a request from one service to another.
 
-El código que se mostrará a continuación define la estructura básica y simplificada de las aplicaciones `mobile-bff` y `music-library-ms`, las cuales simularán la librería musical de Spotify.
+The code shown below defines the basic and simplified structure of the `mobile-bff` and `music-library-ms` applications, which will simulate the Spotify music library.
 
-> Si quieres ver en detalle el codigo puedes consultar el [repositorio](https://github.com/nullpointer-excelsior/microservices-architecture-nestjs)
+> If you want to see the code in detail, you can check the [repository](https://github.com/nullpointer-excelsior/microservices-architecture-nestjs)
 
-## Servicio MobileBFF Spotify clone
+## 📱 MobileBFF Service Spotify Clone
 
-Definimos las clases necesarias para levantar nuestro servicio GraphQL.
+We define the necessary classes to set up our GraphQL service.
 
 ```typescript
-// Model de Artist Graphql
+// Artist GraphQL Model
 @ObjectType()
 export class Artist {
 
@@ -208,7 +208,7 @@ export class Artist {
 
 }
 
-// Resolver de Artist
+// Artist Resolver
 @Resolver(of => Artist)
 export class ArtistResolver {
 
@@ -239,7 +239,7 @@ export class ArtistResolver {
 ```
 
 ```typescript
-// cliente http para conexion con el microservicio music-library-ms
+// HTTP client for connection with the music-library-ms microservice
 @Injectable()
 export class MusicLibraryCLient {
 
@@ -261,7 +261,7 @@ export class MusicLibraryCLient {
     }
 
 }
-// componente de tipo service para obtener los artistas de music-library-ms
+// service-type component to get artists from music-library-ms
 @Injectable()
 export class ArtistService {
 
@@ -280,11 +280,11 @@ export class ArtistService {
 }
 ```
 
-> Se ignoran las configuraciones de módulos, ya que salen del objetivo del artículo.
+> Module configurations are ignored as they are outside the scope of this article.
 
-## Microservicio Music Library Spotify Clone
+## 🎵 Music Library Microservice Spotify Clone
 
-Nuestro Microservicio `music-library-ms` es una API Rest simple.
+Our `music-library-ms` microservice is a simple REST API.
 
 ```typescript
 // artist controller
@@ -379,11 +379,11 @@ export class Artist {
 
 ```
 
-## Iniciando instrumentación de microservicios
+## 🚀 Starting Microservice Instrumentation
 
-La instrumentación debe instanciarse en el punto de entrada de la aplicación. Debemos hacer llamado de la función `startOpenTelemetry()` en la ejecución del archivo `main.ts`. Debemos iniciar esta función antes del método `bootstrap()` como en el siguiente ejemplo:
+Instrumentation must be instantiated at the application entry point. We need to call the `startOpenTelemetry()` function in the `main.ts` file execution. We must start this function before the `bootstrap()` method as in the following example:
 
-### mobile-bff `apps/mobile-bff/main.ts`
+### 📱 mobile-bff `apps/mobile-bff/main.ts`
 
 ```typescript
 // MOBILE-BFF Application
@@ -396,9 +396,9 @@ startOpenTelemetry({
   serviceName: "mobile-bff",
   serviceVersion: "1.0",
   instrumentations: [
-    new HttpInstrumentation(), // trazas http
-    new ExpressInstrumentation({ // trazas express
-      ignoreLayersType: [ExpressLayerType.REQUEST_HANDLER, ExpressLayerType.MIDDLEWARE] // se ignora trazas provenientes de middleware y request handlre de express
+    new HttpInstrumentation(), // http traces
+    new ExpressInstrumentation({ // express traces
+      ignoreLayersType: [ExpressLayerType.REQUEST_HANDLER, ExpressLayerType.MIDDLEWARE] // ignore traces from express middleware and request handler
     }),
   ],
 })
@@ -406,7 +406,7 @@ startOpenTelemetry({
 bootstrap();
 ```
 
-### music-library-ms `apps/music-library-ms/main.ts`
+### 🎵 music-library-ms `apps/music-library-ms/main.ts`
 
 ```typescript
 // MusicLibraryMS microservice
@@ -422,7 +422,7 @@ startOpenTelemetry({
   serviceVersion: "1.0",
   instrumentations: [
     new HttpInstrumentation(),
-    new PgInstrumentation(), // trazas de postgres
+    new PgInstrumentation(), // postgres traces
     new ExpressInstrumentation({
       ignoreLayersType: [ExpressLayerType.REQUEST_HANDLER, ExpressLayerType.MIDDLEWARE]
     }),
@@ -432,19 +432,19 @@ startOpenTelemetry({
 bootstrap();
 ```
 
-Tanto `mobile-bff` como `music-library-ms` instrumentarán `HttpInstrumentation` y `ExpressInstrumentation`. Con esto lograremos que OpenTelemetry pueda asociar cualquier petición entre los 2 en una misma traza con una jerarquía incluida. `music-library-ms` instrumentará `PgInstrumentation` para obtener información sobre el motor PostgreSQL.
+Both `mobile-bff` and `music-library-ms` will instrument `HttpInstrumentation` and `ExpressInstrumentation`. With this, we will achieve OpenTelemetry being able to associate any request between the two in the same trace with an included hierarchy. `music-library-ms` will instrument `PgInstrumentation` to get information about the PostgreSQL engine.
 
-## Customizando Trazas con Spans
+## 🎯 Customizing Traces with Spans
 
-Un "Span" representa una porción de tiempo durante la cual una operación específica ocurre en una aplicación. Por ejemplo, cuando se inicia una solicitud HTTP en un servicio y se completa, también contienen información relevante sobre el tiempo que tomó la operación, metadatos contextualizados (como identificadores de servicio, identificadores de usuario, etc.), así como también pueden tener relaciones padre-hijo, lo que permite visualizar cómo las operaciones se relacionan entre sí en un entorno distribuido.
+A "Span" represents a portion of time during which a specific operation occurs in an application. For example, when an HTTP request is initiated in a service and completed, they also contain relevant information about the time the operation took, contextualized metadata (such as service identifiers, user identifiers, etc.), and can also have parent-child relationships, allowing you to visualize how operations relate to each other in a distributed environment.
 
-Para implementar Span podemos utilizar la librería `nestjs-otel`, la cual nos proporciona un conjunto de anotaciones y servicios de NestJS para instrumentar de forma fácil y limpia nuestras aplicaciones.
+To implement Spans, we can use the `nestjs-otel` library, which provides a set of NestJS annotations and services to easily and cleanly instrument our applications.
 
 ```bash
 npm install nestjs-otel
 ```
 
-Ahora en cualquier método podemos hacer uso del decorador `@Span`.
+Now we can use the `@Span` decorator on any method.
 
 ```typescript
 @Span("ArtistService/findById")
@@ -453,7 +453,7 @@ findById(id: string): Promise<ArtistModel> {
 }
 ```
 
-Además, podemos agregar atributos a nuestras trazas para proporcionar más contexto sobre las operaciones que estamos rastreando. Por ejemplo, podemos agregar más información o metadata a nestras trazas en `ArtistService` de la siguiente manera:
+Additionally, we can add attributes to our traces to provide more context about the operations we are tracking. For example, we can add more information or metadata to our traces in `ArtistService` as follows:
 
 ```typescript
 
@@ -462,15 +462,15 @@ export class ArtistService {
 
     constructor(private readonly traceService: TraceService) {}
 
-    // atributos mediante decorador
+    // attributes via decorator
     @Span("ArtistService/findById", { attributes: { foo: 'bar' }})
     findById(id: string): Promise<ArtistModel> {
       return this.repository.findOneBy({ id });
     }
 
-    // atributos mediante service
+    // attributes via service
     async save(artist: CreateArtistRequest) {
-      const currentSpan = this.traceService.getSpan(); // --> retrives current span, comes from http or @Span
+      const currentSpan = this.traceService.getSpan(); // --> retrieves current span, comes from http or @Span
       const saved = await this.repository.save(artist)
       await this.doSomething();
       currentSpan.addEvent('event 1');
@@ -490,41 +490,41 @@ export class ArtistService {
 
 ```
 
-## Ejecución y Pruebas de trazas distribuidas
+## 🧪 Running and Testing Distributed Traces
 
-Finalizando con la implementación de OpenTelemetry, es hora de realizar un par de pruebas. Todo el código anterior con mayor detalle está en el siguiente [repositorio](https://github.com/nullpointer-excelsior/microservices-architecture-nestjs). Ahora sigue los siguientes pasos para probar el sistema:
+Finishing the OpenTelemetry implementation, it is time to run a couple of tests. All the code above with more detail is in the following [repository](https://github.com/nullpointer-excelsior/microservices-architecture-nestjs). Now follow these steps to test the system:
 
-> Necesitarás tener Docker corriendo en tu máquina local.
+> You will need Docker running on your local machine.
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/nullpointer-excelsior/microservices-architecture-nestjs
 
-# Instalar dependencias
+# Install dependencies
 cd microservices-architecture-nestjs/
 npm install
 ```
 
-Ahora necesitaremos levantar la infraestructura y las aplicaciones:
+Now we need to start the infrastructure and applications:
 
 ```bash
-# Levantar infraestructura
+# Start infrastructure
 npm run start:infra 
-# Iniciar mobile-bff
+# Start mobile-bff
 npm run start:mobile-bff
-# Iniciar music-library-ms
+# Start music-library-ms
 npm run start:music-library
 ```
 
-El comando `npm run start:infra` levantará también a Jeager UI. Ahora, si todo sale bien, tendrás 2 aplicaciones NestJs ejecutándose más la aplicación Jeager UI:
+The `npm run start:infra` command will also start Jaeger UI. Now, if everything goes well, you will have 2 NestJS applications running plus the Jaeger UI application:
 
-- `mobile-bff`: En la URL http://localhost:3014/graphql encontrarás el playground de GraphQL con el cual podrás ejecutar consultas.
-- `music-library-ms`: En la URL http://localhost:3011/api encontrarás la definición de la API con Swagger con la que podrás interactuar con la API directamente.
-- `Jeager UI`: En la URL http://localhost:16686 encontrarás Jaeger UI. Aquí es donde visualizaremos las trazas de las aplicaciones.
+- `mobile-bff`: At the URL http://localhost:3014/graphql you will find the GraphQL playground where you can execute queries.
+- `music-library-ms`: At the URL http://localhost:3011/api you will find the API definition with Swagger with which you can interact with the API directly.
+- `Jaeger UI`: At the URL http://localhost:16686 you will find Jaeger UI. This is where we will visualize the application traces.
 
-### Visualizando nuestra primera traza
+### 🔍 Visualizing Our First Trace
 
-Nos dirigimos a http://localhost:3014/graphql y realizaremos la siguiente query.
+We go to http://localhost:3014/graphql and execute the following query.
 
 ```gql
 query {
@@ -540,42 +540,42 @@ query {
 }
 ```
 
-como se muestra en la imagen ![i1](https://i.ibb.co/Z8zwdn7/Screenshot-2023-11-27-at-15-46-41.png)
+as shown in the image ![i1](https://i.ibb.co/Z8zwdn7/Screenshot-2023-11-27-at-15-46-41.png)
 
-En este caso, no nos devolverá datos, pero habrá hecho una petición a `music-library-ms`, con esto nos basta.
+In this case, it will not return data, but it will have made a request to `music-library-ms`, which is enough for us.
 
-### Visualizando trazas en Jeager UI
+### 📊 Visualizing Traces in Jaeger UI
 
-Nos dirigimos a http://localhost:16686 y en el buscador de servicios podremos filtrar nuestras trazas. En este caso, escogeremos `mobile-bff`. Si no vemos `mobile-bff` o `music-library-ms`, esperamos unos minutos y refrescamos.
+We go to http://localhost:16686 and in the service search we can filter our traces. In this case, we will choose `mobile-bff`. If we do not see `mobile-bff` or `music-library-ms`, we wait a few minutes and refresh.
 
 ![i2](https://i.ibb.co/qD97CYM/Screenshot-2023-11-27-at-15-47-15.png)
 
-Ahora veremos las distintas trazas que llegaron a Jeager UI. Escogeremos la que tenga más spans asociados y expandiremos.
+Now we will see the different traces that arrived at Jaeger UI. We will choose the one with the most associated spans and expand it.
 
 ![i3](https://i.ibb.co/n3XH7Hd/Screenshot-2023-11-27-at-16-07-14.png)
 
-Ahora podemos ver una jerarquía de spans realizados por ambas aplicaciones donde nos da una apreciación de tiempo como de atributos que pudiera contener las trazas.
+Now we can see a hierarchy of spans performed by both applications, which gives us an appreciation of time as well as attributes that the traces might contain.
 
 ![i4](https://i.ibb.co/LR0S8Xd/Screenshot-2023-11-27-at-15-47-00.png)
 
-Toda la información que enviamos es personalizable. Deberás consultar la documentación de [OpenTelemetry](https://opentelemetry.io/docs/getting-started/dev/) o de la instrumentación en específico. Por ejemplo, aquí podemos visualizar la query realizada por `music-library-ms`.
+All the information we send is customizable. You should consult the [OpenTelemetry](https://opentelemetry.io/docs/getting-started/dev/) documentation or the specific instrumentation. For example, here we can visualize the query performed by `music-library-ms`.
 
 ![i5](https://i.ibb.co/1nxkV3S/Screenshot-2023-11-27-at-15-48-05.png)
 
-## Conclusión
+## 🏁 Conclusion
 
-La implementación de trazas distribuidas con OpenTelemetry nos dará una ventaja al momento de resolver problemas en entornos distribuidos. Antes de diseñar microservicios o cualquier aplicación donde el entorno producctivo sea realmente crítico, debemos considerar cómo vamos a hacer seguimiento de estos sistemas. En este artículo abordamos solo el caso de trazas, pero la observabilidad en la ingeniería de software nos ayudará a:
+Implementing distributed traces with OpenTelemetry will give us an advantage when resolving problems in distributed environments. Before designing microservices or any application where the production environment is truly critical, we must consider how we will track these systems. In this article we only covered the case of traces, but observability in software engineering will help us:
 
-- **Monitoreo de salud**: Evaluar el estado de los componentes distribuidos.
-- **Identificar cuellos de botella**: Encontrar áreas de rendimiento deficiente.
-- **Optimización de recursos**: Ajustar asignación de CPU, memoria, etc.
-- **Seguimiento y trazabilidad**: Rastrear flujo de datos entre servicios.
-- **Detección de problemas en tiempo real**: Configurar alertas para responder rápidamente.
-- **Análisis de tendencias**: Identificar patrones y comportamientos históricos de los usuarios para toma de decisiones.
-- **Automatización de respuestas**: Tomar decisiones automáticas según la demanda.
-- **Optimización de la experiencia del usuario**: Mejorar rendimiento según interacciones.
-- **Seguridad y detección de anomalías**: Identificar posibles ataques o brechas.
-- **Evaluación del rendimiento a largo plazo**: Analizar para mejorar la arquitectura.
+- **Health monitoring**: Evaluate the state of distributed components.
+- **Identify bottlenecks**: Find areas of poor performance.
+- **Resource optimization**: Adjust CPU, memory, etc. allocation.
+- **Tracking and traceability**: Track data flow between services.
+- **Real-time problem detection**: Set up alerts to respond quickly.
+- **Trend analysis**: Identify patterns and historical user behaviors for decision-making.
+- **Response automation**: Make automatic decisions based on demand.
+- **User experience optimization**: Improve performance based on interactions.
+- **Security and anomaly detection**: Identify potential attacks or breaches.
+- **Long-term performance evaluation**: Analyze to improve architecture.
 
 
-La observabilidad es un aspecto crucial para el desarrollo y la operación de microservicios. En este artículo vimos solo la capacidad de las trazas. OpenTelemetry nos proporciona las herramientas necesarias para recopilar y gestionar la telemetría de nuestras aplicaciones, lo que nos permite obtener una visión completa de nuestras aplicaciones. Con OpenTelemetry, podemos mejorar la calidad y el rendimiento de nuestras aplicaciones y resolver los problemas de manera más eficiente.
+Observability is a crucial aspect for the development and operation of microservices. In this article we only saw the capability of traces. OpenTelemetry provides the necessary tools to collect and manage telemetry from our applications, allowing us to get a complete view of our applications. With OpenTelemetry, we can improve the quality and performance of our applications and resolve issues more efficiently.

@@ -1,54 +1,54 @@
-# Arquitecturas EDA Eventos de dominio vs eventos de integración
+# 📨 EDA Architectures: Domain Events vs Integration Events
 
-La comunicación asíncrona entre microservicios nos ayuda a crear procesos complejos donde las responsabilidades del sistema están repartidas entre distintas aplicaciones. Como es la filosofía de los microservicios, separar responsabilidades para mantener ciertas características independientes entre sí nos ayuda a lograr escalabilidad, manejo de cargas y tolerancia a errores, pero esto conlleva un gran desafío de comunicación. Comunicar un servicio de forma síncrona y esperar una respuesta no siempre es viable. Hay cargas de trabajo que no requieren una respuesta inmediata, e incluso muchas veces esto puede fallar y romper todo el flujo de un proceso importante. Nadie quiere esto en una compra de considerable valor.
+Asynchronous communication between microservices helps us create complex processes where system responsibilities are distributed across different applications. As per the microservices philosophy, separating responsibilities to keep certain characteristics independent from each other helps us achieve scalability, load handling, and fault tolerance, but this comes with a great communication challenge. Communicating a service synchronously and waiting for a response is not always viable. There are workloads that do not require an immediate response, and often this can fail and break the entire flow of an important process. Nobody wants this in a purchase of considerable value.
 
-Cuando la comunicación síncrona no es la opción, te presento las arquitecturas EDA, o arquitecturas basadas en eventos. Este enfoque nos da la posibilidad de comunicarnos con componentes tanto internos de una aplicación como con servicios o aplicaciones externas. En esta ocasión analizaremos los eventos de dominio y los eventos de integración.
+When synchronous communication is not the option, I present EDA architectures, or event-driven architectures. This approach gives us the possibility to communicate with both internal components of an application and with external services or applications. This time we will analyze domain events and integration events.
 
-## Comunicación basada en eventos
+## 📡 Event-Based Communication
 
-La integración de aplicaciones y servicios utilizando arquitecturas orientadas a eventos es esencial para crear sistemas robustos y flexibles. Dos conceptos fundamentales en este ámbito son los eventos de dominio y los eventos de integración. Ambos desempeñan roles cruciales, pero se aplican en contextos un tanto diferentes, pero a su vez son compatibles entre sí, lo que nos permite crear sistemas complejos y desacoplados.
+Integrating applications and services using event-driven architectures is essential for creating robust and flexible systems. Two fundamental concepts in this area are domain events and integration events. Both play crucial roles but are applied in somewhat different contexts, yet they are compatible with each other, allowing us to create complex and decoupled systems.
 
-### Eventos de Dominio:
+### 🏛️ Domain Events:
 
-Los eventos de dominio son fundamentales en el diseño basado en dominio o DDD, una técnica que se centra en modelar el sistema según el dominio de negocio al que pertenece. Estos eventos representan cambios significativos en el estado del dominio y suelen estar vinculados estrechamente a los conceptos del modelo de dominio. También representan hechos pasados del dominio, por ejemplo: `user-created`, `user-banned`, `stock-updated`, etc.
+Domain events are fundamental in domain-driven design or DDD, a technique focused on modeling the system according to the business domain it belongs to. These events represent significant changes in the domain state and are usually closely linked to domain model concepts. They also represent past domain facts, for example: `user-created`, `user-banned`, `stock-updated`, etc.
 
-> Si bien los eventos de dominio los encuentras mucho en sistemas hechos con DDD, nadie te impide usarlos en arquitecturas más simples como las de N-capas.
+> While you find domain events a lot in systems built with DDD, nobody prevents you from using them in simpler architectures like N-tier.
 
-#### Características Clave:
+#### 🔑 Key Characteristics:
 
-- **Contexto de Negocio**: Los eventos de dominio se originan en el núcleo del negocio y reflejan acciones o cambios relevantes para el dominio.
-- **Desacoplamiento**: Permiten un desacoplamiento eficiente entre las distintas partes del sistema al enfocarse en la semántica del dominio en lugar de detalles de implementación.
-- **Modelado Preciso**: Al reflejar eventos específicos del dominio, estos eventos contribuyen a un modelado más preciso y representativo del negocio.
+- **Business Context**: Domain events originate in the business core and reflect actions or changes relevant to the domain.
+- **Decoupling**: They allow efficient decoupling between different parts of the system by focusing on domain semantics rather than implementation details.
+- **Precise Modeling**: By reflecting domain-specific events, these events contribute to more precise and representative business modeling.
 
-### Eventos de Integración:
+### 🔗 Integration Events:
 
-Los eventos de integración son mensajes diseñados para coordinar la interacción entre microservicios o aplicaciones. Estos eventos abordan la necesidad de sincronización y colaboración en un entorno distribuido. Estos eventos representan mensajes que se intercambian entre componentes o servicios para mantener la coherencia y la sincronización en el ecosistema de software.
+Integration events are messages designed to coordinate interaction between microservices or applications. These events address the need for synchronization and collaboration in a distributed environment. These events represent messages exchanged between components or services to maintain coherence and synchronization in the software ecosystem.
 
-#### Características Clave:
+#### 🔑 Key Characteristics:
 
-- **Comunicación Inter-Servicios**: Los eventos de integración facilitan la comunicación entre diferentes servicios o componentes, permitiendo la colaboración en un entorno distribuido.
-- **Desacoplamiento de Sistemas**: Al utilizar eventos para la integración, se logra un desacoplamiento efectivo entre sistemas, lo que facilita la escalabilidad y la evolución independiente de cada componente.
-- **Interoperabilidad**: Son esenciales para lograr interoperabilidad entre sistemas heterogéneos, ya que proporcionan un medio estandarizado de intercambio de información.
+- **Inter-Service Communication**: Integration events facilitate communication between different services or components, enabling collaboration in a distributed environment.
+- **System Decoupling**: By using events for integration, effective decoupling between systems is achieved, facilitating scalability and independent evolution of each component.
+- **Interoperability**: They are essential for achieving interoperability between heterogeneous systems, as they provide a standardized means of information exchange.
 
-Es crucial comprender que los eventos de dominio y los eventos de integración sirven propósitos diferentes, pero no son mutuamente excluyentes. De hecho, su uso combinado puede potenciar la eficacia de un sistema.
+It is crucial to understand that domain events and integration events serve different purposes but are not mutually exclusive. In fact, their combined use can enhance the effectiveness of a system.
 
-## Casos de Uso Eventos de dominio:
+## 🎯 Domain Events Use Cases:
 
-En nuestra arquitectura de nuestro **Spotify-clone** veremos los eventos de dominio ocurridos en el microservicio `music-discovery-ms`. Esta aplicación contiene los siguientes módulos:
+In our **Spotify-clone** architecture, we will see domain events occurring in the `music-discovery-ms` microservice. This application contains the following modules:
 
-- **user-catalog**: catálogo musical del usuario con playlists personales, artistas y canciones favoritas.
-- **playlist-catalog**: catálogo de playlists ofrecidas a los usuarios.
-- **shared**: componentes compartidos entre los módulos.
+- **user-catalog**: user's music catalog with personal playlists, favorite artists, and songs.
+- **playlist-catalog**: catalog of playlists offered to users.
+- **shared**: shared components between modules.
 
-### Caso de uso: El catálogo de playlists públicos debe actualizarse si el usuario actualiza sus playlists de tipo público.
+### 📝 Use Case: The public playlist catalog must be updated when the user updates their public-type playlists.
 
-Cuando el usuario crea una playlist en su catálogo, si esta es de tipo público, debe agregarse automáticamente al catálogo de playlists de **Spotify-clone** para poder ser indexado de forma eficiente.
+When a user creates a playlist in their catalog, if it is of public type, it must be automatically added to the **Spotify-clone** playlist catalog to be efficiently indexed.
 
-Analizando el caso de uso, lo único que tendríamos que hacer es invocar al repositorio encargado de la playlist de **Spotify-clone** cuando el usuario actualice su playlist. Pero para ejemplos reales, suponiendo que la complejidad del código es alta, acoplar el módulo `user-catalog` con `playlist-catalog` en el caso de uso de actualizar catálogo de usuario no tiene nada que ver con el caso de uso de actualizar el catálogo de playlist. Esto incluso no nos permite que nuestro código sea escalable. Para solucionar esto, comunicaremos estos 2 módulos mediante eventos de dominio.
+Analyzing the use case, all we would have to do is invoke the repository responsible for the **Spotify-clone** playlist when the user updates their playlist. But for real examples, assuming the code complexity is high, coupling the `user-catalog` module with `playlist-catalog` in the use case of updating the user catalog has nothing to do with the use case of updating the playlist catalog. This does not even allow our code to be scalable. To solve this, we will communicate these 2 modules through domain events.
 
-Primero creamos dentro de la librería `libs/utils` del proyecto monorepo una librería de utilitarios de DDD llamada `seedwork` con clase base para los eventos de dominio.
+First, we create within the `libs/utils` library of the monorepo project a DDD utility library called `seedwork` with a base class for domain events.
 
-> `seedwork` El nombre hace referencia a un tipo de mini framework de utilidades propias, pero aplicado a nivel local de tu proyecto. Puedes encontrarlo con otros nombres como shared-kernel, commons, core, etc.
+> `seedwork` The name refers to a type of mini framework of own utilities, but applied at the local level of your project. You can find it with other names like shared-kernel, commons, core, etc.
 
 ```typescript
 //libs/utils/src/seedwork/domain/events/eventbus.ts
@@ -72,7 +72,7 @@ export abstract class DomainEvent<T = any> {
 }
 ```
 
-Nos ayudamos de la librería [eventemitter](https://docs.nestjs.com/techniques/events) de NestJS para crear un eventbus en memoria para poder emitir los eventos.
+We use the NestJS [eventemitter](https://docs.nestjs.com/techniques/events) library to create an in-memory eventbus to emit events.
 
 ```typescript
 // libs/utils/src/seedwork/infrastructure/domain-eventbus/services/event-emitter.eventbus.ts
@@ -88,7 +88,7 @@ export class EventEmitterEventbus implements DomainEventBus {
 }
 ```
 
-Generamos los eventos de dominio dentro del módulo `shared` de `music-discovery`.
+We generate domain events within the `shared` module of `music-discovery`.
 
 ```typescript
 // apps/music-discovery-ms/src/shared/domain-events/user-music-catalog/playlist-updated.event.ts
@@ -103,9 +103,9 @@ export class PlaylistUpdatedEvent extends DomainEvent<Playlist> {
 }
 ```
 
-> Utilizamos el patrón de spotifyclone.*FEATURE*.domain.*EVENT* para poder realizar patrones de filtrado sobre eventos en casos más complejos.
+> We use the pattern spotifyclone.*FEATURE*.domain.*EVENT* to be able to perform filtering patterns on events in more complex cases.
 
-Ahora nuestro caso de uso sería el siguiente.
+Now our use case would be the following.
 
 ```typescript
 // apps/music-discovery-ms/src/user-catalog/application/dto/update-playlists.dto.ts
@@ -169,9 +169,9 @@ export class UserCatalogUseCases {
 }
 ```
 
-Nuestro caso de uso es simple, solo recibimos un DTO con la información de la playlist a actualizar y enviamos el evento de dominio con `domainEventBus.publish()`.
+Our use case is simple, we just receive a DTO with the playlist information to update and send the domain event with `domainEventBus.publish()`.
 
-Gracias a NestJS podremos escuchar este evento mediante anotaciones en cualquier servicio `@Injectable`.
+Thanks to NestJS, we can listen for this event using annotations in any `@Injectable` service.
 
 ```typescript
 // apps/music-discovery-ms/src/playlist-catalog/infrastructure/domain-events/domain-event.listener.ts
@@ -191,26 +191,26 @@ export class DomainEventListener {
 }
 ```
 
-Finalmente, recibimos la playlist mediante un evento y si esta es pública, se guardará en la base de datos en el módulo de `playlist-catalog`. De esta manera, hemos desacoplado 2 casos de uso totalmente distintos donde el modelo de playlist tiene un significado distinto dependiendo del contexto de dominio en que esté.
+Finally, we receive the playlist through an event and if it is public, it will be saved in the database in the `playlist-catalog` module. This way, we have decoupled 2 totally different use cases where the playlist model has a different meaning depending on the domain context it is in.
 
-## Casos de Uso Eventos de integración:
+## 🎯 Integration Events Use Cases:
 
-Ya tenemos claro que los eventos de integración nos ayudan a comunicar distintas aplicaciones. Para ejemplificar este concepto, tomaremos el caso de uso de creación de usuario dentro del microservicio `accounts-ms`, el cual es dependiente de un caso de uso más grande llamado "Bienvenida de usuario".
+We already understand that integration events help us communicate different applications. To exemplify this concept, we will take the user creation use case within the `accounts-ms` microservice, which is dependent on a larger use case called "User Welcome".
 
-### Caso de uso: Bienvenida de usuario
+### 📝 Use Case: User Welcome
 
-Este caso de uso involucra 3 aplicaciones:
-- `account-ms`: encargado de la gestión de cuentas y usuarios.
-- `mailing-ms`: encargado de enviar notificaciones de correo electrónico.
-- `music-discovery-ms`: encargado de gestionar la música que le interesa o puede interesarle al usuario del clonespotify.
+This use case involves 3 applications:
+- `account-ms`: responsible for account and user management.
+- `mailing-ms`: responsible for sending email notifications.
+- `music-discovery-ms`: responsible for managing music that interests or may interest the clonespotify user.
 
-Nuestro caso de uso es simple. Cuando se cree un usuario dentro de `accounts-ms`, necesitamos enviar un correo electrónico de bienvenida al usuario y a su vez necesitamos iniciar el catálogo inicial del usuario.
+Our use case is simple. When a user is created within `accounts-ms`, we need to send a welcome email to the user and also need to initialize the user's initial catalog.
 
-Este simple caso de uso involucra diferentes servicios, y como vemos a simple vista, cada uno de estos tiene responsabilidades totalmente distintas entre sí, pero gracias a los eventos de integración podemos lograr un proceso distribuido entre nuestros servicios con un bajo acoplamiento.
+This simple use case involves different services, and as we can see at first glance, each of them has totally different responsibilities from each other, but thanks to integration events we can achieve a distributed process between our services with low coupling.
 
-Lo primero será definir la arquitectura de eventos. Para lograrlo, nos ayudaremos del modelo `pub/sub`, el cual nos permitirá que múltiples clientes puedan suscribirse a algún evento y realizar sus operaciones.
+The first thing will be to define the event architecture. To achieve this, we will use the `pub/sub` model, which will allow multiple clients to subscribe to an event and perform their operations.
 
-Creemos un servicio de Redis en nuestro docker-compose.
+Let's create a Redis service in our docker-compose.
 
 ```yml
 # infrastructure/local/docker-compose.yaml
@@ -228,40 +228,40 @@ services:
       - microservices-architecture
 ```
 
-Instalamos la siguiente dependencia.
+We install the following dependency.
 
 ```bash
 npm i --save ioredis 
 ```
 
-NestJS nos ofrece este modelo de `pub/sub` basado en un servidor Redis, el cual nos ayudará a aplicar y escuchar eventos a modo de fire and forget, lo que implica la desventaja de que si nadie escucha los mensajes emitidos, estos se perderán. Pero a modo de aprendizaje, esto nos bastará.
+NestJS offers this `pub/sub` model based on a Redis server, which will help us apply and listen to events in a fire-and-forget manner, which has the disadvantage that if nobody listens to the emitted messages, they will be lost. But for learning purposes, this will be enough.
 
-La implementación del `pub/sub` es simple, así que definimos la siguiente librería compartida en nuestro monorepo.
+The `pub/sub` implementation is simple, so we define the following shared library in our monorepo.
 
 ```bash
- integration-events
-├──  src
-│   ├──  config
-│   │   └──  constants.ts
-│   ├──  events
-│   │   ├──  accounts-ms
-│   │   │   └──  user-created.event.ts
-│   │   ├──  integration.event.ts
-│   │   ├──  integration.eventbus.ts
-│   │   └──  music-discovery-ms
-│   │       └──  user-favorites-updated.event.ts
-│   ├──  index.ts
-│   ├──  integration-events.module.ts
-│   ├──  services
-│   │   └──  redis.eventbus.ts
-│   └──  transporters
-│       ├──  get-microservice-options.ts
-│       └──  redis
-│           └──  get-redis-options.ts
-└──  tsconfig.lib.json
+ integration-events
+├──  src
+│   ├──  config
+│   │   └──  constants.ts
+│   ├──  events
+│   │   ├──  accounts-ms
+│   │   │   └──  user-created.event.ts
+│   │   ├──  integration.event.ts
+│   │   ├──  integration.eventbus.ts
+│   │   └──  music-discovery-ms
+│   │       └──  user-favorites-updated.event.ts
+│   ├──  index.ts
+│   ├──  integration-events.module.ts
+│   ├──  services
+│   │   └──  redis.eventbus.ts
+│   └──  transporters
+│       ├──  get-microservice-options.ts
+│       └──  redis
+│           └──  get-redis-options.ts
+└──  tsconfig.lib.json
 ```
 
-Definimos nuestro Eventbus.
+We define our EventBus.
 
 ```typescript
 // libs/integration-events/src/events/integration.eventbus.ts
@@ -329,7 +329,7 @@ const IntegrationEventbusProvider = {
 export class IntegrationEventsModule { }
 ```
 
-Definimos los eventos.
+We define the events.
 
 ```typescript
 // libs/integration-events/src/events/integration.event.ts
@@ -362,9 +362,9 @@ export class UserCreatedEvent extends IntegrationEvent<Payload> {
 }
 ```
 
-### Enviar eventos de integración
+### 📤 Sending Integration Events
 
-Ahora, dentro del módulo `users` de `accounts-ms`, importamos nuestra librería para instanciar el eventbus.
+Now, within the `users` module of `accounts-ms`, we import our library to instantiate the eventbus.
 
 ```typescript
 // apps/accounts-ms/src/users/users.module.ts
@@ -377,7 +377,7 @@ Ahora, dentro del módulo `users` de `accounts-ms`, importamos nuestra librería
 export class UsersModule {}
 ```
 
-Y hacemos uso de `IntegrationEventBus` dentro de nuestro servicio UserService.
+And we use `IntegrationEventBus` within our UserService.
 
 ```typescript
 // apps/accounts-ms/src/users/service/user.service.ts
@@ -402,11 +402,11 @@ export class UserService {
 }
 ```
 
-Con esto, los eventos serán enviados al servidor Redis y quienes estén a la escucha obtendrán los mensajes.
+With this, events will be sent to the Redis server and those listening will receive the messages.
 
-### Escuchar eventos de integración
+### 📥 Listening to Integration Events
 
-Ahora, para escuchar los eventos, instanciamos nuestro microservicio NestJS en las aplicaciones que necesiten los eventos de integración.
+Now, to listen to events, we instantiate our NestJS microservice in the applications that need the integration events.
 
 ```typescript
 // libs/integration-events/src/transporters/get-microservice-options.ts
@@ -422,7 +422,7 @@ export function getMicroserviceOptions() {
 }
 ```
 
-Microservicio: `mailing-ms`
+Microservice: `mailing-ms`
 
 ```typescript
 // apps/mailing-ms/src/main.ts
@@ -432,7 +432,7 @@ async function bootstrap() {
 }
 ```
 
-Microservicio: `music-discovery-ms`
+Microservice: `music-discovery-ms`
 
 ```typescript
 // apps/music-discovery-ms/src/main.ts
@@ -449,9 +449,9 @@ async function bootstrap() {
 }
 ```
 
-Finalmente, definimos los controladores con su message pattern y ejecutar la lógica de negocio que queramos.
+Finally, we define the controllers with their message pattern and execute the business logic we want.
 
-Envío de email de bienvenida al crearse un usuario en el microservicio `mailing-ms`.
+Sending welcome email when a user is created in the `mailing-ms` microservice.
 
 ```typescript
 // apps/mailing-ms/src/integration-events/controllers/integration.controller.ts
@@ -469,7 +469,7 @@ export class IntegrationController {
 }
 ```
 
-Creación del catálogo inicial del usuario al crearse un nuevo usuario en el microservicio `music-discovery-ms`
+Creating the initial user catalog when a new user is created in the `music-discovery-ms` microservice.
 
 ```typescript
 // apps/music-discovery-ms/src/user-catalog/infrastructure/integration-events/integration.controller.ts
@@ -492,7 +492,7 @@ export class IntegrationController {
 }
 ```
 
-Finalmente, para ver el ejemplo funcionando, ejecuta lo siguiente.
+Finally, to see the example working, execute the following.
 
 ```bash
 npm run start:infra
@@ -501,7 +501,7 @@ npm run start:mailing
 npm run start:music-discovery
 ```
 
-Y envía un curl a `accounts-ms`.
+And send a curl to `accounts-ms`.
 
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
@@ -512,11 +512,10 @@ curl -X POST -H "Content-Type: application/json" -d '{
 }' http://localhost:3013/users
 ```
 
-Finalmente, verás los logs de la aplicación.
+Finally, you will see the application logs.
 
 ![ex](images/domain-event-vs-integration-event.webp)
 
-## Conclusión
+## 🏁 Conclusion
 
-Exploramos los eventos de dominio y de integración con un enfoque práctico y fácil de entender. Los eventos de integración nos ayudan a crear sistemas totalmente desacoplados entre sí, y los eventos de dominio nos ayudan a modelar de mejor manera la lógica de negocio, creando un código totalmente desacoplado y con la capacidad de ser mantenible en el tiempo.
-
+We explored domain and integration events with a practical and easy-to-understand approach. Integration events help us create fully decoupled systems, and domain events help us better model business logic, creating fully decoupled code with the ability to be maintainable over time.

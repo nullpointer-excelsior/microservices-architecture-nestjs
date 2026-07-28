@@ -1,76 +1,76 @@
 
-# Comunicación entre microservicios
+# 🔄 Microservices Communication
 
-## Introducción
+## 💡 Introduction
 
-En arquitecturas orientadas a microservicios, contamos con numerosos componentes, aplicaciones y sistemas encargados de realizar tareas y procesos. Cada tarea o proceso puede recibir una entrada, procesarla y generar una salida. A su vez, esta salida puede ser devuelta o asignada a otro componente. 
-Para lograr orquestar estos procesos se utilizan los protocolos de comunicación. En las arquitecturas de microservicios y en los sistemas distribuidos, la comunicación desempeña un papel crucial. Sin ella, estos sistemas no existirían. En este artículo exploraremos cómo funcionan las comunicaciones en aplicaciones basadas en microservicios.
+In microservices-oriented architectures, we have numerous components, applications, and systems responsible for performing tasks and processes. Each task or process can receive an input, process it, and generate an output. In turn, this output can be returned or assigned to another component.
+To orchestrate these processes, communication protocols are used. In microservices architectures and distributed systems, communication plays a crucial role. Without it, these systems would not exist. In this article, we will explore how communications work in microservices-based applications.
 
-## ¿Qué son los protocolos?
+## ❓ What Are Protocols?
 
-Los protocolos básicamente nos indican cómo los sistemas deben comunicarse entre sí. Definimos un formato de petición y un formato de respuesta con el cual podremos comunicar dos sistemas de una manera estandarizada. Estas pautas son descritas en documentos llamados RFC. La mayoría del tiempo, para nosotros, los protocolos son algo más ligado al bajo nivel. Ahora tenemos librerías y tecnologías que trabajan con estos con mayor abstracción y así podemos desarrollar soluciones con mayor facilidad.
+Protocols basically tell us how systems should communicate with each other. We define a request format and a response format with which we can communicate two systems in a standardized way. These guidelines are described in documents called RFCs. Most of the time, for us, protocols are something more related to the low level. Now we have libraries and technologies that work with them at a higher level of abstraction, so we can develop solutions more easily.
 
-Sin embargo, no está de más recordar estos conceptos fundamentales en el mundo de los microservicios, ya que existen un montón de arquitecturas y tecnologías involucradas en sistemas más complejos. Saber qué pasa por debajo de una librería o tecnología nos ayudará a resolver problemas que van más allá del código, los cuales la mayor parte del tiempo son los más difíciles de encontrar.
+However, it does not hurt to remember these fundamental concepts in the world of microservices, since there are a lot of architectures and technologies involved in more complex systems. Knowing what happens beneath a library or technology will help us solve problems that go beyond code, which most of the time are the hardest to find.
 
-Actualmente, una forma de comunicar dos aplicaciones es mediante RESTful, un enfoque popular y súper simple de implementar que por debajo usa HTTP. RESTful no es la única manera en que dos aplicaciones pueden comunicarse. A continuación, hablaremos de las distintas maneras que tenemos disponibles en arquitecturas orientadas a microservicios para la comunicación de aplicaciones.
+Currently, one way to communicate two applications is through RESTful, a popular and super simple approach to implement that uses HTTP under the hood. RESTful is not the only way two applications can communicate. Below, we will talk about the different ways we have available in microservices-oriented architectures for application communication.
 
-## Tipos de comunicación entre microservicios
+## 📋 Types of Communication Between Microservices
 
-Los microservicios, al ser aplicaciones independientes con necesidad de comunicarse con otras aplicaciones, tendremos disponibles básicamente dos categorías de comunicación síncronas y Asíncronas
+Microservices, being independent applications that need to communicate with other applications, will basically have two categories of communication available: synchronous and asynchronous.
 
-### Comunicación síncrona
+### 🔄 Synchronous Communication
 
-En la comunicación síncrona, un microservicio espera una respuesta inmediata después de enviar una solicitud a otro microservicio. Esto se asemeja a una conversación en tiempo real, donde el microservicio solicitante detiene su ejecución y espera la respuesta antes de continuar. Dentro de este enfoque tenemos a restful, graphql o remote call procedures RPC.
-
-
-### Comunicación asíncrona
-
-En la comunicación asíncrona, los microservicios envían mensajes sin esperar una respuesta inmediata. Esto se asemeja a dejar una nota para alguien, donde no hay una interacción directa en tiempo real. Los sistemas de mensajería como RabbitMQ, Apache Kafka o Amazon SQS se utilizan comúnmente para la comunicación asíncrona entre aplicaciones.
+In synchronous communication, a microservice expects an immediate response after sending a request to another microservice. This resembles a real-time conversation, where the requesting microservice stops its execution and waits for the response before continuing. Within this approach we have RESTful, GraphQL, or Remote Procedure Calls (RPC).
 
 
-## ¿Cuándo usar asíncrono vs síncrono?
+### 📨 Asynchronous Communication
 
-La elección entre comunicación síncrona y asíncrona en microservicios depende de varios factores, y cada enfoque tiene sus propias fortalezas dependiendo del contexto. Básicamente, podemos tomar las siguientes consideraciones: 
-
-* Comunicación síncrona: Usa esto cuando necesites una respuesta inmediata para continuar con una tarea específica o cuando la consistencia de los datos sea crucial.
-
-* Comunicación asíncrona: Opta por esto cuando busques escalabilidad, desacoplamiento entre microservicios o cuando necesites procesar tareas en segundo plano sin bloquear otras operaciones.
-
-En la práctica, a menudo es útil una combinación de ambos enfoques para diferentes casos o situaciones. A continuación, se detallan las ventajas y desventajas de ambos enfoques.
-
-### Ventajas de la comunicación asíncrona:
-
-* Permite la desacoplación entre microservicios, lo que significa que pueden funcionar de forma independiente.
-* Mayor escalabilidad ya que los microservicios no están esperando respuestas.
-* Mejor tolerancia a fallos, ya que un microservicio puede seguir funcionando aunque el receptor esté temporalmente inactivo.
-
-### Desventajas de la comunicación asíncrona:
-
-* Puede ser más complejo de diseñar y mantener, ya que los sistemas deben gestionar la llegada y el procesamiento de mensajes de manera independiente.
-* La gestión de errores puede ser más complicada debido a la falta de respuesta inmediata.
-
-### Ventajas de la comunicación síncrona:
-
-* Simplifica el manejo de errores y excepciones.
-* Es más fácil de entender y depurar, ya que el flujo de control es lineal y directo.
-
-### Desventajas de la comunicación síncrona:
-
-* Puede aumentar la latencia, ya que el microservicio solicitante debe esperar la respuesta.
-* La sobrecarga de red puede ser un problema si hay muchas solicitudes simultáneas.
-* Si un microservicio está inactivo o es lento, puede afectar a los demás que dependen de él.
+In asynchronous communication, microservices send messages without expecting an immediate response. This resembles leaving a note for someone, where there is no direct real-time interaction. Messaging systems like RabbitMQ, Apache Kafka, or Amazon SQS are commonly used for asynchronous communication between applications.
 
 
-## Ejemplo de comunicación síncrona
+## ⚖️ When to Use Asynchronous vs Synchronous?
 
-Crearemos un pequeño ejemplo de un cliente HTTP con NestJS, basandonos en nuestra arquitectura de **Spotify-Clone**.
+The choice between synchronous and asynchronous communication in microservices depends on several factors, and each approach has its own strengths depending on the context. Basically, we can take the following considerations:
 
-### Creando un cliente HTTP reutilizable
+* Synchronous communication: Use this when you need an immediate response to continue with a specific task or when data consistency is crucial.
 
-El siguiente código ejemplifica el uso de `HttpModule` en NestJS. Esto nos permite establecer propiedades de manera global para el cliente HTTP. Esta aproximación nos brinda la oportunidad de configurar nuestro cliente HTTP de forma única, evitando repeticiones.
+* Asynchronous communication: Go for this when you seek scalability, decoupling between microservices, or when you need to process tasks in the background without blocking other operations.
+
+In practice, a combination of both approaches is often useful for different cases or situations. Below are the advantages and disadvantages of both approaches.
+
+### ⚡ Advantages of Asynchronous Communication:
+
+* Allows decoupling between microservices, meaning they can operate independently.
+* Greater scalability since microservices are not waiting for responses.
+* Better fault tolerance, as a microservice can keep running even if the receiver is temporarily down.
+
+### ⚠️ Disadvantages of Asynchronous Communication:
+
+* Can be more complex to design and maintain, as systems must manage the arrival and processing of messages independently.
+* Error handling can be more complicated due to the lack of immediate response.
+
+### ⚡ Advantages of Synchronous Communication:
+
+* Simplifies error and exception handling.
+* Easier to understand and debug, as the control flow is linear and direct.
+
+### ⚠️ Disadvantages of Synchronous Communication:
+
+* Can increase latency, as the requesting microservice must wait for the response.
+* Network overhead can be a problem if there are many simultaneous requests.
+* If a microservice is down or slow, it can affect others that depend on it.
+
+
+## 🖥️ Synchronous Communication Example
+
+We will create a small example of an HTTP client with NestJS, based on our **Spotify-Clone** architecture.
+
+### 🛠️ Creating a Reusable HTTP Client
+
+The following code exemplifies the use of `HttpModule` in NestJS. This allows us to set properties globally for the HTTP client. This approach gives us the opportunity to configure our HTTP client in a single place, avoiding repetition.
 
 ```typescript
-// ejemplo de uso de HttpModule
+// example of HttpModule usage
 @Module({
   imports: [
     HttpModule.register({
@@ -83,10 +83,10 @@ El siguiente código ejemplifica el uso de `HttpModule` en NestJS. Esto nos perm
 })
 export class MyModule {}
  ```
-Ahora crearemos un servicio llamado `MusicLibraryClient`, el cual será el cliente HTTP del microservicio `music-library`. Este microservicio es el encargado de obtener información sobre artistas, álbumes y canciones de **Spotify-Clone**.
+Now we will create a service called `MusicLibraryClient`, which will be the HTTP client for the `music-library` microservice. This microservice is responsible for getting information about artists, albums, and songs from **Spotify-Clone**.
 
 ```typescript
-// definimos una clase de Error para evitar la verbosidad de un AxiosError al momento de realizar un catch
+// we define an Error class to avoid the verbosity of an AxiosError when catching
 type Props = {
     message: string;
     status: number;
@@ -111,7 +111,7 @@ export class HttpClientError extends Error {
 
 }
 
-// definimos nuestro cliente reutilizable
+// we define our reusable client
 @Injectable()
 export class HttpCLient {
 
@@ -127,7 +127,7 @@ export class HttpCLient {
                         message: error.message,
                         status: error.response?.status || 500,
                         url: error.config.url || "",
-                        response: error.response?.data || 'Unknow error',
+                        response: error.response?.data || 'Unknown error',
                      })
                 }
                 throw error
@@ -137,7 +137,7 @@ export class HttpCLient {
 
 } 
 
-// definimos nuestro modulo personalizado para ser usado con aplicaciones basadas en NestJS
+// we define our custom module to be used with NestJS-based applications
 
 import { Module } from '@nestjs/common';
 import { HttpClient } from './client/http-client';
@@ -165,7 +165,7 @@ export class HttpClientModule {
 
 ```
 
- Y utilizamos nuestro componente en clases de tipo servicio.
+ And we use our component in service-type classes.
 
  ```typescript
  @Injectable()
@@ -184,24 +184,24 @@ export class ArtistAPI {
 }
  ```
 
-Este enfoque de cliente tiene las siguientes ventajas:
+This client approach has the following advantages:
 
-* Toda lógica ligada a HTTP está centralizada en nuestro componente `HttpClient``.
-* Encapsulamos toda la lógica de la librería Axios dentro de nuestro cliente, evitando así acoplarnos a una solución en específico.
-* Las clases que usen el cliente podrán crear dominios más desacoplados.
+* All HTTP-related logic is centralized in our `HttpClient` component.
+* We encapsulate all the Axios library logic within our client, thus avoiding coupling to a specific solution.
+* Classes that use the client can create more decoupled domains.
 
-## Ejemplo de comunicación asíncrona
+## 📨 Asynchronous Communication Example
 
-Ahora crearemos un ejemplo de comunicación asíncrona con el siguiente caso de uso, basado en la arquitectura de nuestro **Spotify-Clone**:
+Now we will create an example of asynchronous communication with the following use case, based on our **Spotify-Clone** architecture:
 
-Cuando se crea un nuevo álbum de un artista, debemos enviar un correo electrónico de notificación a los usuarios que estén interesados en las noticias del artista.
+When a new album is created by an artist, we need to send a notification email to users who are interested in the artist's news.
 
-Para lograr esto, lo haremos mediante una cola de mensajería. Esta cola básicamente recibe mensajes de aplicaciones productoras y estos mensajes serán escuchados por aplicaciones suscriptoras. Cada aplicación suscriptora podrá realizar alguna operación o tarea con la información contenida en el mensaje.
+To achieve this, we will do it through a messaging queue. This queue basically receives messages from producer applications and these messages will be listened to by subscriber applications. Each subscriber application can perform some operation or task with the information contained in the message.
 
 
-### Ejemplo básico de mensajería con RabbitMQ.
+### 🐰 Basic Messaging Example with RabbitMQ
 
-Crearemos un ejemplo con RabbitMQ, el cual es un servicio de colas de mensajería. Para levantarlo, debemos hacer uso de `docker-compose`.
+We will create an example with RabbitMQ, which is a messaging queue service. To start it, we need to use `docker-compose`.
 
 ```yml
 version: '3'
@@ -221,16 +221,16 @@ services:
 
 ```
 
-NestJS nos provee un módulo de [RabbitMQ](https://docs.nestjs.com/microservices/rabbitmq) con los  que podremos implementar los casos de uso más comunes.
+NestJS provides a [RabbitMQ](https://docs.nestjs.com/microservices/rabbitmq) module with which we can implement the most common use cases.
 
-> Si no conoces nada sobre RabbitMQ, te recomiendo que leas este post que profundiza más en detalle: [Enlace](https://nullpointer-excelsior.github.io/posts/mono-repo-with-nestjs/).
+> If you do not know anything about RabbitMQ, I recommend reading this post that goes into more detail: [Link](https://nullpointer-excelsior.github.io/posts/mono-repo-with-nestjs/).
 
-Ahora simularemos un microservicio que envía correos. Este servicio estara escuchando los mensjes que se reciban en la cola `spotify-clone` y dependiendo del tipo de mensaje, enviará un correo electrónico.
+Now we will simulate a microservice that sends emails. This service will be listening to messages received on the `spotify-clone` queue and depending on the message type, it will send an email.
 
 ```typescript 
-// definimos el RabbitMqModule con la configuración de RabbitMQ
+// we define the RabbitMqModule with the RabbitMQ configuration
 @Module({
-    // ... module conifguration
+    // ... module configuration
 })
 export class RabbitmqQueueModule {
 
@@ -258,7 +258,7 @@ export class RabbitmqQueueModule {
 
 }
 
-// iniciamos un microservicio de NestJs  en main.ts
+// we start a NestJS microservice in main.ts
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(
     MailingMsModule,
@@ -269,9 +269,9 @@ async function bootstrap() {
 
 ```
 
-Una vez levantado nuestro microservicio con RabbitMQ, se creará una cola en el servidor de RabbitMQ la cual estará lista para recibir mensajes. En este ejemplo, los mensajes de nuevos álbumes creados serán recibidos por medio de los clásicos controladores de NestJS. En este caso, ya no se utilizan para una API REST, sino que NestJS los transformará automáticamente para RabbitMQ.
+Once our microservice is up with RabbitMQ, a queue will be created on the RabbitMQ server which will be ready to receive messages. In this example, new album created messages will be received through the classic NestJS controllers. In this case, they are not used for a REST API, but NestJS will automatically transform them for RabbitMQ.
 
-Para que podamos escuchar mensajes lo haremos mediante la anotación `@MessagePattern('EVENT_NAME')` en la cual especificamos el patrón de mensajes que queremos escuchar.
+To listen for messages, we will use the `@MessagePattern('EVENT_NAME')` annotation where we specify the message pattern we want to listen to.
 
 ```typescript 
 @Controller()
@@ -286,11 +286,11 @@ export class QueueController {
 
 }
 ```
-Cuando un mensaje de `new-album` sea recibido por nuestro controlador, se invocará el servicio de email para enviar una notificación a los usuarios interesados en el artista.
+When a `new-album` message is received by our controller, the email service will be invoked to send a notification to users interested in the artist.
 
-### Configuración del cliente de mensajería
+### ⚙️ Messaging Client Configuration
 
-Ahora debemos crear un cliente de RabbitMQ que se encargará de enviar mensajes a la cola. Lo haremos mediante el método `registerAsync()` del módulo `ClientModule` y definiremos la siguiente configuración:
+Now we need to create a RabbitMQ client that will be responsible for sending messages to the queue. We will do this using the `registerAsync()` method of the `ClientModule` and define the following configuration:
 
 ```typescript
 
@@ -344,9 +344,9 @@ export class RabbitmqQueueModule {
 }
 ```
 
-Este código creará un cliente de RabbitMQ que podremos utilizar en nuestros microservicios. Sin embargo, iremos un paso más allá y crearemos un servicio más personalizado para evitar estar acoplados a la librería de NestJS.
+This code will create a RabbitMQ client that we can use in our microservices. However, we will go one step further and create a more personalized service to avoid being coupled to the NestJS library.
 
-Definiremos la estructura general de nuestros mensajes que serán enviados entre nuestros microservicios de **Spotify-Clone**.
+We will define the general structure of our messages that will be sent between our **Spotify-Clone** microservices.
 
 ```typescript 
 export interface RabbitmqMessage<T> {
@@ -355,7 +355,7 @@ export interface RabbitmqMessage<T> {
     timestamp: Date;
     data: T;
 }
-// definmos los mensjaes que se eniaran entre microservicios
+// we define the messages that will be sent between microservices
 
 export interface NewAlbumDataMessage {
     albumId: string;
@@ -365,7 +365,7 @@ export interface NewAlbumDataMessage {
 export type NewAlbumMessage = RabbitmqMessage<NewAlbumDataMessage>
 ```
 
-Y definimos ahora un servicio que será encargado de enviar mensajes.
+And now we define a service that will be responsible for sending messages.
 
 ```typescript 
 @Injectable()
@@ -387,7 +387,7 @@ export class RabbitmqClient {
 }
 ```
 
-Y para usar nuestro cliente en alguna aplicación de NestJS, importamos el módulo `RabbitMQModule`.
+And to use our client in any NestJS application, we import the `RabbitMQModule`.
 
 ```typescript 
 @Module({
@@ -399,7 +399,7 @@ Y para usar nuestro cliente en alguna aplicación de NestJS, importamos el módu
 })
 export class MusicLibraryModule {}
 ```
- Y usamos el servicio donde queramos enviar mensajes.
+ And we use the service wherever we want to send messages.
 
 ```typescript
 @Injectable()
@@ -434,21 +434,21 @@ export class AlbumService {
 }
 ```
 
-Ahora, el servicio de álbum, al crear un álbum, enviará un mensaje a RabbitMQ. Todos los clientes que se suscriban a la cola recibirán el mensaje y podrán realizar las operaciones pertinentes.
+Now, the album service, when creating an album, will send a message to RabbitMQ. All clients subscribed to the queue will receive the message and can perform the relevant operations.
 
-Este enfoque nos trae los siguientes beneficios:
+This approach brings the following benefits:
 
-- Desacoplamos la lógica de un caso de uso (crear álbum) de lógicas de notificaciones (email).
-- El sistema queda extensible a otros casos de uso de forma desacoplada del principal.
-- Hemos agregado escalabilidad a nuestro ecosistema de microservicios.
+- We decouple the logic of a use case (create album) from notification logic (email).
+- The system becomes extensible to other use cases in a decoupled way from the main one.
+- We have added scalability to our microservices ecosystem.
 
-Si bien este es un ejemplo básico, existen múltiples configuraciones en arquitecturas orientadas a comunicaciones asincronas.
+While this is a basic example, there are multiple configurations in architectures oriented towards asynchronous communications.
 
-El ejemplo completo está disponible levantando los siguientes servicios:
+The complete example is available by starting the following services:
 
 ```bash
 #!/bin/bash
-# up infrasrructure with docker-compose
+# start infrastructure with docker-compose
 npm run start:infra
 # start music-library microservice
 npm run start:music-library
@@ -456,11 +456,6 @@ npm run start:music-library
 npm run start:mailing
  ```
 
-## Conclusión
+## 🏁 Conclusion
 
-La comunicación entre microservicios de forma sincrónica nos dará la versatilidad de crear aplicaciones con responsabilidades únicas. Cada uno de estos componentes podrá comunicarse con otros de forma sencilla cuando la comunicación de estos no involucra temas de latencia y de responsabilidad. En este caso nos convendrá utilizar una comunicación asíncrona, la cual nos dará la posibilidad de crear sistemas escalables y de alto rendimiento. Cada enfoque debe ser adecuado al caso, pero básicamente estas 2 formas de comunicación las encontrarás implementadas de múltiples maneras en arquitecturas basadas en microservicios.
-
-
-
-
-
+Synchronous communication between microservices will give us the versatility to create applications with unique responsibilities. Each of these components can communicate with others easily when their communication does not involve latency and responsibility issues. In this case, it is convenient to use asynchronous communication, which will give us the possibility to create scalable and high-performance systems. Each approach must be suited to the case, but basically you will find these 2 forms of communication implemented in multiple ways in microservices-based architectures.

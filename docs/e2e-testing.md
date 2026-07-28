@@ -1,40 +1,40 @@
-# Simplificando el Testing e2e con Object Mother
+# ✅ Simplifying E2E Testing with Object Mother
 
-¿Alguna vez te has enfrentado a la tarea de crear objetos mock para tus pruebas unitarias o e2e y has sentido que estabas escribiendo demasiado código repetitivo? Aquí les traigo un pequeño tip. Existe un patrón de diseño que puede hacer que esta tarea sea mucho más fácil y eficiente: el patrón de diseño Object Mother.
+Have you ever faced the task of creating mock objects for your unit or e2e tests and felt like you were writing too much repetitive code? Here is a small tip. There is a design pattern that can make this task much easier and more efficient: the Object Mother design pattern.
 
-## ¿Qué es Object Mother?
+## ❓ What is Object Mother?
 
-El Object Mother es un patrón de diseño de creación de objetos utilizado en el desarrollo de software. Su objetivo principal es simplificar la creación de objetos mock o de prueba al proporcionar métodos y funciones que devuelven instancias preconfiguradas de objetos.
+Object Mother is an object creation design pattern used in software development. Its main goal is to simplify the creation of mock or test objects by providing methods and functions that return preconfigured object instances.
 
-### Ventajas Principales:
+### ⚡ Main Advantages:
 
-- **Reusabilidad**: Con Object Mother, puedes reutilizar las configuraciones de objetos en varias pruebas, evitando la duplicación de código y mejorando el mantenimiento.
+- **Reusability**: With Object Mother, you can reuse object configurations across multiple tests, avoiding code duplication and improving maintainability.
 
-- **Claridad en las Pruebas**: Al utilizar un método específico para crear objetos en lugar de escribir la configuración en cada prueba, se mejora la claridad y legibilidad del código de prueba.
+- **Clarity in Tests**: By using a specific method to create objects instead of writing the configuration in each test, the clarity and readability of the test code is improved.
 
-- **Facilita la Mantenibilidad** : Si la estructura de tus objetos cambia, solo necesitas actualizar el código en un lugar: el método de creación en el Object Mother. Esto simplifica enormemente la tarea de mantener las pruebas.
+- **Facilitates Maintainability**: If the structure of your objects changes, you only need to update the code in one place: the creation method in the Object Mother. This greatly simplifies the task of maintaining tests.
 
-Echando un vistazo a nuestra arquitectura de **Spotify-clone**, veremos cómo implementar object-mother para facilitar las pruebas e2e, las cuales son las más complejas y que más tiempo toma poder escribirlas.
+Taking a look at our **Spotify-clone** architecture, we will see how to implement object-mother to facilitate e2e testing, which are the most complex and time-consuming to write.
 
-## Utilizando ObjectMother
+## 🛠️ Using ObjectMother
 
-Como habíamos visto anteriormente, Object Mother nos ayuda a crear una plantilla personalizable de nuestros objetos complejos. Es una especie de factory o builder con parámetros preestablecidos, lo que nos permite crear dummy data con el menor esfuerzo.
+As we saw earlier, Object Mother helps us create a customizable template for our complex objects. It is a kind of factory or builder with preset parameters, which allows us to create dummy data with minimal effort.
 
-Crearemos una función ObjectMother para poder crear los datos de prueba que insertaremos en una base de datos para crear pruebas e2e del servicio `music-library-ms`. Crearemos la función `createArtistEntity`, la cual obtendrá el componente de tipo repository de `typeorm` y devolverá otra función la cual tiene parámetros por defecto del objeto a crear.
+We will create an ObjectMother function to create the test data that we will insert into a database to create e2e tests for the `music-library-ms` service. We will create the `createArtistEntity` function, which will obtain the `typeorm` repository-type component and return another function that has default parameters for the object to create.
 
 ```typescript
 // apps/music-library-ms/test/utils.ts
 
-// La función createArtistEntity acepta una instancia de la aplicación Nest.js (INestApplication).
+// The createArtistEntity function accepts a Nest.js application instance (INestApplication).
 export function createArtistEntity(app: INestApplication) {
   
-  // Obtiene el repositorio de la entidad "Artist" utilizando el token del repositorio.
+  // Gets the repository for the "Artist" entity using the repository token.
   const repository = app.get<Repository<Artist>>(getRepositoryToken(Artist));
 
-  // La función createEntity es la que realmente se exporta y se utiliza para crear entidades de artistas.
+  // The createEntity function is what is actually exported and used to create artist entities.
   return function createEntity({ name = "Journey", biography = "Amazing band", photo = "artist.jpg" }: Partial<CreateArtistRequest>) {
     
-    // Utiliza el repositorio para guardar una nueva entidad "Artist" con las propiedades proporcionadas o valores predeterminados.
+    // Uses the repository to save a new "Artist" entity with the provided properties or default values.
     return repository.save({
       name,
       biography,
@@ -45,7 +45,7 @@ export function createArtistEntity(app: INestApplication) {
 }
 ```
 
-Entonces, al crear un artista, esta función guardará uno preconfigurado, el cual podemos adaptar sobrescribiendo el parámetro deseado.
+So when creating an artist, this function will save a preconfigured one, which we can adapt by overriding the desired parameter.
 
 ```typescript
 // apps/music-library-ms/src/test/artist.e2e-spec.ts
@@ -53,7 +53,7 @@ Entonces, al crear un artista, esta función guardará uno preconfigurado, el cu
 it('/artists (GET): get all artists', async () => {
 
   const create = createArtistEntity(app)
-  await create({}) // deafult = journey
+  await create({}) // default = journey
   await create({ name: "BonJovi" })
   await create({ name: "Scorpions" })
 
@@ -67,7 +67,7 @@ it('/artists (GET): get all artists', async () => {
 
 ```
 
-Bajo esta misma lógica, podemos crear objetos de tipo mock relacionados entre sí para crear estructuras de datos más complejas.
+Following the same logic, we can create related mock objects to build more complex data structures.
 
 ```typescript
 // apps/music-library-ms/src/test/songs.e2e-spec.ts
@@ -99,8 +99,8 @@ it('/songs (GET): get all songs', async () => {
 
 ```
 
-En esta prueba e2e creamos un objeto artista con álbumes y canciones.
+In this e2e test, we create an artist object with albums and songs.
 
-# Conclusión:
+# 🏁 Conclusion
 
-El patrón de diseño Object Mother puede ser una herramienta invaluable para simplificar y mejorar la eficiencia en la creación de objetos mock en tus pruebas unitarias. Al adoptar este enfoque, no solo reducirás la redundancia en tu código de prueba, sino que también facilitarás la mantenibilidad y comprensión de tus pruebas.
+The Object Mother design pattern can be an invaluable tool for simplifying and improving efficiency in creating mock objects for your unit tests. By adopting this approach, you will not only reduce redundancy in your test code but also facilitate the maintainability and comprehension of your tests.

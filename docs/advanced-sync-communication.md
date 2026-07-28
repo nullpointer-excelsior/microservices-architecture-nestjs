@@ -1,37 +1,37 @@
-# Comunicación sincrona avanzada en Microservicios.
+# 🔄 Advanced Synchronous Communication in Microservices
 
-En una arquitectura de microservicios, podemos comunicar nuestras aplicaciones de forma síncrona y asíncrona. En este artículo, exploraremos comunicaciones síncronas avanzadas. Si bien RESTful es la manera más sencilla de comunicarnos con un microservicio, la eficiencia y flexibilidad en las comunicaciones entre servicios son fundamentales. Dos tecnologías que han revolucionado esta área son gRPC y GraphQL. Estas herramientas ofrecen enfoques distintos pero potentes para manejar las comunicaciones entre microservicios, cada una con sus propias ventajas y casos de uso.
+In a microservices architecture, we can communicate our applications synchronously and asynchronously. In this article, we will explore advanced synchronous communications. While RESTful is the simplest way to communicate with a microservice, efficiency and flexibility in inter-service communications are fundamental. Two technologies that have revolutionized this area are gRPC and GraphQL. These tools offer distinct but powerful approaches for handling communications between microservices, each with its own advantages and use cases.
 
 
-## gRPC para comunicaciones eficientes.
+## 🔌 gRPC for Efficient Communications
 
-### ¿Qué es gRPC?
+### ❓ What is gRPC?
 
-gRPC es un framework de comunicación de código abierto desarrollado por Google. Utiliza el protocolo HTTP/2 para la comunicación de datos de forma eficiente, permitiendo a los desarrolladores definir sus servicios mediante el lenguaje de definición de interfaz (IDL) Protocol Buffers. Esta tecnología está diseñada para ser rápida, eficiente y escalable, ideal para entornos distribuidos.
+gRPC is an open-source communication framework developed by Google. It uses the HTTP/2 protocol for efficient data communication, allowing developers to define their services using the Protocol Buffers Interface Definition Language (IDL). This technology is designed to be fast, efficient, and scalable, ideal for distributed environments.
 
-### Ventajas de gRPC:
+### ⚡ Advantages of gRPC:
 
-- **Rendimiento**: Utiliza HTTP/2, lo que permite la multiplexación de solicitudes, minimizando la latencia y mejorando el rendimiento.
-- **Tipado fuerte**: Gracias a Protocol Buffers, ofrece un sistema de tipos fuertemente tipado que facilita la definición y validación de datos.
-- **Bidireccional y streaming**: Admite la comunicación bidireccional y transmisión de datos en tiempo real mediante streaming, lo que lo hace adecuado para aplicaciones con necesidades de actualización constante de datos, como chats o sistemas de seguimiento en tiempo real.
+- **Performance**: Uses HTTP/2, which allows request multiplexing, minimizing latency and improving performance.
+- **Strong typing**: Thanks to Protocol Buffers, it offers a strongly typed system that facilitates data definition and validation.
+- **Bidirectional and streaming**: Supports bidirectional communication and real-time data streaming, making it suitable for applications with constant data update needs, such as chats or real-time tracking systems.
 
-### Desventajas de gRPC:
+### ⚠️ Disadvantages of gRPC:
 
-- **Complejidad de implementación**: La curva de aprendizaje inicial puede ser pronunciada, especialmente para equipos que no están familiarizados con Protocol Buffers o el paradigma de comunicación basado en RPC (Remote Procedure Call).
+- **Implementation complexity**: The initial learning curve can be steep, especially for teams unfamiliar with Protocol Buffers or the RPC (Remote Procedure Call) communication paradigm.
 
-- **Problemas de visibilidad y debugging**: Al utilizar un formato binario para la transferencia de datos, puede ser más difícil depurar y visualizar los datos transmitidos en comparación con formatos de texto utilizados en otros protocolos, como REST.
+- **Visibility and debugging issues**: Since it uses a binary format for data transfer, it can be harder to debug and visualize the transmitted data compared to text formats used in other protocols like REST.
 
-- **Restricciones en la interoperabilidad**: Aunque gRPC es altamente eficiente dentro de su ecosistema, puede haber limitaciones al interactuar con sistemas que no admiten o tienen dificultades para integrarse con HTTP/2 o Protocol Buffers.
+- **Interoperability restrictions**: Although gRPC is highly efficient within its ecosystem, there may be limitations when interacting with systems that do not support or have difficulty integrating with HTTP/2 or Protocol Buffers.
 
-## Implementando gRPC con NestJs
+## 📡 Implementing gRPC with NestJS
 
-NestJs nos provee una manera sencilla de implementar un servicio con gRPC. Si bien tendremos que saber cómo implementar el archivo `.proto`, lo demás será sencillo. En el siguiente ejemplo, basado en el stack de microservicios de Spotify-clone, analizaremos la comunicación de una aplicación de tipo backend-for-frontend llamada `mobile-bff`, que se comunicará con el microservicio `music-library-ms`, el cual provee el catálogo musical.
+NestJS provides a straightforward way to implement a service with gRPC. While we will need to know how to implement the `.proto` file, the rest will be simple. In the following example, based on the Spotify-clone microservices stack, we will analyze the communication of a backend-for-frontend application called `mobile-bff`, which will communicate with the `music-library-ms` microservice, which provides the music catalog.
 
-Este ejemplo es bastante cercano a la realidad, ya que una aplicación móvil necesita mayor eficiencia en las conexiones. Cuando las aplicaciones móviles se conecten a un servidor backend donde sus servicios internos utilicen gRPC, ayudará a reducir la latencia y el tráfico de red entre un servicio y otro, resultando en una mejor respuesta del lado del cliente.
+This example is quite close to reality, as a mobile application needs greater efficiency in connections. When mobile applications connect to a backend server where their internal services use gRPC, it will help reduce latency and network traffic between services, resulting in better response on the client side.
 
-### Definiendo el contrato con un archivo .proto
+### 📜 Defining the Contract with a .proto File
 
-Este será nuestro contrato. Este archivo debe ser el mismo para todos los servicios que utilicen gRPC.
+This will be our contract. This file must be the same for all services that use gRPC.
 
 ```proto
 // libs/music-library-grpc/src/music-catalog.proto
@@ -39,7 +39,7 @@ syntax = "proto3";
 
 package catalog;
 
-// Importa los paquetes necesarios
+// Import necessary packages
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -103,13 +103,13 @@ service GenreService {
 }
 ```
 
-Básicamente, aquí tendremos:
+Basically, here we will have:
 
-- `messages`: son la estructura de datos que intercambiaremos entre los servicios
-- `services`: son las operaciones disponibles 
+- `messages`: the data structure we will exchange between services
+- `services`: the available operations
 
 
-El servicio `music-library-ms` expondrá los servicios mediante la anotación `@Controller`. NestJS sabrá que este controlador corresponde a un endpoint gRPC, ya que configuraremos nuestra aplicación como microservicio.
+The `music-library-ms` service will expose the services through the `@Controller` annotation. NestJS will know that this controller corresponds to a gRPC endpoint since we will configure our application as a microservice.
 
 ```typescript
 //apps/music-library-ms/src/main.ts
@@ -123,7 +123,7 @@ app.connectMicroservice({
 await app.startAllMicroservices()
 ```
 
-Nuestro controlador expondrá los servicios.
+Our controller will expose the services.
 
 ```typescript
 // apps/music-library-ms/src/music-catalog/infrastructure/grpc/catalog.controller.ts
@@ -145,9 +145,9 @@ export class CatalogController {
 
 }
 ```
-> La clase `CatalogUseCases` tendrá lógica para obtener el catálogo musical.
+> The `CatalogUseCases` class will have logic to obtain the music catalog.
 
-Básicamente, tendremos nuestro servidor gRPC listo. Ahora definiremos el cliente en la aplicación `mobile-bff`:
+Basically, we will have our gRPC server ready. Now we will define the client in the `mobile-bff` application:
 
 ```typescript
 // apps/mobile-bff/src/mobile-bff.module.ts
@@ -175,7 +175,7 @@ Básicamente, tendremos nuestro servidor gRPC listo. Ahora definiremos el client
 export class MusicLibraryGrpcModule {}
 ```
 
-Definimos nuestro cliente gRPC con el módulo `ClientModule`. Ahora, basados en el archivo `.proto` que definimos anteriormente, creamos el modelo en código con TypeScript.
+We define our gRPC client with the `ClientModule` module. Now, based on the `.proto` file we defined earlier, we create the model in code with TypeScript.
 
 ```typescript
 // libs/music-library-grpc/messages.ts
@@ -241,7 +241,7 @@ export interface GenreService {
 }
 ```
 
-Para instanciar los servicios de gRPC, debemos crear estos componentes de la siguiente manera:
+To instantiate the gRPC services, we need to create these components as follows:
 
 ```typescript
 // libs/music-library-grpc/music-catalog.client.ts
@@ -269,7 +269,7 @@ export class MusicCatalogClient implements OnModuleInit {
 }
 ```
 
-De esta forma, la clase `MusicCatalogClient` implementará un `Facade` para exponer los servicios. Finalmente, podemos importar nuestro módulo en la aplicación `mobile-bff`.
+This way, the `MusicCatalogClient` class will implement a `Facade` to expose the services. Finally, we can import our module into the `mobile-bff` application.
 
 ```typescript
 // apps/mobile-bff/src/mobile-bff.module.ts
@@ -282,7 +282,7 @@ De esta forma, la clase `MusicCatalogClient` implementará un `Facade` para expo
 export class MobileBffModule { }
 ```
 
-Ahota podremos usar nuestro cliente gRPC.
+Now we can use our gRPC client.
 
 ```typescript
 @Injectable()
@@ -291,17 +291,17 @@ export class SomeService {
 }
 ```
 
-## GraphQL: Poderoso lenguaje de consulta
+## 📊 GraphQL: Powerful Query Language
 
-### ¿Qué es GraphQL?
+### ❓ What is GraphQL?
 
-GraphQL es un lenguaje de consulta y manipulación de datos desarrollado por Facebook. A diferencia de las API REST tradicionales, donde los clientes reciben datos predefinidos, GraphQL permite a los clientes solicitar solo los datos que necesitan, lo que lo hace altamente flexible y eficiente en términos de consumo de recursos.
+GraphQL is a data query and manipulation language developed by Facebook. Unlike traditional REST APIs, where clients receive predefined data, GraphQL allows clients to request only the data they need, making it highly flexible and efficient in terms of resource consumption.
 
-### Grapql  y su Lenguaje de consulta
+### 📝 GraphQL and Its Query Language
 
-GraphQL en sí mismo es un lenguaje de consulta y manipulación de datos que permite a los clientes definir la estructura de los datos que desean recibir. Esto se hace mediante la construcción de consultas GraphQL, que especifican los campos exactos que el cliente necesita de los servicios o APIs.
+GraphQL itself is a data query and manipulation language that allows clients to define the structure of the data they want to receive. This is done by constructing GraphQL queries, which specify the exact fields the client needs from services or APIs.
 
-El lenguaje de consulta de GraphQL tiene una sintaxis específica para construir estas consultas. Aquí hay un ejemplo básico de cómo se vería una consulta GraphQL:
+The GraphQL query language has a specific syntax for building these queries. Here is a basic example of what a GraphQL query would look like:
 
 ```gql
 query {
@@ -315,49 +315,49 @@ query {
   }
 }
 ```
-En esta consulta, se está pidiendo información sobre un usuario específico por su ID, solicitando el nombre, el correo electrónico y los títulos y contenidos de sus publicaciones.
+In this query, we are asking for information about a specific user by their ID, requesting the name, email, and the titles and content of their posts.
 
-Las consultas GraphQL son flexibles y permiten anidar campos y especificar relaciones entre ellos de manera muy estructurada. Además de las consultas, GraphQL también admite otras operaciones, como mutaciones para la modificación de datos y suscripciones para establecer canales de comunicación en tiempo real.
+GraphQL queries are flexible and allow nesting fields and specifying relationships between them in a very structured way. In addition to queries, GraphQL also supports other operations, such as mutations for data modification and subscriptions for establishing real-time communication channels.
 
 
-### El Playground de consultas
+### 🎮 The Query Playground
 
-A su vez, GraphQL, al levantar un servicio, nos permite acceder a un playground donde podremos realizar consultas y mutaciones. También tendremos la documentación autogenerada en base anuestro código de qué consultas, mutaciones y suscripciones podremos realizar.
+Also, GraphQL, when starting a service, allows us to access a playground where we can perform queries and mutations. We will also have auto-generated documentation based on our code showing what queries, mutations, and subscriptions we can perform.
 
-### Ventajas de GraphQL:
+### ⚡ Advantages of GraphQL:
 
-- **Solicitudes precisas de datos**: Permite a los clientes solicitar solo la información necesaria mediante consultas específicas.
+- **Precise data requests**: Allows clients to request only the necessary information through specific queries.
 
-- **Flexibilidad en consultas**: Los clientes pueden definir la estructura exacta de los datos que desean recibir, permitiendo anidamiento de campos y especificación de relaciones entre ellos de manera más flexible y estructurada.
+- **Query flexibility**: Clients can define the exact structure of the data they want to receive, allowing field nesting and relationship specification in a more flexible and structured way.
 
-- **Reducción del número de solicitudes**: Al poder solicitar múltiples recursos a través de una sola consulta, se reduce la necesidad de realizar múltiples solicitudes al servidor.
+- **Reduced number of requests**: By being able to request multiple resources through a single query, the need for multiple server requests is reduced.
 
-- **Herramientas de desarrollo robustas**: Cuenta con herramientas de desarrollo sólidas, como GraphiQL, que facilitan la exploración del esquema y la construcción de consultas.
+- **Robust development tools**: It has solid development tools like GraphiQL, which facilitate schema exploration and query building.
 
-### Desventajas de GraphQL:
-- **Curva de aprendizaje inicial**: Para aquellos nuevos en GraphQL, puede requerir tiempo comprender su sintaxis y las mejores prácticas para el diseño del esquema.
+### ⚠️ Disadvantages of GraphQL:
+- **Initial learning curve**: For those new to GraphQL, it may take time to understand its syntax and best practices for schema design.
 
-- **Cacheo y caché compartido**: La complejidad de las consultas personalizadas puede dificultar el cacheo efectivo de consultas, aunque herramientas como Apollo Client ofrecen soluciones para mitigar este problema.
+- **Caching complexity**: The complexity of custom queries can make effective query caching difficult, although tools like Apollo Client offer solutions to mitigate this problem.
 
-- **Posible ineficiencia en consultas anidadas**: Consultas profundamente anidadas o complejas pueden dar lugar a consultas excesivamente pesadas que requieren una gestión cuidadosa para garantizar el rendimiento del servidor.
+- **Possible inefficiency in nested queries**: Deeply nested or complex queries can lead to excessively heavy queries that require careful management to ensure server performance.
 
-- **Carga de trabajo en el servidor**: Una mala gestión de consultas complejas o maliciosas podría aumentar la carga en el servidor, especialmente si no se implementan medidas adecuadas de seguridad y control de consultas.
+- **Server workload**: Poor management of complex or malicious queries could increase the load on the server, especially if adequate security and query control measures are not implemented.
 
-## Implementando un servidor GraphQL.
+## 🛠️ Implementing a GraphQL Server
 
-Ahora implementaremos un ejemplo de GraphQL siguiendo el mismo ejemplo anterior. Configuraremos nuestra aplicación `mobile-bff` como un servidor GraphQL que consume el microservicio `music-library-ms` con gRPC.
+Now we will implement a GraphQL example following the same previous example. We will configure our `mobile-bff` application as a GraphQL server that consumes the `music-library-ms` microservice with gRPC.
 
-Para crear un servidor GraphQL debemos crear los siguientes componentes:
+To create a GraphQL server, we need to create the following components:
 
-- `Tipos y campos`: modelo de datos donde definimos nuestros modelos y sus propiedades 
-- `Queries`: estructura de las operaciones de lectura sobre GraphQL
-- `Resolvers`: son los servicios que devolverán o realizarán las operaciones definidas en el modelo GraphQL.
+- `Types and fields`: data model where we define our models and their properties
+- `Queries`: structure of read operations on GraphQL
+- `Resolvers`: services that will return or perform the operations defined in the GraphQL model.
 
-Nestjs nos permite usar decoradores para realizar el modelo. Sin embargo, también es posible crear un archivo `.gql`, el cual representará el modelo GraphQL, pero en ese caso debemos implementar el mapeo de las operaciones y los objetos.
+NestJS allows us to use decorators to create the model. However, it is also possible to create a `.gql` file, which will represent the GraphQL model, but in that case we must implement the mapping of operations and objects.
 
-En nuestro ejemplo, solo habrá operaciones de lectura, es decir, queries, y utilizaremos decoradores.
+In our example, there will only be read operations, i.e., queries, and we will use decorators.
 
-Definimos nuestro módulo `mobile-bff.module`.
+We define our `mobile-bff` module.
 
 ```typescript
 // apps/mobile-bff/src/mobile-bff.module.ts
@@ -380,7 +380,7 @@ Definimos nuestro módulo `mobile-bff.module`.
 })
 export class MobileBffModule { }
 ```
-Ahora definimos nuestro modelo de datos.
+Now we define our data model.
 
 ```typescript
 // apps/mobile-bff/src/music-catalog/graphql/models/artist.model.ts
@@ -405,7 +405,7 @@ export class Artist {
 }
 ```
 
-Definiremos nuestra clase resolver.
+We will define our resolver class.
 
 ```typescript
 // apps/mobile-bff/src/music-catalog/graphql/resolvers/artist.resolver.ts
@@ -431,24 +431,24 @@ export class ArtistResolver {
     
 }
 ```
-Finalmente podremos probar nuestro ejemplo de nuestro repositorio de la siguiente manera:
+Finally, we can test our example from our repository as follows:
 
 ```bash
 #!/bin/bash
 
-# levanta la infraestructura
+# start infrastructure
 npm run start:infra
-# levanta nuestro catalog musical con el servidor gRPC activo
+# start our music catalog with the gRPC server active
 npm run start:music-library
-# levanta el backend for frontend el cual actua como cliente gRPC y servidor GraphQL
+# start the backend for frontend which acts as gRPC client and GraphQL server
 npm run start:mobile-bff
 
 ```
-Ahora puedes realizar consultas en el playground en la URL: http://localhost:3014/graphql.
+Now you can perform queries in the playground at the URL: http://localhost:3014/graphql.
 
 ![playground](images/graphql-playground.png)
 
 
-## Conclusión
+## 🏁 Conclusion
 
-Establecer una comunicación entre microservicios no solo se basa en el popular enfoque de APIs REST. En esta ocasión destacamos gRPC y GraphQL, con sus casos de uso correspondientes. Definir la estrategia adecuada nos ayudará a crear sistemas que cumplan de mejor manera requerimientos avanzados en proyectos basados en microservicios.
+Establishing communication between microservices is not only based on the popular REST API approach. In this instance, we highlight gRPC and GraphQL, with their corresponding use cases. Defining the right strategy will help us create systems that better meet advanced requirements in microservices-based projects.

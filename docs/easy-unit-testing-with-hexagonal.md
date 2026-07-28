@@ -1,74 +1,74 @@
-# Simplificando el testing unitario con arquitectura hexagonal.
+# 🧩 Simplifying Unit Testing with Hexagonal Architecture
 
-El testing con arquitectura hexagonal nos provee una manera limpia de crear pruebas unitarias en nuestro código sin acoplarnos a las librerías de testing o cualquier otra tecnología no relacionada a los casos de uso o reglas de negocio que queramos implementar.
+Testing with hexagonal architecture provides a clean way to create unit tests in our code without coupling to testing libraries or any other technology unrelated to the use cases or business rules we want to implement.
 
-El testing unitario nos ayudará a evitar muchos dolores de cabeza y tiene un montón de beneficios. Al tratar de aplicarlo en códigos que no siguen buenas prácticas se hace complejo y en muchas ocasiones duplica o triplica el tiempo de desarrollo de una funcionalidad con pruebas incluidas. En esta ocasión te voy a decir por qué las arquitecturas clean son tan valoradas por la ingeniería de software sobre proyectos complejos.
+Unit testing will help you avoid many headaches and has a ton of benefits. Trying to apply it to code that does not follow good practices becomes complex and often doubles or triples the development time of a feature with included tests. This time I will tell you why clean architectures are so valued by software engineering for complex projects.
 
-## Porque hexagonal ayuda la test unitario
+## 💡 Why Hexagonal Helps Unit Testing
 
-La elección de una arquitectura hexagonal para desarrollar nuestras aplicaciones no solo tiene beneficios durante la implementación, sino que también mejora significativamente el proceso de pruebas unitarias. Aquí te presento algunas razones clave:
+Choosing a hexagonal architecture to develop our applications not only has benefits during implementation but also significantly improves the unit testing process. Here are some key reasons:
 
-- **Desacoplamiento del Código de Dominio de Frameworks o Librerías:**
-   La arquitectura hexagonal nos permite mantener nuestro código de dominio completamente desacoplado de frameworks o librerías externas. Este desacoplamiento facilita la creación de pruebas unitarias, ya que podemos concentrarnos en evaluar la lógica de negocio sin preocuparnos por detalles de implementación específicos de la tecnología.
+- **Decoupling Domain Code from Frameworks or Libraries:**
+   Hexagonal architecture allows us to keep our domain code completely decoupled from frameworks or external libraries. This decoupling makes it easier to create unit tests since we can focus on evaluating business logic without worrying about technology-specific implementation details.
 
-- **Azúcar Sintáctica para las Pruebas del Código de Dominio:**
-   La estructura limpia y desacoplada de la arquitectura hexagonal proporciona un azúcar sintáctica para escribir pruebas del código de dominio. Esto se traduce en pruebas más legibles y mantenibles, ya que podemos enfocarnos en expresar directamente los casos de uso y las reglas de negocio sin distracciones innecesarias.
+- **Syntactic Sugar for Domain Code Testing:**
+   The clean and decoupled structure of hexagonal architecture provides syntactic sugar for writing domain code tests. This translates to more readable and maintainable tests since we can focus on directly expressing use cases and business rules without unnecessary distractions.
 
-- **Creación de Pruebas Acorde a Casos de Uso y Reglas de Negocio:**
-   La flexibilidad inherente de la arquitectura hexagonal nos permite crear pruebas que se alinean directamente con los casos de uso y las reglas de negocio de nuestra aplicación. Esto garantiza que nuestras pruebas sean más precisas y relevantes, abordando de manera efectiva los aspectos críticos del sistema.
+- **Creating Tests Aligned with Use Cases and Business Rules:**
+   The inherent flexibility of hexagonal architecture allows us to create tests that align directly with the use cases and business rules of our application. This ensures our tests are more precise and relevant, effectively addressing critical aspects of the system.
 
-- **Creación Sencilla de Mocks:**
-   En el entorno de pruebas unitarias, la necesidad de crear mocks es común. La arquitectura hexagonal simplifica este proceso, permitiéndonos generar mocks de componentes de forma sencilla. Esto facilita la simulación de escenarios específicos para validar el comportamiento del sistema.
+- **Easy Mock Creation:**
+   In the unit testing environment, the need to create mocks is common. Hexagonal architecture simplifies this process, allowing us to easily generate component mocks. This facilitates the simulation of specific scenarios to validate system behavior.
 
-- **Mocks sin Acoplamiento con Tecnologías:**
-   La creación de mocks dentro de la arquitectura hexagonal se realiza de manera que no se acoplan con tecnologías específicas. Esto significa que nuestras pruebas unitarias no dependerán de detalles de implementación tecnológica, lo que las hace más robustas y menos propensas a fallos debido a cambios en el entorno tecnológico.
+- **Mocks Without Technology Coupling:**
+   Mock creation within hexagonal architecture is done in a way that does not couple to specific technologies. This means our unit tests will not depend on technological implementation details, making them more robust and less prone to failures due to changes in the technology environment.
 
-Ahora, para ejemplificar los beneficios de la Clean Architecture, nos ayudaremos con **Spotify-clone**.
+Now, to exemplify the benefits of Clean Architecture, we will use **Spotify-clone**.
 
 
- ## Ejemplo con el microservicio `music-discovery-ms`.
+ ## 📦 Example with the `music-discovery-ms` Microservice
 
-Nuestro ejemplo práctico se basa en el módulo `radio` de la aplicación `music-discovery-ms`, el microservicio encargado de descubrir nueva música para el usuario en nuestra **Spotify-clone-architecture**. Ahora nos centraremos en el caso de uso de `updateSongs`, el cual actualiza las canciones de una radio de Spotify (playlist de varios artistas con temática especial).
+Our practical example is based on the `radio` module of the `music-discovery-ms` application, the microservice responsible for discovering new music for users in our **Spotify-clone-architecture**. We will focus on the `updateSongs` use case, which updates the songs of a Spotify radio (a playlist of various artists with a special theme).
  
- ### Arquitectura
+ ### 🏗️ Architecture
 
- La estructura del módulo `radio` de la aplicación `music-discovery-ms` es la siguiente:
+ The structure of the `radio` module in the `music-discovery-ms` application is as follows:
 
  ```bash
-  radio
-├──  application
-│   ├──  dto
-│   │   ├──  create-radio.dto.ts
-│   │   ├──  update-songs-by-radio.dto.ts
-│   │   └──  update-songs.dto.ts
-│   ├──  radio.use-cases.spec.ts
-│   └──  radio.use-cases.ts
-├──  domain
-│   ├──  model
-│   │   ├──  radio.model.ts
-│   │   └──  song.model.ts
-│   └──  repositories
-│       └──  radio.repository.ts
-├──  infrastructure
-│   ├──  mongo
-│   │   ├──  repositories
-│   │   │   └──  mongo-radio.repository.ts
-│   │   └──  schemas
-│   │       ├──  radio.schema.ts
-│   │       └──  song.schema.ts
-│   ├──  restful
-│   │   └──  radio.controller.ts
-│   └──  validate-model.ts
-└──  radio.module.ts
+  radio
+├──  application
+│   ├──  dto
+│   │   ├──  create-radio.dto.ts
+│   │   ├──  update-songs-by-radio.dto.ts
+│   │   └──  update-songs.dto.ts
+│   ├──  radio.use-cases.spec.ts
+│   └──  radio.use-cases.ts
+├──  domain
+│   ├──  model
+│   │   ├──  radio.model.ts
+│   │   └──  song.model.ts
+│   └──  repositories
+│       └──  radio.repository.ts
+├──  infrastructure
+│   ├──  mongo
+│   │   ├──  repositories
+│   │   │   └──  mongo-radio.repository.ts
+│   │   └──  schemas
+│   │       ├──  radio.schema.ts
+│   │       └──  song.schema.ts
+│   ├──  restful
+│   │   └──  radio.controller.ts
+│   └──  validate-model.ts
+└──  radio.module.ts
  ```
 
-- **Application**: Casos de uso del módulo. También puede contener ciertas clases de tipo servicio.
-- **Domain**: Modelo de entidades de dominio del módulo `radio`. El dominio se encarga de especificar el contrato o la especificación de las operaciones de persistencia de las entidades, mediante puertos (en este caso `radio.repository.ts`).
-- **Infraestructura**: Todos los componentes de software que implementarán los adaptadores de las capas de dominio o aplicación. En este caso, tenemos el adaptador `mongo-radio.repository.ts`. Esta capa también contendrá los componentes de servicios como conexión a base de datos, servidor http o cualquier otra dependencia tecnológica.
+- **Application**: Module use cases. It may also contain certain service-type classes.
+- **Domain**: Domain entity models for the `radio` module. The domain is responsible for specifying the contract or specification of entity persistence operations through ports (in this case `radio.repository.ts`).
+- **Infrastructure**: All software components that will implement the adapters for the domain or application layers. In this case, we have the adapter `mongo-radio.repository.ts`. This layer will also contain service components such as database connections, HTTP servers, or any other technological dependency.
 
-### Caso de uso **updateSongs**
+### 🎯 Use Case **updateSongs**
 
-Aquí nos enfocaremos en el caos de uso de `updateSongs()` el cual recibe un DTO `UpdateSongsByRadioDTO` que posee la id de la radio a actualizar y las canciones que se actualizarán de la radio.
+Here we will focus on the `updateSongs()` use case which receives a DTO `UpdateSongsByRadioDTO` containing the ID of the radio to update and the songs that will be updated in the radio.
 
 ```typescript
 // apps/music-discovery-ms/src/radio/application/radio.use-case.ts
@@ -95,7 +95,7 @@ export class RadioUseCases {
        return this.repository.findAll()
     }
 
-    @NotFoundExceptionIfUndefined('Radio no encontrada')
+    @NotFoundExceptionIfUndefined('Radio not found')
     private findRadioById(id: string) {
         return this.repository.findById(id)
     }
@@ -108,9 +108,9 @@ export class RadioUseCases {
 }
 ```
 
-## Dominio
+## 🏛️ Domain
 
-Las entidades del módulo son `Radio` y `Song`. Estas entidades utilizan la librería `class-validator` para validar el estado de sus valores. Si bien nos acoplamos a una librería de terceros, en este caso usar `class-validator` nos da más ventajas que desventajas, ya que las validaciones no tienen un acople fuerte gracias al patrón `@Decorator`, el cual agrega nuevas funcionalidades a los componentes sin tener que tocar el código principal de nuestras clases.
+The module entities are `Radio` and `Song`. These entities use the `class-validator` library to validate the state of their values. Although we are coupling to a third-party library, using `class-validator` gives us more advantages than disadvantages in this case, since validations do not have strong coupling thanks to the `@Decorator` pattern, which adds new functionality to components without having to touch the main code of our classes.
 
 ```typescript
 // apps/music-discovery-ms/src/radio/domain/model/radio.model.ts
@@ -184,9 +184,9 @@ export class Song {
 
 }
 ```
-### Puertos del dominio
+### 🔌 Domain Ports
 
-Se ha definido el puerto `RadioRepository`, el cual describe las operaciones de persistencia.
+The `RadioRepository` port has been defined, which describes the persistence operations.
 
 ```typescript
 // apps/music-discovery-ms/src/radio/domain/repositories/radio.repository.ts
@@ -198,9 +198,9 @@ export abstract class RadioRepository {
 }
 
 ```
-### Infraestructura del modulo `radio`
+### 🏗️ Infrastructure of the `radio` Module
 
-La infraestructura está dada por un módulo de persistencia basado en `mongodb`, donde definimos el adaptador `MongoRadioRepository`, el cual hereda del puerto `RadioRepository` e implementa la lógica de persistencia asociada a la librería `mongoose`.
+The infrastructure is provided by a persistence module based on `mongodb`, where we define the adapter `MongoRadioRepository`, which inherits from the `RadioRepository` port and implements the persistence logic associated with the `mongoose` library.
 
 ```typescript
 // apps/music-discovery-ms/src/radio/infrastructure/mongo/repositories/mongo-radio.repository.ts
@@ -287,7 +287,7 @@ export class MongoRadioRepository extends RadioRepository {
 }
 
 ```
-Finalmente, tenemos un módulo `restful` para crear nuestro servidor HTTP que expondrá nuestros casos de uso mediante una API REST.
+Finally, we have a `restful` module to create our HTTP server that will expose our use cases through a REST API.
 
 ```typescript
 // apps/music-discovery-ms/src/radio/infrastructure/restful/radio.controller.ts
@@ -307,16 +307,16 @@ export class RadioController {
     // other methods
 }
 ```
-## Definiendo las pruebas unitarias
+## 🧪 Defining Unit Tests
 
-Definimos el siguiente set de pruebas:
+We define the following test set:
 
-- **Songs updated**: Las canciones deben actualizarse
+- **Songs updated**: Songs must be updated
 
-- **Throw NotFoundExeption if radio is not in database**: Si tratamos de actualizar una radio que no existe debe arrojar un `NotFoundExeption`.
+- **Throw NotFoundException if radio is not in database**: If we try to update a radio that does not exist, it should throw a `NotFoundException`.
 
 
-Archivo `radio.use-case.spec.ts`
+File `radio.use-case.spec.ts`
 
 ```typescript
 // apps/music-discovery-ms/src/radio/application/radio.use-cases.spec.ts
@@ -329,10 +329,10 @@ describe('RadioUseCase', () => {
 
     let usecase: RadioUseCases
 
-    // Prueba para verificar que se lance una NotFoundException si la radio no está en la base de datos.
-    it('updateSongs: throw NotFoundExeption if radio is not in database', async () => {
+    // Test to verify that a NotFoundException is thrown if the radio is not in the database.
+    it('updateSongs: throw NotFoundException if radio is not in database', async () => {
         
-        // Se crea un mock del repositorio con un método `findById` que devuelve undefined.
+        // A mock of the repository is created with a `findById` method that returns undefined.
         const mockRepository = {
             findById: jest.fn().mockReturnValue(undefined),
             save: jest.fn(),
@@ -341,7 +341,7 @@ describe('RadioUseCase', () => {
         }
         usecase = new RadioUseCases(mockRepository)
 
-        // Se define un objeto para actualizar las canciones de una radio inexistente.
+        // An object is defined to update the songs of a non-existent radio.
         const updateSongs = {
             radioId: "A48BCD55-B248-4377-8BCD-E9687768BA07",
             songs: [{
@@ -352,14 +352,14 @@ describe('RadioUseCase', () => {
                 genre: "rock"
             }]
         }
-        // Se espera que llamar al método `updateSongs` lance una NotFoundException.
+        // We expect calling `updateSongs` to throw a NotFoundException.
         await expect(usecase.updateSongs(updateSongs)).rejects.toThrow(NotFoundException);
 
     })
 
-    // Prueba para verificar que las canciones se actualizan correctamente en una radio existente.
+    // Test to verify that songs are correctly updated on an existing radio.
     it('updateSongs: songs updated', async () => {
-        // Se crea un mock del repositorio con un método `findById` que devuelve información de una radio existente.
+        // A mock of the repository is created with a `findById` method that returns information of an existing radio.
         const mockRepository: RadioRepository = {
             findById: jest.fn().mockReturnValue({
                 id: 'A48BCD55-B248-4377-8BCD-E9687768BA07',
@@ -372,7 +372,7 @@ describe('RadioUseCase', () => {
         }
         usecase = new RadioUseCases(mockRepository)
 
-        // Se define un objeto para actualizar las canciones de una radio existente.
+        // An object is defined to update the songs of an existing radio.
         const updateSongs = {
             radioId: "A48BCD55-B248-4377-8BCD-E9687768BA07",
             songs: [{
@@ -388,10 +388,10 @@ describe('RadioUseCase', () => {
     })
 })
 ```
-Este set de pruebas nos garantizará el comportamiento de nuestro caso de uso. Ahora, si analizamos el siguiente código:
+This test set will guarantee the behavior of our use case. Now, if we analyze the following code:
 
 ```typescript
-// Se crea un mock del repositorio con un método `findById` que devuelve undefined.
+// A mock of the repository is created with a `findById` method that returns undefined.
 const mockRepository: RadioRepository = {
     findById: jest.fn().mockReturnValue(undefined),
     save: jest.fn(),
@@ -400,33 +400,31 @@ const mockRepository: RadioRepository = {
 }
 
 ```
-Hemos creado el mock de `RadioRepository` con el contrato específico para las operaciones de persistencia. Si en vez de crear `RadioRepository` hubiéramos hecho uso de las clases proporcionadas directamente por la librería de MongoDB como en este ejemplo:
+We have created the mock of `RadioRepository` with the specific contract for persistence operations. If instead of creating `RadioRepository` we had used the classes provided directly by the MongoDB library as in this example:
 
 ```typescript
-// model: Model<RadioDocument> componente complejo de crear un Mock por su gran cantidad de metodos que dependiendo de neustro caso de uso usaremos unos pocos.
+// model: Model<RadioDocument> complex component to create a Mock due to its large number of methods, of which we will only use a few depending on our use case.
 constructor(@InjectModel(RadioDocument.name) private model: Model<RadioDocument>) {
     super()
 }
 ```
 
-El mock no sería sencillo, ya que estos componentes de tipo repositorio vienen con un montón de métodos que no nos aportan nada en el contexto de casos de uso o reglas de negocio que queramos probar. Para crear pruebas unitarias de forma limpia y sencilla, solo debemos probar las partes de forma aislada y, dependiendo del caso, definir el comportamiento específico del mock. 
+The mock would not be simple, since these repository-type components come with a ton of methods that do not contribute anything in the context of use cases or business rules we want to test. To create clean and simple unit tests, we should only test parts in isolation and, depending on the case, define the specific behavior of the mock.
 
-Y ahora, gracias a la inyección de dependencias, podemos crear nuestro Caso de uso `RadioUseCases`:
+And now, thanks to dependency injection, we can create our `RadioUseCases` use case:
 
 ```typescript
 const usecase = new RadioUseCases(mockRepository)
 ```
-Este enfoque nos permite no tener que usar las dependencias o componentes de testing que nos ofrece NestJs, ya que estos nos generarían un montón de boilerplate en testing unitario.
+This approach allows us to avoid having to use the testing dependencies or components that NestJS offers us, since these would generate a lot of boilerplate in unit testing.
 
 
-Si quieres ejecutar las pruebas unitarias, ejecuta lo siguiente:
+If you want to run the unit tests, execute the following:
 
 ```bash
 npm run test
 ```
 
- ## Conclusión
+ ## 🏁 Conclusion
 
-Al dar un pequeño vistazo a un set de pruebas unitarias sobre una arquitectura limpia, examinamos las ventajas, simplicidad, elegancia y desacople del código en aspectos más de infraestructura como pueden ser HTTP, MongoDB, Nestjs o cualquier otro componente tecnológico. Este enfoque nos asegura crear un código más mantenible y escalable.
-
-
+By taking a small look at a set of unit tests on a clean architecture, we examined the advantages, simplicity, elegance, and decoupling of the code from more infrastructure-related aspects such as HTTP, MongoDB, NestJS, or any other technological component. This approach ensures creating more maintainable and scalable code.

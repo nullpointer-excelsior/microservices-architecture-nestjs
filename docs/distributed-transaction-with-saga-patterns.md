@@ -1,62 +1,62 @@
-# Sagas I - Transacciones Distribuidas Con Patrones Saga
+# 🔗 Sagas I — Distributed Transactions With Saga Patterns
 
-## Transacciones centralizadas vs distribuidas
+## 🏦 Centralized vs Distributed Transactions
 
-Las aplicaciones monolíticas tienen la ventaja de poder crear procesos transaccionales de forma sencilla. Las transacciones nos ayudan a mantener la consistencia de los datos en operaciones de escritura.
+Monolithic applications have the advantage of being able to create transactional processes easily. Transactions help us maintain data consistency in write operations.
 
-Ya que podemos iniciar un conjunto de operaciones y, si son exitosas, persistir los cambios. Si algún error ocurre, realizaremos un rollback, el cual volverá a dejar en un estado consistente la base de datos antes de haber intentado una operación de escritura.
+Since we can start a set of operations and, if successful, persist the changes. If any error occurs, we will perform a rollback, which will restore the database to a consistent state before the write operation was attempted.
 
-Si bien las bases de datos relacionales nos permiten esto de forma sencilla, en las arquitecturas de microservicio los procesos transaccionales son complejos, ya que no existe manera de centralizar las operaciones de escritura.
+While relational databases allow us to do this easily, in microservices architectures transactional processes are complex, since there is no way to centralize write operations.
 
-Para lograr transacciones en microservicios o sistemas distribuidos, podemos aprender de los patrones SAGA. Estos nos ayudarán a lidiar con sistemas distribuidos complejos donde involucran transacciones.
+To achieve transactions in microservices or distributed systems, we can learn from SAGA patterns. These will help us deal with complex distributed systems involving transactions.
 
-## Que son las SAGAS
+## ❓ What Are SAGAS
 
-El patrón SAGA (también conocido como patrón de transacción SAGA) es un patrón de diseño utilizado en arquitecturas de microservicios para manejar transacciones distribuidas. Su objetivo es mantener la consistencia de los datos en sistemas distribuidos donde múltiples servicios están involucrados en una transacción.
+The SAGA pattern (also known as SAGA transaction pattern) is a design pattern used in microservices architectures to handle distributed transactions. Its goal is to maintain data consistency in distributed systems where multiple services are involved in a transaction.
 
-En lugar de utilizar una transacción monolítica que involucre a todos los servicios y que pueda causar bloqueos y cuellos de botella, el patrón SAGA divide la transacción en pasos más pequeños o secuencias de acciones. Cada paso se ejecuta como una transacción independiente en el contexto de un servicio específico. Estos pasos se organizan en una secuencia lógica y se ejecutan de manera secuencial o en paralelo.
+Instead of using a monolithic transaction involving all services that could cause locks and bottlenecks, the SAGA pattern divides the transaction into smaller steps or sequences of actions. Each step is executed as an independent transaction in the context of a specific service. These steps are organized in a logical sequence and executed sequentially or in parallel.
 
-El patrón SAGA utiliza dos estrategias principales para mantener la consistencia:
+The SAGA pattern uses two main strategies to maintain consistency:
 
-- **SAGA Orquestada:** Un componente central (orquestador) coordina y dirige la ejecución de los pasos de la transacción. Este orquestador envía comandos a los servicios involucrados para realizar las operaciones necesarias. Si un paso falla, el orquestador puede desencadenar acciones de compensación para revertir los cambios realizados en pasos anteriores.
+- **Orchestrated SAGA:** A central component (orchestrator) coordinates and directs the execution of the transaction steps. This orchestrator sends commands to the involved services to perform the necessary operations. If a step fails, the orchestrator can trigger compensation actions to reverse the changes made in previous steps.
 
-- **SAGA Coreografía:** En este enfoque, no hay un orquestador central. En cambio, cada servicio conoce las acciones que debe realizar y cómo responder ante eventos. Cada servicio inicia sus propias transacciones y envía eventos para desencadenar las acciones en otros servicios. Este enfoque puede ser más complejo de diseñar y mantener, pero puede ser más escalable y distribuido.
+- **Choreography SAGA:** In this approach, there is no central orchestrator. Instead, each service knows what actions it must perform and how to respond to events. Each service initiates its own transactions and sends events to trigger actions in other services. This approach can be more complex to design and maintain but can be more scalable and distributed.
 
-## Diseñando una Saga
+## 🎨 Designing a Saga
 
-Orquestado o coreográfico, independientemente de cuál sea, debemos definir lo siguiente:
+Orchestrated or choreographed, regardless of which one, we must define the following:
 
-- Transacciones o pasos
-- Operaciones del servicio que realiza la transacción
-- Comunicación entre servicios
+- Transactions or steps
+- Service operations that perform the transaction
+- Communication between services
 
-Cuando creamos un proceso basado en sagas, definiremos los pasos. Estos serán las invocaciones a las operaciones de las aplicaciones involucradas.
+When we create a saga-based process, we will define the steps. These will be the invocations to the operations of the involved applications.
 
-### Proceso de compra basado en sagas
+### 🛒 Saga-Based Purchase Process
 
-Diseñaremos un proceso de compra para un usuario basado en la adquisición de mercadería de las bandas de nuestro clon de Spotify. Entonces, estos son los pasos:
+We will design a purchase process for a user based on acquiring merchandise from the bands in our Spotify clone. So these are the steps:
 
-- **create-order:** encargado de crear una nueva orden en el sistema.
-- **create-payment:** encargado de procesar un nuevo pago en el sistema.
-- **update-stock:** encargado de actualizar el inventario de productos en el sistema.
-- **create-delivery:** encargado de crear una nueva entrega en el sistema.
-- **notify-purchase:** notificación al usuario de su compra
+- **create-order:** responsible for creating a new order in the system.
+- **create-payment:** responsible for processing a new payment in the system.
+- **update-stock:** responsible for updating the product inventory in the system.
+- **create-delivery:** responsible for creating a new delivery in the system.
+- **notify-purchase:** notification to the user of their purchase
 
-Cada paso definido se refiere a una operación en un microservicio. Cada operación puede ser síncrona o asíncrona, pero normalmente en una saga coreográfica debería ser asíncrona utilizando alguna estrategia de mensajería distribuida como RabbitMQ o Kafka.
+Each defined step refers to an operation in a microservice. Each operation can be synchronous or asynchronous, but normally in a choreography saga it should be asynchronous using some distributed messaging strategy like RabbitMQ or Kafka.
 
 
-### Operaciones de las sagas
+### ⚙️ Saga Operations
 
-Cada paso de nuestra saga debe definir los siguientes componentes:
+Each step of our saga must define the following components:
 
-- **Transacción:** la operación que realiza el microservicio. Esta debe devolver una respuesta exitosa o un error.
-- **Compensación:** es la operación que actuará como un rollback, debe dejar el estado de los datos en la condición previa a la transacción realizada.
-- **Respuesta ok de transacción:** indica que la transacción fue realizada exitosamente.
-- **Error en transacción:** indica que la transacción falló, se deberá ver qué operaciones de compensación deben realizarse en este punto.
+- **Transaction:** the operation performed by the microservice. It must return a successful response or an error.
+- **Compensation:** the operation that will act as a rollback, it must leave the data state in the condition prior to the performed transaction.
+- **Transaction ok response:** indicates the transaction was successfully completed.
+- **Transaction error:** indicates the transaction failed, and we need to determine which compensation operations should be performed at this point.
 
-Definiendo este contrato podremos coordinar nuestro proceso de manera uniforme a través de los servicios involucrados. Debemos tener en cuenta que las operaciones de inicio y término pueden diferir en la implementación de estos contratos, pero todos los procesos fuera de las operaciones de inicio y término deben cumplir este contrato.
+By defining this contract we can coordinate our process uniformly across the involved services. We must keep in mind that the start and end operations may differ in the implementation of these contracts, but all processes outside the start and end operations must comply with this contract.
 
-Para implementar de forma sencilla esto podemos hacer uso de un enum de typescript.
+To implement this easily, we can use a TypeScript enum.
 
 ```typescript
 // libs/distributed-transactions/src/user-purchases/orchestation-saga/sagas/CreateNotificationSaga.ts
@@ -96,18 +96,18 @@ export enum UpdateStockSaga {
 }
 ```
 
-Donde cada valor corresponderá a un endpoint o el nombre de una cola o patrón de mensajería. De esta manera centralizamos nuestras constantes y nos ahorraremos problemas de typo. Al diseñar sistemas complejos, debemos considerar las buenas prácticas desde el comienzo para evitar errores triviales.
+Where each value will correspond to an endpoint or the name of a queue or messaging pattern. This way we centralize our constants and avoid typo problems. When designing complex systems, we must consider good practices from the beginning to avoid trivial errors.
 
-### Comunicación entre servicios 
+### 📡 Communication Between Services
 
-Debemos definir cómo comunicar los servicios. Dependiendo del enfoque, podremos hacer uso de comunicación síncrona (modelo request-response) o comunicación asíncrona (por eventos).
+We must define how to communicate the services. Depending on the approach, we can use synchronous communication (request-response model) or asynchronous communication (event-based).
 
-En una comunicación por coreografía, la mejor opción es elegir la comunicación por mensajes o eventos. Mientras tanto, en la comunicación por orquestación, podemos hacer uso tanto de comunicación síncrona como asíncrona, es decir, podremos comunicarnos con los microservicios mediante una API REST para una manera síncrona, y por medio de una cola de mensajes para comunicación asíncrona.
+In a choreography communication, the best option is to choose message or event communication. Meanwhile, in orchestration communication, we can use both synchronous and asynchronous communication, meaning we can communicate with microservices through a REST API for synchronous communication, and through a message queue for asynchronous communication.
 
 
-### Diseñando la comunicación basada en eventos
+### 📨 Designing Event-Based Communication
 
-Cada paso ya ha definido sus operaciones, es hora de diseñar la comunicación. Cada paso puede comunicarse con otros mediante mensajes, eventos o request-response. En esta saga de ejemplo diseñaremos una comunicación basada en eventos y nos ayudaremos de la siguiente clase abstracta que será la base.
+Each step has already defined its operations; it is time to design the communication. Each step can communicate with others through messages, events, or request-response. In this example saga, we will design event-based communication and use the following abstract class as the base.
 
 ```typescript
 // libs/distributed-transactions/src/sagas/saga.event.ts
@@ -146,18 +146,18 @@ export abstract class SagaEvent<T> {
 }
 ```
 
-Esta clase será la base para nuestros eventos donde destacamos las siguientes propiedades:
+This class will be the base for our events where we highlight the following properties:
 
-- **transactionID:** Esta propiedad es la que relacionará todos los eventos a un proceso de compra iniciado por algún usuario. Es importante esta identificación, ya que los servicios involucrados en el 100% del diseño de estos contemplan la creación de ids internos para sus entidades. Entonces, basados en esta situación, cada operación debe estar asociada a un `transactionId` y debemos asociar todas las respuestas y peticiones a este identificador. 
+- **transactionID:** This property relates all events to a purchase process initiated by some user. This identification is important since the services involved in 100% of the design contemplate the creation of internal IDs for their entities. So, based on this situation, each operation must be associated with a `transactionId` and we must associate all responses and requests to this identifier.
 
-- **pattern:** Esta propiedad indicará la operación asociada. En una arquitectura basada en eventos, este representa la cola de mensajes donde enviar el evento.
+- **pattern:** This property indicates the associated operation. In an event-based architecture, this represents the message queue where the event is sent.
 
-- **Payload:** Nos indica el contenido de los mensajes, es la info que el servicio necesita para realizar su operación. 
-- **timestamp:** Nos indicará la creación del evento.
+- **Payload:** Indicates the message content; it is the info the service needs to perform its operation.
+- **timestamp:** Indicates the event creation time.
  
-Ya con nuestra evento base explicado, definimos los eventos de las operaciones:
+With our base event explained, we define the operation events:
 
-Ejemplo de create-order-saga: 
+Example of create-order-saga:
 ```typescript
 // libs/distributed-transactions/src/user-purchases/orchestation-saga/events/create-order-transaction.event.ts
 type Payload = Omit<Order, 'id'>;
@@ -231,11 +231,11 @@ export class CreateOrderErrorEvent extends SagaEvent<Payload>{
 
 ```
 
-Los demás eventos seguirán el mismo patrón. Dependiendo de la operación, variará el payload del evento.
+The remaining events will follow the same pattern. Depending on the operation, the event payload will vary.
 
-### Envío de Eventos entre microservicios
+### 📤 Sending Events Between Microservices
 
-NestJS nos permite utilizar una variedad de proveedores de microservicios, dependiendo del caso. Así que creamos un servicio llamado `SagaExecutorService`, el cual despachará los eventos.
+NestJS allows us to use a variety of microservice providers, depending on the case. So we create a service called `SagaExecutorService`, which will dispatch the events.
 
 ```typescript
 // libs/distributed-transactions/src/sagas/services/saga-executor.service.ts
@@ -254,7 +254,7 @@ export class SagaExecutorService {
 }
 ```
 
-Y podemos hacer uso de este de la siguiente manera:
+And we can use it as follows:
 
 ```typescript
 // sending events
@@ -266,7 +266,7 @@ this.sagaExecutor.execute(new DeliveryTransactionEvent({
 }))
 ```
 
-Independientemente de la estrategia coreográfica u orquestación, cada microservicio involucrado debe cumplir el siguiente contrato:
+Regardless of the choreography or orchestration strategy, each involved microservice must comply with the following contract:
 
 ```typescript
 // libs/distributed-transactions/src/sagas/ports/saga.controller.port.ts
@@ -278,7 +278,7 @@ export abstract class SagaControllerPort<T, C> {
 }
 ```
 
-Donde nuestro microservicio deberá definir la operación de transacción y la operación de compensación, donde el servicio creará el rollback del proceso.
+Where our microservice must define the transaction operation and the compensation operation, where the service will create the rollback of the process.
 
 ```typescript
 // apps/merch-products-ms/src/delivery/infrastructure/sagas/create-delivery-saga.controller.ts
@@ -298,7 +298,7 @@ export class CreateDeliverySagaController extends SagaControllerPort<DeliveryTra
     async onTransaction(event: DeliveryTransactionEvent, context: RedisContext) {
         this.logger.debug(`Received Event(pattern=${event.pattern}, transactionId=${event.transactionId})`)
         this.logger.debug('Event-payload', event.payload)
-        // trasaction operation
+        // transaction operation
     }
 
     @EventPattern(DeliverySaga.COMPENSATION)
@@ -311,29 +311,29 @@ export class CreateDeliverySagaController extends SagaControllerPort<DeliveryTra
 }
 
 ```
-Nuestro controlador automáticamente será asociado a nuestro servicio de mensajería definido en `main.ts` del microservicio.
+Our controller will automatically be associated with our messaging service defined in the microservice's `main.ts`.
 
-> Si quieres aprender más sobre microservicios en NestJs [acá](https://nullpointer-excelsior.github.io/posts/arquitecturas-eda-eventos-de-dominio-vs-eventos-de-integracion/) 
+> If you want to learn more about microservices in NestJS [here](https://nullpointer-excelsior.github.io/posts/arquitecturas-eda-eventos-de-dominio-vs-eventos-de-integracion/)
 
 
-Dependiendo de la estrategia escogida, orquestación o coreografía, la lógica del flujo será delegada a un componente central o a los servicios involucrados. En la siguiente imagen vemos la diferencia entre coreografía y orquestación.
+Depending on the chosen strategy, orchestration or choreography, the flow logic will be delegated to a central component or the involved services. In the following image we see the difference between choreography and orchestration.
 
 ![saga](images/sagas-architecture.webp)
 
-- **Coreografía:** Cada servicio sabe cuál es su tarea y a qué parte del flujo pertenece. Realiza las transacciones y, en caso de error, invoca las compensaciones en los servicios correspondientes, es decir, en aquellos que ya hayan tenido las operaciones correctas.
+- **Choreography:** Each service knows what its task is and which part of the flow it belongs to. It performs the transactions and, in case of error, invokes the compensations in the corresponding services, i.e., those that have already had correct operations.
 
-- **Orquestación:** Tendremos un componente central encargado de realizar las operaciones y coordinar las compensaciones dependiendo del paso que haya fallado.
+- **Orchestration:** We will have a central component responsible for performing the operations and coordinating compensations depending on which step failed.
 
-En el caso de la Coreografía, la mejor forma de comunicación será mediante eventos para poder crear un sistema distribuido escalable y desacoplado. Mientras tanto, en una Saga orquestada, podemos usar tanto la comunicación por eventos como de forma síncrona. Dependerá de la operación y su coste. Debemos considerar que este componente central deberá estar al tanto de la coherencia de las operaciones. Este enfoque tendrá la ventaja de ser más mantenible que una saga coreográfica.
+In the case of Choreography, the best form of communication will be through events to create a scalable and decoupled distributed system. Meanwhile, in an Orchestrated Saga, we can use both event communication and synchronous communication. It will depend on the operation and its cost. We must consider that this central component must be aware of the coherence of operations. This approach will have the advantage of being more maintainable than a choreography saga.
 
 
-## Conclusión
+## 🏁 Conclusion
 
-El patrón SAGA es esencial para preservar la atomicidad de las transacciones en el entorno distribuido de los microservicios. No obstante, su implementación requiere una gestión meticulosa de fallos, durabilidad de mensajes y consistencia eventual para asegurar la integridad de los datos. Dependiendo de si utilizamos una estrategia basada en coreografía u orquestación, estas dependerán del caso. Si bien hay situaciones que no contemplamos en este artículo, las bases están declaradas y te ayudarán a entender los desafíos de los sistemas distribuidos.
+The SAGA pattern is essential for preserving transaction atomicity in the distributed environment of microservices. However, its implementation requires meticulous failure management, message durability, and eventual consistency to ensure data integrity. Depending on whether we use a choreography or orchestration strategy, these will depend on the case. While there are situations we do not cover in this article, the foundations are laid out and will help you understand the challenges of distributed systems.
 
-## Testing sagas
+## 🧪 Testing Sagas
 
-Para ejecutar los procesos sagas levanta los siguientes servicios:
+To run the saga processes, start the following services:
 
 ```bash
 #!/bin/bash
@@ -341,7 +341,7 @@ Para ejecutar los procesos sagas levanta los siguientes servicios:
 # start docker-compose infra 
 npm run start:infra
 
-# start saga orchestator: user-purchases-ms
+# start saga orchestrator: user-purchases-ms
 npm run start:user-purchases
 
 # start merch-orders-ms
@@ -355,7 +355,7 @@ npm run start:merch-payment
 
 ```
 
-Ahora ejecuta cualquiera de estos scripts los cuales simulan los posibles flujos
+Now run any of these scripts which simulate the possible flows
 
 ```bash
 #!/bin/bash

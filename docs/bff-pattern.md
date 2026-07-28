@@ -1,46 +1,46 @@
-# Backend for Frontend Pattern
+# 🎯 Backend for Frontend Pattern
 
-Cuando optamos por una arquitectura basada en microservicios, hemos dividido un sistema complejo en pequeñas partes independientes y con responsabilidades definidas. A su vez, surge la necesidad de gestionar el acceso y consumo de los microservicios que hemos desarrollado. Para lograrlo, podemos hacer uso del patrón BFF (Backend for Frontend). La idea es similar a la de un api gateway, un componente central encargado de gestionar las peticiones de los clientes y redireccionar la petición al servicio adecuado. La gran diferencia es que BFF es una aplicación específica para una aplicación cliente, como puede ser un frontend, aplicación móvil u otro tipo de cliente.
+When we opt for a microservices-based architecture, we have divided a complex system into small independent parts with defined responsibilities. In turn, the need arises to manage access and consumption of the microservices we have developed. To achieve this, we can use the BFF (Backend for Frontend) pattern. The idea is similar to that of an API gateway, a central component responsible for managing client requests and redirecting the request to the appropriate service. The big difference is that BFF is a specific application for a client application, such as a frontend, mobile application, or other type of client.
 
-## Tipos de BFF
+## 📋 Types of BFF
 
-Existen 2 tipos principales de BFF:
+There are 2 main types of BFF:
 
-- `BFF específico por dispositivo`: se construye una aplicación BFF por tipo de dispositivo, generalmente uno para una versión web y otro para una versión móvil.
-- `BFF por dominio`: se centra en construir un BFF por funcionalidad. Por ejemplo, un BFF para ventas, otro para usuarios, otro para clientes, etc.
+- `Device-specific BFF`: a BFF application is built per device type, generally one for a web version and another for a mobile version.
+- `Domain BFF`: focuses on building a BFF per functionality. For example, a BFF for sales, another for users, another for customers, etc.
 
-## Ejemplo e implementación tecnológica de BFF por dispositivo
+## 📱 Example and Technological Implementation of Device-Specific BFF
 
-Tomaremos un ejemplo de implementación de BFF basado en nuestra querida arquitectura de clone spotify.
+We will take an implementation example of BFF based on our beloved Spotify clone architecture.
 
-### En contexto
+### 🌐 In Context
 
-Nuestro spotify-clone tiene 2 clientes disponibles: web y mobile. Ambas aplicaciones están definidas para un cliente específico, ya que cada tipo de cliente tiene diferentes requerimientos. Por ejemplo, una aplicación móvil tendrá que lidiar con problemas de latencia y también tendrá muchas más funcionalidades que una aplicación versión web. Por lo tanto, el diseño de la API del BFF mobile debería poder ofrecer un alto nivel de flexibilidad. Por otro lado, nuestra BFF versión web no tendrá que lidiar con problemas de latencia tan frecuentemente como la versión móvil, y la cantidad de funcionalidades puede diferir en comparación con la versión mobile. Para construir nuestros BFFs, optaremos por 2 tecnologías distintas:
+Our spotify-clone has 2 available clients: web and mobile. Both applications are defined for a specific client, as each client type has different requirements. For example, a mobile application will have to deal with latency issues and will also have many more features than a web version application. Therefore, the API design of the mobile BFF should be able to offer a high level of flexibility. On the other hand, our web BFF version will not have to deal with latency issues as frequently as the mobile version, and the number of features may differ compared to the mobile version. To build our BFFs, we will opt for 2 different technologies:
 
-- `web-bff`: Aplicación backend basada en RESTful.
-- `mobile-bff`: Aplicación backend basada en GraphQL.
+- `web-bff`: Backend application based on RESTful.
+- `mobile-bff`: Backend application based on GraphQL.
 
-## GraphQL vs RESTful
+## ⚖️ GraphQL vs RESTful
 
-GraphQL es una tecnología que permite a los clientes especificar exactamente qué datos necesitan en una única solicitud y devuelve respuestas estructuradas según lo solicitado, utilizando normalmente un único endpoint. Por otro lado, una API RESTful utiliza múltiples endpoints con estructuras de datos fijas y a menudo requiere múltiples solicitudes para obtener toda la información necesaria, lo que puede ser menos eficiente en la red.
+GraphQL is a technology that allows clients to specify exactly what data they need in a single request and returns structured responses as requested, typically using a single endpoint. On the other hand, a RESTful API uses multiple endpoints with fixed data structures and often requires multiple requests to get all the necessary information, which can be less efficient on the network.
 
-GraphQL es ideal para las necesidades de la aplicación BFF-mobile, mientras que una API RESTful es suficiente para bff-web dentro del contexto de `spotify-clone`.
+GraphQL is ideal for the needs of the BFF-mobile application, while a RESTful API is sufficient for bff-web within the context of `spotify-clone`.
 
-## Construyendo un BFF
+## 🏗️ Building a BFF
 
-Al construir un BFF, definiremos la estructura de las peticiones y respuestas. A menudo, un BFF realiza múltiples peticiones a microservicios y agrupa las respuestas en una sola para devolverla al cliente. Un BFF no debería manejar ninguna lógica de negocio más que saber qué servicio llamar y cómo devolver las respuestas. A su vez, un BFF puede centralizar la autenticación, autorización y caché.
+When building a BFF, we will define the structure of requests and responses. Often, a BFF makes multiple requests to microservices and groups the responses into a single one to return to the client. A BFF should not handle any business logic other than knowing which service to call and how to return responses. In turn, a BFF can centralize authentication, authorization, and caching.
 
 ![bff-pattern](images/bff-pattern.webp)
 
-## Código de ejemplo
+## 📝 Example Code
 
-NestJs nos permite integrar GraphQL de forma sencilla, ya que podemos definir el modelo de las queries, mutaciones y suscripciones mediante anotaciones.
+NestJS allows us to integrate GraphQL easily, as we can define the model of queries, mutations, and subscriptions through annotations.
 
-Explicaré brevemente las partes de GraphQL para mostrar la idea.
+I will briefly explain the parts of GraphQL to show the idea.
 
-### Modelo
+### 📦 Model
 
-Definimos el modelo de la entidad que queremos exponer. A su vez, este modelo puede exponer otros modelos mediante propiedades. Hacemos uso de decoradores para poder definir el esquema de nuestra API GraphQL.
+We define the model of the entity we want to expose. In turn, this model can expose other models through properties. We use decorators to define the schema of our GraphQL API.
 
 ```typescript
 import { Field, ObjectType } from '@nestjs/graphql';
@@ -68,9 +68,9 @@ export class Artist {
 }
 ```
 
-### Resolvers
+### 🔧 Resolvers
 
-Los resolvers son un componente que le dice a GraphQL cómo debe obtener los datos que les son solicitados. NestJs nos provee más decoradores para poder definir el esquema de datos de nuestra API GraphQL.
+Resolvers are a component that tells GraphQL how to obtain the data that is requested. NestJS provides more decorators to define the data schema of our GraphQL API.
 
 ```typescript
 @Resolver(of => Artist)
@@ -99,9 +99,9 @@ export class ArtistResolver {
 }
 ```
 
-### API Client
+### 🔌 API Client
 
-En este caso, hacemos uso de un servicio de gRPC para obtener los datos. También podemos hacer llamados a APIs REST dependiendo de la API que necesitemos consumir.
+In this case, we use a gRPC service to get the data. We can also make REST API calls depending on the API we need to consume.
 
 ```typescript
 @Injectable()
@@ -176,7 +176,7 @@ export class MusicCatalogClient implements OnModuleInit {
 }
 ```
 
-Hacemos definición de los módulos para que NestJs pueda iniciar la aplicación.
+We define the modules so NestJS can start the application.
 
 ```typescript
 @Module({
@@ -202,7 +202,7 @@ Hacemos definición de los módulos para que NestJs pueda iniciar la aplicación
 export class MobileBffModule { }
 ```
 
-Para probar la API, inicia los siguientes servicios.
+To test the API, start the following services.
 
 ```bash
 npm run start:infra
@@ -213,11 +213,10 @@ npm run start:media
 npm run start:mobile-bff
 ```
 
-Puedes dirigirte a http://localhost:3014/graphql y visualizar una Playground que nos provee GraphQL por defecto, donde podrás consultar el esquema de la API y realizar consultas.
+You can go to http://localhost:3014/graphql and see a Playground that GraphQL provides by default, where you can query the API schema and perform queries.
 
 ![gql-dashboard](images/gql-dashboard.webp)
 
-## Conclusiones
+## 🏁 Conclusions
 
-BFF nos permite centralizar el acceso a microservicios en un solo punto de entrada para las aplicaciones cliente. Dependiendo de las necesidades, tenemos disponibles distintas tecnologías para la comunicación, tanto para la comunicación de cliente a BFF como de BFF a microservicios. Como vimos en este ejemplo, GraphQL define una estructura de consulta eficiente para aplicaciones cliente móviles. La elección de la tecnología que expondremos al cliente dependerá del contexto. Lo importante es que mediante BFF podamos centralizar las peticiones a los microservicios en un único punto y podamos exponer de forma sencilla nuestro sistema.
-
+BFF allows us to centralize access to microservices in a single entry point for client applications. Depending on the needs, we have different communication technologies available, both for client-to-BFF communication and BFF-to-microservices communication. As we saw in this example, GraphQL defines an efficient query structure for mobile client applications. The choice of technology we expose to the client will depend on the context. The important thing is that through BFF we can centralize requests to microservices in a single point and easily expose our system.
