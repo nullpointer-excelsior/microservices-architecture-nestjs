@@ -4,8 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RadioUseCases } from './application/radio.use-cases';
 import { RadioRepository } from './domain/repositories/radio.repository';
 import { MongoRadioRepository } from './infrastructure/mongo/repositories/mongo-radio.repository';
-import { RadioDocument, RadioSchema } from './infrastructure/mongo/schemas/radio.schema';
-import { SongDocument, SongSchema } from './infrastructure/mongo/schemas/song.schema';
+import { Radio, RadioSchema } from './infrastructure/mongo/schemas/radio.schema';
+import { Song, SongSchema } from './infrastructure/mongo/schemas/song.schema';
 import { RadioController } from './infrastructure/restful/radio.controller';
 
 @Module({
@@ -30,8 +30,8 @@ import { RadioController } from './infrastructure/restful/radio.controller';
             ]
         }),
         MongooseModule.forFeature([
-            { name: RadioDocument.name, schema: RadioSchema },
-            { name: SongDocument.name, schema: SongSchema },
+            { name: Radio.name, schema: RadioSchema },
+            { name: Song.name, schema: SongSchema },
         ]),
 
     ],

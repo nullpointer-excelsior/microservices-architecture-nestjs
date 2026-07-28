@@ -3,14 +3,8 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Song {
-  @Prop()
-  title: string;
-}
 
-@Schema()
-export class SongDocument extends Document {
-  
-  @Prop()
+  @Prop({ type: String })
   _id: string;
 
   @Prop({ required: true })
@@ -27,4 +21,10 @@ export class SongDocument extends Document {
 
 }
 
-export const SongSchema = SchemaFactory.createForClass(SongDocument);
+export type SongDocument = Song & Document;
+export const SongSchema = SchemaFactory.createForClass(Song);
+SongSchema.virtual('id').get(function (this: any) {
+  return this._id;
+});
+SongSchema.set('toJSON', { virtuals: true });
+SongSchema.set('toObject', { virtuals: true });

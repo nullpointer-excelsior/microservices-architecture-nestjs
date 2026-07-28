@@ -82,3 +82,42 @@ broken mailing-ms e2e test was replaced with a real microservice test.
   phase. Subsequent phases bump the remaining `@nestjs/*` packages so the
   flag is no longer needed.
 
+## Phase 2 — Database & Event Bus (2026-07-26)
+
+### Tasks executed
+
+- `TASK-002-1` Bumped `@nestjs/typeorm@^11.0.0`, `typeorm@^0.3.31`.
+- `TASK-002-2` Bumped `@nestjs/mongoose@^11.0.0`, `mongoose@^8.9.5`.
+- `TASK-002-3` Bumped `@nestjs/event-emitter@^3.0.0`. No wildcard syntax
+  changes required (EventEmitter2 still supports `**`).
+- `TASK-002-4` Bumped `@nestjs/config@^4.0.0`. Current call sites use the
+  no-options form `ConfigModule.forRoot()`, which is signature-compatible
+  with v4. New options (`cache`, `validatePredefined`, `skipProcessEnv`)
+  are not needed by any module today.
+- `TASK-002-5` Bumped `@nestjs/axios@^4.0.0`.
+- `TASK-002-6` `npm run build` + `npm test` — green.
+
+### Mongoose 8 schema fix
+
+`@nestjs/mongoose@11` ships with Mongoose 8. In Mongoose 8, `Document._id`
+is `ObjectId`, so `class RadioDocument extends Document { _id: string; }`
+fails to type-check.
+
+Resolution: split the schema into a plain class (`Radio`, `Song`) used for
+`SchemaFactory.createForClass` and a `RadioDocument = Radio & Document`
+type alias used by the repository. `_id` is declared with
+`@Prop({ type: String })` to keep the existing string identifier. A
+`virtual('id')` is registered on the schema so consumers can keep using
+`doc.id` (it now returns `doc._id`). Files touched:
+
+- `apps/music-discovery-ms/src/radio/infrastructure/mongo/schemas/radio.schema.ts`
+- `apps/music-discovery-ms/src/radio/infrastructure/mongo/schemas/song.schema.ts`
+- `apps/music-discovery-ms/src/radio/infrastructure/mongo/repositories/mongo-radio.repository.ts`
+- `apps/music-discovery-ms/src/radio/radio.module.ts`
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- e2e: deferred (no Docker).
+
