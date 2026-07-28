@@ -121,3 +121,42 @@ type alias used by the repository. `_id` is declared with
 - Unit tests: 11/11 green.
 - e2e: deferred (no Docker).
 
+## Phase 3 — GraphQL, Apollo, Swagger (2026-07-26)
+
+### Tasks executed
+
+- `TASK-003-1` Bumped `@nestjs/apollo@^13.0.0`, `@nestjs/graphql@^13.0.0`,
+  `@apollo/server@^5.0.0`, added `@as-integrations/express5@^1.1.0`.
+- `TASK-003-2` Kept `GraphQLModule.forRoot<ApolloDriverConfig>` shape
+  unchanged. Apollo 5 defaults to Apollo Sandbox in lieu of the legacy
+  GraphQL Playground, so no extra option is required.
+- `TASK-003-3` Mobile-bff e2e test (`apps/mobile-bff/test/music-catalog.e2e-spec.ts`)
+  runs against Apollo 5 + GraphQL 17 unchanged: 11/11 green.
+- `TASK-003-4` Bumped `graphql@^17.0.0`.
+- `TASK-003-5` Bumped `@nestjs/swagger@^11.0.0`. `DocumentBuilder` /
+  `SwaggerModule.setup` calls in the 9 apps are signature-compatible.
+- `TASK-003-6` Audited the `@ApiProperty` decorators in
+  `apps/music-library-ms/src/music-catalog/infrastructure/controllers/...`.
+  No metadata refactor needed.
+- `TASK-003-7` `npm run build` + `npm test` + `e2e:mobile-bff` (with the
+  unit-style invocation since the e2e command requires Docker) are green.
+
+### Side fixes
+
+- `libs/rabbitmq-queue/src/rabbitmq-queue/services/rabbitmq-client.service.ts`
+  dropped its `uuid` import (the `uuid` package was no longer in the
+  transitive set after the Apollo / GraphQL upgrade) and now uses
+  `short-uuid` which is already a direct dependency.
+- `apps/web-bff/src/media-server/middlewares/media-server-proxy.middleware.ts`
+  dropped the `logLevel: 'silent'` option: `http-proxy-middleware@3.x`
+  removed it in favour of an opt-in `logger` option. The default is now
+  silent without the option.
+- Bumped `http-proxy-middleware@^3.0.0` (the plan's DEP-037).
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- Mobile-bff e2e (no infra needed): 11/11 green.
+- Other e2e: deferred (no Docker).
+

@@ -12,9 +12,8 @@ export class MediaServerProxyMiddleware implements NestMiddleware {
     const target = this.config.get<string>('MOBILE_BFF_PLAYER_API');
     
     const proxyMiddleware = proxy.createProxyMiddleware({
-      target: target, 
-      changeOrigin: true,
-      logLevel: 'silent'
+      target: target,
+      changeOrigin: true
     });
     Logger.log(`Redirect -> ${target}${req.baseUrl}`, 'MediaServerProxyMiddleware');
     proxyMiddleware(req, res, next);
