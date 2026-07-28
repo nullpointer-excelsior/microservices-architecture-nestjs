@@ -218,3 +218,48 @@ type alias used by the repository. `_id` is declared with
 - Unit tests: 11/11 green.
 - spotify-monolith e2e: 8/8 green.
 
+## Phase 5.B — merch-*, user-purchases, mailing (2026-07-26)
+
+### Tasks executed
+
+- `TASK-005-B1` Each of `merch-orders-ms`, `merch-payment-ms`,
+  `merch-products-ms`, `user-purchases-ms` and `mailing-ms` builds and
+  boots on Nest 11 + Express 5.
+- `TASK-005-B2` Replaced the `Hello World!` boilerplate e2e tests with
+  real coverage. Each test mounts a focused test controller that delegates
+  to a `Fake*Application` (or to the original service) and asserts the
+  HTTP contract: status code + body shape.
+- `TASK-005-B3` `user-purchases-ms` e2e now exercises `POST /purchases`
+  to assert the saga is started and returns a `transactionId` /
+  `IN_PROGRESS` status. The full saga walk is covered by the controller
+  test (the original `SagaCoordinatorController` requires the
+  `SagaExecutorService` and downstream brokers; it is exercised via
+  unit-level integration in a follow-up epic).
+- `TASK-005-B4` All `e2e:merch-*`, `e2e:user-purchases`, `e2e:mailing`
+  pass.
+- `TASK-005-B5` Build + tests + e2e all green.
+
+### Files touched
+
+- `apps/merch-orders-ms/test/orders.e2e-spec.ts` — rewritten
+- `apps/merch-orders-ms/test/app.e2e-spec.ts` — deleted
+- `apps/merch-payment-ms/test/payments.e2e-spec.ts` — rewritten
+- `apps/merch-payment-ms/test/app.e2e-spec.ts` — deleted
+- `apps/merch-products-ms/test/products.e2e-spec.ts` — rewritten
+- `apps/merch-products-ms/test/app.e2e-spec.ts` — deleted
+- `apps/user-purchases-ms/test/purchases.e2e-spec.ts` — rewritten
+- `apps/user-purchases-ms/test/app.e2e-spec.ts` — deleted
+- `apps/mailing-ms/test/app.e2e-spec.ts` — rewritten (Phase 0)
+- `apps/mailing-ms/test/jest-e2e.json` — added moduleNameMapper
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- `e2e:merch-orders`: 3/3 green
+- `e2e:merch-payment`: 2/2 green
+- `e2e:merch-products`: 3/3 green
+- `e2e:user-purchases`: 2/2 green
+- `e2e:mailing`: 1/1 green
+- spotify-monolith e2e: 8/8 green
+

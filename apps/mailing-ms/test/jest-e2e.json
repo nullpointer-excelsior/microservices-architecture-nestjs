@@ -5,5 +5,11 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@lib/integration-events(|/.*)$": "<rootDir>/../../../libs/integration-events/src/$1",
+    "^@lib/shared(|/.*)$": "<rootDir>/../../../libs/shared/src/$1",
+    "^@lib/utils(|/.*)$": "<rootDir>/../../../libs/utils/src/$1",
+    "^@lib/distributed-transactions(|/.*)$": "<rootDir>/../../../libs/distributed-transactions/src/$1"
   }
 }
