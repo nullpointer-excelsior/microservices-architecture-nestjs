@@ -37,5 +37,48 @@ broken mailing-ms e2e test was replaced with a real microservice test.
 
 ### Validation
 
-Pending Phase 1 (the build is exercised on the upgraded stack).
+- `npm run build` — passes for all 20 projects (12 apps + 8 libs).
+- `npm test` — 11/11 tests pass.
+- `npm run e2e:all` — not exercised: `infrastructure/test` requires Docker
+  (Postgres, MongoDB, Redis, RabbitMQ); the daemon is unavailable in the
+  current sandbox. Per `CON-002`, the phase commit is gated on the build
+  and unit tests only; e2e coverage is re-validated in Phase 7 once
+  Docker is available.
+
+## Phase 1 — NestJS Core 10 → 11 (2026-07-26)
+
+### Tasks executed
+
+- `TASK-001-1` Bumped `@nestjs/{common,core,microservices,platform-express,testing}`
+  to `^11.1.0` and `@nestjs/{cli,schematics}` to `^11.0.0`.
+- `TASK-001-2` Installed with `npm install --ignore-scripts --legacy-peer-deps`
+  (the remaining `@nestjs/*` packages — `apollo`, `graphql`, `typeorm`, etc. —
+  still on the v10 line; their peer range conflicts with the v11 core. The
+  `--legacy-peer-deps` flag is the standard resolution at this stage and
+  the lockfile is committed alongside the source).
+- `TASK-001-3` Updated `apps/web-bff/src/media-server/media-server.module.ts`
+  to use the named wildcard `'audio/{*path}'` / `'cover/{*path}'` for
+  Express 5 / `path-to-regexp` 8.
+- `TASK-001-4` Bumped `@types/express` to `^5.0.0`.
+- `TASK-001-5` `npm run build` — passes for all 20 projects.
+- `TASK-001-6` `npm test` — 11/11 tests pass.
+- `TASK-001-7` Added `check:legacy-routes` script (`scripts/check-legacy-routes.mjs`).
+  It greps the source tree for `forRoutes(...)` with unnamed wildcards.
+  Current run: **no findings**.
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- Legacy routes: 0/0.
+- e2e: deferred (no Docker); re-validated in Phase 7.
+
+### Notes / follow-ups
+
+- The `build` script in `package.json` was updated to enumerate the projects
+  (the previous `nest build` relied on a default `apps/microservices-architecture-nestjs/src`
+  root that did not exist and silently failed at `npm run build`).
+- `--legacy-peer-deps` is the operative flag throughout the in-progress
+  phase. Subsequent phases bump the remaining `@nestjs/*` packages so the
+  flag is no longer needed.
 

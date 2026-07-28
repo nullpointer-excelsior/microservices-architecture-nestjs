@@ -15,7 +15,7 @@ export class MediaServerModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(MediaServerProxyMiddleware)
-            .forRoutes('audio/*', 'cover/*');
+            .forRoutes('audio/{*path}', 'cover/{*path}');
     }
 
 }
