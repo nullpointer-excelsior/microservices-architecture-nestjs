@@ -362,3 +362,48 @@ type alias used by the repository. `_id` is declared with
 - Unit tests: 12/12 green.
 - `e2e:mobile-bff`: 11/11 green.
 
+## Phase 7 — Final validation & hardening (2026-07-26)
+
+### Tasks executed
+
+- `TASK-007-1` Ran the full matrix: `npm run build` (20/20), `npm test`
+  (12/12), `npm run check:legacy-routes` (0 findings). Per-app e2e
+  suites verified individually (results below).
+- `TASK-007-2` `infrastructure/local` start and full saga walk are
+  gated on Docker, which is not available in the current sandbox. The
+  e2e suites that hit the BFFs / saga controllers in isolation (without
+  infra) all pass.
+- `TASK-007-3` Removed the temporary `check:legacy-routes` script and
+  its reference in `package.json`. The script remains in
+  `scripts/check-legacy-routes.mjs` for ad-hoc use.
+- `TASK-007-4` Updated `package.json` `description` and `README.md` to
+  reference Nest 11. Added a "Migration Notes" section that links to
+  `artifacts/workspace/notes.md`.
+- `TASK-007-5` `npm audit --omit=dev` reports 1 transitive advisory
+  from `@smithy/config-resolver` pulled in by `@aws-sdk/client-s3`.
+  This is a pre-existing condition that survives the migration (the
+  bump of `typeorm`, `mongoose`, `@nestjs/*` does not touch the AWS
+  SDK). It is tracked as a follow-up to bump `@aws-sdk/client-s3` to
+  the latest line.
+- `TASK-007-6` Wrote the one-page release summary at
+  `artifacts/workspace/summary.md`.
+- `TASK-007-7` `git tag nest11-phase-7` on the phase commit.
+- `TASK-007-8` `git tag nest11-final` on the same commit.
+
+### Final per-app e2e matrix (no-Docker run)
+
+| Suite | Result |
+|-------|--------|
+| `spotify-monolith` | 8/8 green |
+| `web-bff` | 2/2 green |
+| `media-ms` | 4/4 green |
+| `accounts-ms` | 5/5 green |
+| `mailing-ms` | 1/1 green |
+| `merch-orders-ms` | 3/3 green |
+| `merch-payment-ms` | 2/2 green |
+| `merch-products-ms` | 3/3 green |
+| `user-purchases-ms` | 2/2 green |
+| `mobile-bff` | 11/11 green |
+| `music-library-ms` | requires Postgres (deferred to Docker run) |
+| `music-discovery-ms` | requires Mongo (deferred to Docker run) |
+

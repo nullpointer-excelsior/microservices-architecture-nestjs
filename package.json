@@ -1,7 +1,7 @@
 {
   "name": "microservices-architecture-nestjs",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Microservices reference architecture with NestJS 11.1.x, Express 5, Apollo Server 5, GraphQL 17, TypeORM 11, Mongoose 8, OpenTelemetry 0.221 and nestjs-otel 8.",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -48,8 +48,7 @@
     "create:clean-module": "./scripts/create-hexagonal-module.sh",
     "create:app": "node ./scripts/javascript/create-app.mjs",
     "start:merch-payment": "npx nest start -w merch-payment-ms",
-    "start:user-purchases": "npx nest start -w user-purchases-ms",
-    "check:legacy-routes": "node ./scripts/check-legacy-routes.mjs"
+    "start:user-purchases": "npx nest start -w user-purchases-ms"
   },
   "dependencies": {
     "@apollo/server": "^5.0.0",

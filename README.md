@@ -102,6 +102,21 @@ npm install
 > [`artifacts/workspace/notes.md`](artifacts/workspace/notes.md) para los
 > detalles por fase.
 
+## Migration Notes (Nest 11)
+
+La migración a NestJS 11.1.x se ejecutó en 8 fases, cada una con su
+propio commit y tag local (`nest11-phase-0` … `nest11-phase-7`,
+`nest11-final`). El log por fase está en
+[`artifacts/workspace/notes.md`](artifacts/workspace/notes.md). Highlights:
+
+- **Express 5** + `path-to-regexp` 8 (named wildcards, p. ej. `audio/{*path}`).
+- **Apollo Server 5** + **GraphQL 17** + `@nestjs/graphql` 13.
+- **TypeORM 11**, **Mongoose 8** (con `@nestjs/mongoose` 11).
+- **OpenTelemetry 0.221** + `nestjs-otel` 8 (API 1.9).
+- Tests e2e reales para los 12 microservicios y los 2 BFFs (los
+  originales `Hello World!` fueron reemplazados).
+- `engines.node: ">=20"` y `.nvmrc` con `20`.
+
 ### Variables de entorno
 
 Todas las aplicaciones, jobs e infraestructura son configuradas mediante variables de ambiente definidas en el archivo `.env` 
