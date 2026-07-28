@@ -29,7 +29,7 @@ async function bootstrap() {
 }
 
 startOpenTelemetry({
-  serviceName: "music-discovery-ms",
+  serviceName: "merch-products-ms",
   serviceVersion: "1.0",
   instrumentations: [
     new HttpInstrumentation(),

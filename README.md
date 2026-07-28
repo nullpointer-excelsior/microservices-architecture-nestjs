@@ -85,7 +85,7 @@ Puedes ejecutar un stack mínimo para poder visualizar una aplicación frontend 
 
 Asegúrate de tener:
 
-* Node versión 18 o superior
+* Node versión 20 o superior (ver `.nvmrc`)
 * Docker
 * python3
 
@@ -96,6 +96,11 @@ Instala las dependencias usando npm install.
 #!/bin/bash
 npm install
 ```
+
+> **Nota de migración:** Este repositorio está migrado a NestJS `^11.1.x`.
+> Si vienes desde la versión anterior, revisa
+> [`artifacts/workspace/notes.md`](artifacts/workspace/notes.md) para los
+> detalles por fase.
 
 ### Variables de entorno
 

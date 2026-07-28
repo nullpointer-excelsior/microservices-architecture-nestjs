@@ -5,7 +5,7 @@ import { EmailService } from '../services/email.service';
 
 @Controller()
 export class IntegrationController {
-  
+
   constructor(private readonly email: EmailService) {}
 
   @MessagePattern('com.clonespotify.accounts.users.integration.user-updated')
