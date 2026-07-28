@@ -324,3 +324,41 @@ type alias used by the repository. `_id` is declared with
 - `e2e:web-bff`: 2/2 green
 - `e2e:mobile-bff`: 11/11 green
 
+## Phase 6 — OpenTelemetry 0.41 → 0.221 + nestjs-otel 5 → 8 (2026-07-26)
+
+### Tasks executed
+
+- `TASK-006-1` Bumped all `@opentelemetry/*` packages to the `^0.221.0` /
+  `^2.0.0` (resources, sdk-metrics, sdk-trace-node) and `@opentelemetry/api`
+  to `^1.9.0`. Bumped `nestjs-otel` to `^8.0.0`.
+- `TASK-006-2` Rewrote `libs/shared/src/instrumentation/opentelemetry/start-opentelemetry.ts`
+  to use the new OTel API: `resourceFromAttributes` (instead of the
+  removed `new Resource(...)` constructor), `ATTR_SERVICE_NAME` /
+  `ATTR_SERVICE_VERSION` (instead of the deprecated
+  `SemanticResourceAttributes`), and `PeriodicExportingMetricReader`
+  passed via `NodeSDK({ metricReader })` (instead of
+  `MeterProvider.addMetricReader`).
+- `TASK-006-3` `InstrumentationModule` is unchanged; the
+  `OpenTelemetryModule.forRoot()` call from `nestjs-otel@5` is
+  API-compatible with `nestjs-otel@8` (the default no-options form).
+- `TASK-006-4` Added a unit test
+  (`libs/shared/src/instrumentation/opentelemetry/start-opentelemetry.spec.ts`)
+  that asserts the resource attributes produced by
+  `resourceFromAttributes({...})` contain the expected service name,
+  service version and namespace. The full OTel smoke test is gated on a
+  reachable OTLP collector and is exercised in Phase 7.
+- `TASK-006-5` `npm run build` + `npm test` + `e2e:mobile-bff` — green.
+
+### Files touched
+
+- `libs/shared/src/instrumentation/opentelemetry/start-opentelemetry.ts`
+  — rewritten against the 0.221 / API 1.9 API.
+- `libs/shared/src/instrumentation/opentelemetry/start-opentelemetry.spec.ts`
+  — new unit test.
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 12/12 green.
+- `e2e:mobile-bff`: 11/11 green.
+

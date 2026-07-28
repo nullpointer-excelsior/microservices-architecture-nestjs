@@ -3,50 +3,50 @@ import { metrics } from '@opentelemetry/api';
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-proto";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
-import { InstrumentationOption } from '@opentelemetry/instrumentation';
-import { Resource } from "@opentelemetry/resources";
+import { Instrumentation } from '@opentelemetry/instrumentation';
+import { resourceFromAttributes } from "@opentelemetry/resources";
 import { MeterProvider, PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 
 export type CreateSdkOptions = {
   serviceName: string
   serviceVersion: string,
   traceExporterOptions?: { url: string, headers?: any },
   metricExporterOptions?: { url: string, headers?: any },
-  instrumentations?: InstrumentationOption[]
+  instrumentations?: Instrumentation[]
 }
 
 export function createSdk(options: CreateSdkOptions) {
 
-  const resource = new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: options.serviceName,
-    [SemanticResourceAttributes.SERVICE_VERSION]: options.serviceVersion,
-    [SemanticResourceAttributes.SERVICE_NAMESPACE]: 'local-machine.spotify-clone'
+  const resource = resourceFromAttributes({
+    [ATTR_SERVICE_NAME]: options.serviceName,
+    [ATTR_SERVICE_VERSION]: options.serviceVersion,
+    'service.namespace': 'local-machine.spotify-clone'
   })
 
   const traceExporter = new OTLPTraceExporter(options.traceExporterOptions);
 
   const metricExporter = new OTLPMetricExporter(options.metricExporterOptions)
 
+  const metricReader = new PeriodicExportingMetricReader({
+    exporter: metricExporter,
+    exportIntervalMillis: 30000,
+  });
+
   const sdk = new NodeSDK({
     resource,
     traceExporter,
     contextManager: new AsyncLocalStorageContextManager(),
-    instrumentations: options.instrumentations as any
-  });
-
-  const metricReader = new PeriodicExportingMetricReader({
-    exporter: metricExporter,
-    exportIntervalMillis: 30000, // Default is 60000ms (60 seconds). Set to 3 seconds for demonstrative purposes only.
+    instrumentations: options.instrumentations as Instrumentation[],
+    metricReader,
   });
 
   const applicationMeterProvider = new MeterProvider({
     resource: resource,
+    readers: [metricReader],
   });
 
-  applicationMeterProvider.addMetricReader(metricReader);
-  // Set this MeterProvider to be global to the app being instrumented.
   metrics.setGlobalMeterProvider(applicationMeterProvider);
 
   return sdk
