@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { RabbitmqMessage } from "../model/RabbitmqMessage";
 import { RABBITMQ_PRODUCER_CLIENT } from "../config/providers.tokens";
-import short from 'short-uuid';
+import * as short from 'short-uuid';
 
 
 @Injectable()
