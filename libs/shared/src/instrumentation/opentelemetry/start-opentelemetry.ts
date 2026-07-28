@@ -1,11 +1,10 @@
 import { Logger } from "@nestjs/common";
-import { metrics } from '@opentelemetry/api';
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-proto";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { Instrumentation } from '@opentelemetry/instrumentation';
 import { resourceFromAttributes } from "@opentelemetry/resources";
-import { MeterProvider, PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
+import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import { NodeSDK } from "@opentelemetry/sdk-node";
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from "@opentelemetry/semantic-conventions";
 
@@ -41,13 +40,6 @@ export function createSdk(options: CreateSdkOptions) {
     instrumentations: options.instrumentations as Instrumentation[],
     metricReader,
   });
-
-  const applicationMeterProvider = new MeterProvider({
-    resource: resource,
-    readers: [metricReader],
-  });
-
-  metrics.setGlobalMeterProvider(applicationMeterProvider);
 
   return sdk
 }
