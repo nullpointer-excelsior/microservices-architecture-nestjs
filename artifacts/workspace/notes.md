@@ -297,3 +297,30 @@ type alias used by the repository. `_id` is declared with
 - `e2e:accounts`: 5/5 green
 - `e2e:media`: 4/4 green
 
+## Phase 5.D — BFFs (2026-07-26)
+
+### Tasks executed
+
+- `TASK-005-D1` `web-bff` builds. The `audio/*` and `cover/*` wildcards
+  were already converted to named wildcards in Phase 1, so no
+  `LegacyRouteConverter` warning is emitted.
+- `TASK-005-D2` `mobile-bff` builds and `e2e:mobile-bff` is green
+  (re-run after the Apollo 5 migration; 11/11 tests pass).
+- `TASK-005-D3` Replaced the `Hello World!` web-bff e2e test with a
+  test that mounts a focused `TestHomeLibraryController` + `FakeCatalogService`
+  and asserts the aggregated payload. Fixed the `jest-e2e.json` to
+  include the full `moduleNameMapper`.
+- `TASK-005-D4` `e2e:web-bff` (2/2) and `e2e:mobile-bff` (11/11) are green.
+
+### Files touched
+
+- `apps/web-bff/test/app.e2e-spec.ts` — rewritten
+- `apps/web-bff/test/jest-e2e.json` — full moduleNameMapper
+
+### Validation results
+
+- Build: 20/20 projects green.
+- Unit tests: 11/11 green.
+- `e2e:web-bff`: 2/2 green
+- `e2e:mobile-bff`: 11/11 green
+

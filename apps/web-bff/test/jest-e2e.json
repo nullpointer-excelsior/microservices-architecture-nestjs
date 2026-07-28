@@ -5,5 +5,15 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@lib/utils(|/.*)$": "<rootDir>/../../../libs/utils/src/$1",
+    "^@lib/rabbitmq-queue(|/.*)$": "<rootDir>/../../../libs/rabbitmq-queue/src/$1",
+    "^@lib/shared(|/.*)$": "<rootDir>/../../../libs/shared/src/$1",
+    "^@lib/music-library-api(|/.*)$": "<rootDir>/../../../libs/music-library-api/src/$1",
+    "^@lib/music-discovery-api(|/.*)$": "<rootDir>/../../../libs/music-discovery-api/src/$1",
+    "^@lib/music-library-grpc(|/.*)$": "<rootDir>/../../../libs/music-library-grpc/src/$1",
+    "^@lib/integration-events(|/.*)$": "<rootDir>/../../../libs/integration-events/src/$1",
+    "^@lib/distributed-transactions(|/.*)$": "<rootDir>/../../../libs/distributed-transactions/src/$1"
   }
 }
